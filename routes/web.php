@@ -30,7 +30,7 @@ Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('about', [AboutController::class, 'index'])->name('about');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
-Route::post('contact/store',[ContactController::class,'store'])->name('contact.store');
+Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('blog', [BlogController::class, 'index'])->name('blog');
 
@@ -51,7 +51,7 @@ Route::get('cart/destroy/{id}', [CartController::class, 'destroy'])->name('cart.
 
 // Web Coupon Routes
 
-Route::get('applyCoupon/{couponCode}/{total}', [WebCouponController::class, 'applyCoupon'])->name('applyCoupon');
+Route::get('check-coupon/{couponCode}/', [WebCouponController::class, 'checkCoupon'])->name('checkCoupon');
 
 // Route::get('dcart',function () {
 //    session()->forget('cart');
@@ -139,10 +139,10 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
     Route::prefix('/blogs')->controller(AdminBlogController::class)->name('blog.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
-        Route::post('/store','store')->name('store');
-        Route::get('/edit/{id}','edit')->name('edit');
-        Route::post('/update/{id}','update')->name('update');
-        Route::get('/destroy/{id}','destroy')->name('destroy');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/destroy/{id}', 'destroy')->name('destroy');
     });
 });
 

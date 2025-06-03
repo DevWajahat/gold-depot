@@ -8,106 +8,82 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
-    public function applyCoupon($couponCode, $total)
+    public function checkCoupon($couponCode)
     {
 
 
         $couponCode = Coupon::where('coupon_code', $couponCode)->first();
 
+        $subTotal = 0;
 
-        if ($couponCode) {
-            if ($couponCode->expiry < now()) {
-                $error = "coupon is expired";
+        if (session()->has('cart') && count(session()->get('cart'))) {
+            foreach (session()->get('cart') as $id => $cart) {
 
+                $subTotal += $cart['price'] * $cart['quantity'];
+            }
+
+
+            if ($subTotal > 199) {
+                $subTotal;
+            } else {
+                $subTotal = $subTotal + 9.95;
+            }
+
+            if (!$couponCode) {
                 return response()->json([
-                    'message' => 'Coupon is Expired',
-                    'class' => 'danger'
+                    'message' => 'not found',
+                    'class' => 'red',
+                    'total' => $subTotal
                 ]);
             }
-            if ($couponCode->status == 'active') {
 
-                if ($couponCode->remaining == 0) {
-                    $error = "Coupon is used";
+            if ($couponCode) {
+                if ($couponCode->expiry < now()) {
+                    $error = "coupon is expired";
 
                     return response()->json([
-                        'message' => 'Coupon is Used',
-                        'class' => 'danger'
+                        'message' => 'Coupon is Expired',
+                        'class' => 'red',
+                        'total' => $subTotal
                     ]);
-                } else {
-                    $message = "coupon is applied";
+                }
+                if ($couponCode->status == 'active') {
 
+                    if ($couponCode->remaining == 0) {
+                        $error = "Coupon is used";
 
-                    $couponCode->update([
-                        'remaining' => $couponCode->remaining - 1
-                    ]);
+                        return response()->json([
+                            'message' => 'Coupon is Used',
+                            'class' => 'red',
+                            'total' => $subTotal
+                        ]);
+                    } else {
 
-                    $type = $couponCode->type;
+                        $type = $couponCode->type;
 
-                    if ($type == 'amount') {
+                        if ($type == 'amount') {
+                            return response()->json([
+                                'message' => 'Applied Successfully',
+                                'total' => $subTotal - $couponCode->discount,
+                                'class' => 'green'
+                            ]);
+                        } else {
+                            $discount =  $subTotal * $couponCode->discount / 100;
+                            $total = $subTotal - $discount;
+                            // dd($total);
 
-                        if (session()->has('cart') && count(session()->get('cart'))) {
-                            foreach (session()->get('cart') as $id => $cart) {
-
-                                $subTotal = $cart['price'] * $cart['quantity'];
-                            }
-                            $total = $subTotal - $couponCode->discount;
-                            if ($subTotal > 199) {
-                                return response()->json([
-                                    'class' => 'success',
-                                    'message' => 'Applied Successfully',
-                                    'total' => $total,
-                                    'shipping' => 'FREE SHIPPING',
-                                    'couponCode' => $couponCode
-                                ]);
-                            }
-                             else {
-                                $subTotal + 9.95;
-                                $wholePercent = $subTotal/100 * $cart['discount'];
-
-                              $total =  $subTotal - $wholePercent;
-
-                                return response()->json([
-                                    'class' => 'success',
-                                    'message' => 'Applied Successfully',
-                                    'total' => $total,
-                                    'shipping' => 'FREE SHIPPING',
-                                    'couponCode' => $couponCode
-                                ]);
-                            }
+                            return response()->json([
+                                'message' => 'Applied Successfully',
+                                'total' => $total,
+                                'class' => 'green'
+                            ]);
                         }
-
                     }
-                    else{
-                          if (session()->has('cart') && count(session()->get('cart'))) {
-                            foreach (session()->get('cart') as $id => $cart) {
-
-                                $subTotal = $cart['price'] * $cart['quantity'];
-                            }
-                            $subTotal;
-                            if ($subTotal > 199) {
-                                return response()->json([
-                                    'class' => 'success',
-                                    'message' => 'Applied Successfully',
-                                    'total' => $subTotal,
-                                    'shipping' => 'FREE SHIPPING',
-                                    'couponCode' => $couponCode
-                                ]);
-                            }
-                             else {
-                                return response()->json([
-                                    'class' => 'success',
-                                    'message' => 'Applied Successfully',
-                                    'total' => $subTotal + 9.95,
-                                    'shipping' => 'FREE SHIPPING',
-                                    'couponCode' => $couponCode
-                                ]);
-                            }
-                        }
-
+                } else {
                     return response()->json([
-                        'success' => 'success',
-                        'message' => 'Applied Successfully',
-                        'couponCode' => $couponCode
+                        'message' => 'This Coupon Is Inactive',
+                        'class' => 'red',
+                        'total' => $subTotal
                     ]);
                 }
             }
@@ -116,7 +92,6 @@ class CouponController extends Controller
         // return response()->json([
         //     'success' => false,
         //     'message' => 'not found'
-        // ]);
+        // ])
     }
-}
 }

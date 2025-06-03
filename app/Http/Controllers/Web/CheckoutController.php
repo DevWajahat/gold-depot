@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCheckoutRequest;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -33,6 +34,16 @@ class CheckoutController extends Controller
     {
         $user = auth()->user();
 
+        // dd($request->coupon_value);
+
+        $couponCode = Coupon::where('coupon_code', $request->coupon_value)->first();
+
+        if ($couponCode) {
+            $couponCode->update([
+                'remaining' => $couponCode->remaining - 1,
+            ]);
+        }
+
 
         $order = $user->orders()->create([
             'sub_total' => $request->sub_total,
@@ -46,18 +57,18 @@ class CheckoutController extends Controller
             'phone' => $request->phone
         ]);
 
-        foreach(session()->get('cart') as $id => $cart){
+        foreach (session()->get('cart') as $id => $cart) {
 
-
+            // $couponCode
 
             $order->products()->attach([
-                    $id => [
-                        'quantity'=> $cart['quantity'],
-                        'price' => $cart['price'],
-                        'product_name' => $cart['name'],
-                        'category' => $cart['category'],
-                        'total_price' => $cart['price'] * $cart['quantity']
-                    ]
+                $id => [
+                    'quantity' => $cart['quantity'],
+                    'price' => $cart['price'],
+                    'product_name' => $cart['name'],
+                    'category' => $cart['category'],
+                    'total_price' => $cart['price'] * $cart['quantity']
+                ]
             ]);
         }
 
@@ -70,6 +81,4 @@ class CheckoutController extends Controller
     {
         return view('screens.web.checkout.confirmation');
     }
-
-
 }

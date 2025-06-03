@@ -160,7 +160,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="sub-total">
+                                {{-- <div class="sub-total">
                                 <div class="row align-items-center ">
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
                                         <h4 class="subttl-hd">SALES</h4>
@@ -169,7 +169,7 @@
                                         <p class="subttl-para">$23</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                                 <div class="sub-total">
                                     <div class="row align-items-center ">
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
@@ -186,13 +186,13 @@
                                             </button>
                                         </div>
                                         <div class="d-flex justify-content-end coupon-hidden" style="display: none">
-                                            <input type="text" style="display: none" id="couponInput" name=""
+                                            <input type="text" style="display: none" id="couponInput" name="coupon_value"
                                                 class="">
                                             <br>
                                             <button style="display: none" class="btn btn-light " id="couponSubmitBtn">Apply
                                                 Coupon</button>
 
-                                            <p class="text-success" id="flashMessage"></p>
+                                            <p class="" id="flashMessage"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -204,10 +204,10 @@
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
                                             @if ($shipping == 'FREE SHIPPING')
                                                 <p class="subttl-para" id="total">${{ $subTotal }}</p>
-                                                <input type="text" style="display: none" name="total" id="total" value="{{ $subTotal }}">
+                                                <input type="hidden" style="display:none;" name="total" id="totalValue" value="{{ $subTotal }}">
                                             @else
-                                                <p class="subttl-para" id="totalValue">${{ $total }}</p>
-                                                <input type="text" style="display: none" name="total" id="total" value="{{ $total }}">
+                                                <p class="subttl-para" id="total">${{ $total }}</p>
+                                                <input type="hidden" style="display :none;" name="total" id="totalValue" value="{{ $total }}">
                                             @endif
                                         </div>
                                     </div>
@@ -247,8 +247,6 @@
 @endsection
 @push('scripts')
     <script>
-        var total = document.getElementById("total").value;
-        console.log(total);
 
 
         $(document).ready(function() {
@@ -275,12 +273,14 @@
                 var couponCode = $('#couponInput').val();
 
                 $.ajax({
-                    url: "applyCoupon/" + couponCode + "/" + "724",
+                    url: "check-coupon/" + couponCode + "/" ,
                     type: 'GET',
                     success: function(response) {
                         console.log(response);
                         $('#flashMessage').text(response.message);
+                        $('#flashMessage').css("color",response.class);
                         $('#total').text(`$`+response.total);
+                        $('#totalValue').val(response.total);
                     }
                 })
             });

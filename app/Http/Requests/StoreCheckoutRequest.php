@@ -27,7 +27,8 @@ class StoreCheckoutRequest extends FormRequest
             'address' => 'required',
             'zip_code' => 'required',
             'phone' => 'required|min:8',
-            'city' => 'required'
+            'city' => 'required',
+            'coupon' => 'sometimes'
         ];
     }
 }

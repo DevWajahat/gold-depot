@@ -169,7 +169,7 @@
             $('#couponSubmitBtn').on('click', function() {
                 var couponCode = $('#couponInput').val()
                 $.ajax({
-                    url: "checkCoupon/" + couponCode,
+                    url: "check-coupon/" + couponCode,
                     type: 'GET',
                     success: function(response) {
                         console.log(response);
