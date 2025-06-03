@@ -1,0 +1,76 @@
+@extends('layout.admin.app')
+
+@section('content')
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">DataTable with default features</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
+                            aria-describedby="example1_info">
+                            <thead>
+                                <tr>
+                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
+                                        aria-label="id: activate to sort column ascending">id
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-label="Full Name: activate to sort column ascending">Full Name
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-label="Total Amount: activate to sort column ascending">
+                                        Total Amount</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-label="Price: activate to sort column ascending">Address</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-label="Price: activate to sort column ascending">Status</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-label="CSS grade: activate to sort column ascending">Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($orders as $order)
+                                <tr class="odd">
+                                    <td class="dtr-control sorting_1" tabindex="0">{{ $order->id }}</td>
+                                    <td>{{ $order->full_name }}</td>
+                                    <td>{{ $order->total_amount }}</td>
+                                    <td>{{ $order->address }}</td>
+                                    <td>{{ $order->status }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.order.detail',$order->id) }}" class="btn btn-secondary">View</a>
+                                        {{-- <a href="{{ route('') }}" class="btn btn-warning">Edit</a>
+                                        <a href="{{ route('') }}" class="btn btn-danger">Delete</a> --}}
+                                    </td>
+                                </tr>
+                               @endforeach
+
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th rowspan="1" colspan="1">id</th>
+                                    <th rowspan="1" colspan="1">Full Name</th>
+                                    <th rowspan="1" colspan="1">Total Amount</th>
+                                    <th rowspan="1" colspan="1">Address</th>
+                                    <th rowspan="1" colspan="1">Status</th>
+                                    <th rowspan="1" colspan="1">Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    </div>
+@endsection
