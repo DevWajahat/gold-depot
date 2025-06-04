@@ -116,8 +116,8 @@
                                         alt=""> {{ auth()->user()->first_name }}
                                 </a>
                                 <ul class="dropdown-menu profile-dropdown" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('admin.logout') }}">Logout</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('profile.index') }}">Manage My profile</a>
+                                    <li><a class="dropdown-item " href="{{ route('admin.logout') }}">Logout</a></li>
+                                    <li><a class="dropdown-item " href="{{ route('profile.index') }}">Manage My profile</a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider">
@@ -149,8 +149,8 @@
                     <div class="col-lg-6 col-md-1 col-1">
                         <nav class="navbar-menu">
                             <ul class="list">
-                                <li class="list-item"><a href="{{ route('index') }}">Home</a></li>
-                                <li class="list-item"><a href="{{ route('about') }}">About Us</a></li>
+                                <li class="list-item"><a class="" href="{{ route('index') }}">Home</a></li>
+                                <li class="list-item"><a class="" href="{{ route('about') }}">About Us</a></li>
 
                                 @foreach ($categories as $category)
                                     <li class="list-item"><a
@@ -160,9 +160,9 @@
 
                                 {{-- <li class="list-item"><a href="{{ route('shop.category') }}">Gold</a></li>
                                 <li class="list-item"><a href="{{ route('shop.category') }}">Platinum</a></li> --}}
-                                <li class="list-item"><a href="{{ route('shop.index') }}">Shop All</a></li>
-                                <li class="list-item"><a href="{{ route('blog') }}">Blog</a></li>
-                                <li class="list-item"><a href="{{ route('contact') }}">Contact Us</a></li>
+                                <li class="list-item"><a  href="{{ route('shop.index') }}">Shop All</a></li>
+                                <li class="list-item"><a  href="{{ route('blog') }}">Blog</a></li>
+                                <li class="list-item"><a  href="{{ route('contact') }}">Contact Us</a></li>
 
                             </ul>
                             <div>

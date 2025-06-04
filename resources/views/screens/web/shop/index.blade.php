@@ -23,13 +23,15 @@
                     </div>
                 </div>
 
-                @foreach ($products as $product)
+                @foreach ($Products as $product)
                     <x-product-card :id="$product->id" :name="$product->name" :price="$product->price"
                         :image="$product->image"></x-product-card>
                 @endforeach
 
+                {{ $Products->links() }}
+
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-6">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
@@ -41,7 +43,7 @@
                         </ul>
                     </nav>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </section>
     <div class="shop-dollar-sec">

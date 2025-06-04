@@ -14,10 +14,6 @@ class ReviewController extends Controller
     public function store(StoreReviewRequest $request, $id)
     {
 
-
-
-
-
         if (auth()->user()) {
             $product =  Product::find($id);
 

@@ -52,7 +52,7 @@
                                         <td>
                                             <a href="{{ route('admin.products.detail', $product->id) }}"
                                                 class="btn btn-secondary">View</a>
-                                            <button class="btn btn-warning">Edit</button>
+                                            <a href="{{ route('admin.products.edit',$product->id) }}" class="btn btn-warning">Edit</a>
                                             <a href="{{ route('admin.products.destroy', $product->id) }}"
                                                 class="btn btn-danger">Delete</button>
                                         </td>

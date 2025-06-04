@@ -13,7 +13,7 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function products(): BelongsToMany
+    public function products(): BelongsToMany 
     {
         return $this->belongsToMany(Product::class)->withTimestamps()->withPivot('quantity','price','total_price','product_name','category');
     }

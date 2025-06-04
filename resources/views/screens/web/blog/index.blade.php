@@ -90,7 +90,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div>
-                        <img class="img-fluid" src="./assets/images/logo1.png" alt="">
+                        <img class="img-fluid" src="{{ asset('assets/web/images/logo1.png') }}" alt="">
                     </div>
                 </div>
             </div>

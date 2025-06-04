@@ -44,7 +44,7 @@
                         <!--begin::Small Box Widget 1-->
                         <div class="small-box text-bg-primary">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3>{{ count($orders) }}</h3>
                                 <p>New Orders</p>
                             </div>
                             <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"
@@ -86,7 +86,7 @@
                         <!--begin::Small Box Widget 3-->
                         <div class="small-box text-bg-warning">
                             <div class="inner">
-                                <h3>44</h3>
+                                <h3>{{ count($users) }}</h3>
                                 <p>User Registrations</p>
                             </div>
                             <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24"

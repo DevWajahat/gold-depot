@@ -51,7 +51,8 @@
                                 <input type="hidden" name="price" value="{{ $product->price }}">
 
                                 <label for="Quantity" class="form-label">Quantity: &nbsp;</label>
-                                <input type="number" min="1" placeholder="" name="quantity" class="form-input-add" value="1">
+                                <input type="number" min="1" placeholder="" name="quantity" class="form-input-add"
+                                    value="1">
                                 <input type="submit" class="primary-btn" value="Add To Cart">
                             </div>
 
@@ -106,7 +107,7 @@
                                                         {{-- @dd(auth()->user()->orders()->get()) --}}
 
 
-                                                            {{-- <li class="clearfix">
+                                                        {{-- <li class="clearfix">
                                                                 <img src="https://bootdey.com/img/Content/user_1.jpg"
                                                                     class="avatar" alt="">
                                                                 <div class="post-comments">
@@ -120,7 +121,7 @@
                                                             </li> --}}
 
 
-                                                            {{-- <li class="clearfix">
+                                                        {{-- <li class="clearfix">
                                                             <img src="https://bootdey.com/img/Content/user_2.jpg"
                                                                 class="avatar" alt="">
                                                             <div class="post-comments">

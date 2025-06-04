@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">DataTable with default features</h3>
+            <h2 class="fw-bold">All Orders</h2>
         </div>
         <!-- /.card-header -->
         <div class="card-body">

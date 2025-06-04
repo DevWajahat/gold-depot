@@ -211,7 +211,7 @@
                             provident</p>
                     </div>
                 </div>
-                @foreach ($products as $product)
+                @foreach ($Products as $product)
                     <x-product-card :id="$product->id" :name="$product->name" :price="$product->price"
                         :image="$product->image"></x-product-card>
                 @endforeach
@@ -278,10 +278,15 @@
                 <div class="col-12">
                     <div class="review-slider">
 
+                        @foreach ($reviews as $review)
+                        <x-review-item :name="$review->full_name" :message="$review->message"></x-review-item>
+
+                        @endforeach
+
+
+                        {{-- <x-review-item></x-review-item>
                         <x-review-item></x-review-item>
-                        <x-review-item></x-review-item>
-                        <x-review-item></x-review-item>
-                        <x-review-item></x-review-item>
+                        <x-review-item></x-review-item> --}}
 
                     </div>
                     <div class="banner-slider-btn-rev">
