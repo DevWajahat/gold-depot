@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\IndexController as AdminIndexController;
@@ -158,6 +159,17 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
 
     Route::prefix('/users')->controller(UserController::class)->name('users.')->group(function () {
         Route::get('/', 'index')->name('index');
+    });
+
+    // Carousels
+
+    Route::prefix('carousel')->controller(CarouselController::class)->name('carousel.')->group(function () {
+        Route::get('/index','index')->name('index');
+        Route::get('/create','create')->name('create');
+        Route::post('/store','store')->name('store');
+        Route::get('/edit/{id}','edit')->name('edit');
+        Route::post('/update/{id}','update')->name('update');
+        Route::get('/destroy/{id}','destroy')->name('destroy');
     });
 });
 

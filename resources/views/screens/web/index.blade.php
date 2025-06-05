@@ -3,7 +3,32 @@
 @section('content')
     <section class="hero-banner">
         <div class="banner-slider">
-            <div class="slider-item-banner" style="background-image: url({{ asset('assets/web/images/banner1.png') }});">
+
+            {{-- @dd($carousels) --}}
+            @foreach ($carousels as $carousel)
+
+
+                <div class="slider-item-banner"
+                    style="background-image: url({{ asset('images/banner/' . $carousel->banner) }});">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-md-10 col-12">
+                                <div class="banner-content">
+
+                                    <h1 class="primary-hd">Gold Depot</h1>
+                                    <h2 class="secondary-hd">{{ $carousel->title }}</h2>
+                                    <p class="para white">{{ $carousel->description }}</p>
+                                    <a href="{{ route('shop.index') }}" class="primary-btn">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            @endforeach
+
+
+            {{-- <div class="slider-item-banner" style="background-image: url({{ asset('assets/web/images/banner1.png') }});">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-10 col-12">
@@ -38,25 +63,7 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="slider-item-banner" style="background-image: url({{ asset('assets/web/images/banner1.png') }});">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-md-10 col-12">
-                            <div class="banner-content">
-                                <h1 class="primary-hd">Gold Depot</h1>
-                                <h2 class="secondary-hd">Store Has It ALL!</h2>
-                                <p class="para white">CALL US for ANY COIN! Is there a certain special order item that you
-                                    want? We'll send it!
-                                    Gold Depot Store is also a Certified Industry Wholesaler and CCE Market Maker. CALL US
-                                    1-800-733-8813 ASK to speak with one of our senior numismatic representatives Today!</p>
-                                <a href="{{ route('shop.index') }}" class="primary-btn">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            </div> --}}
         </div>
         <div class="banner-slider-btn">
             <button class="prev-btn"><i class="fa-solid fa-caret-left"></i></button>
@@ -65,7 +72,7 @@
     </section>
     <section class="financial-section fix-pading">
         <!-- <img class="img-fluid financial-img" src="./assets/images/financial-img.png" alt="">
-                        <img class="img-fluid financial-img-2" src="./assets/images/financial-img2.png" alt=""> -->
+                            <img class="img-fluid financial-img-2" src="./assets/images/financial-img2.png" alt=""> -->
 
         <div class="container-fluid">
             <div class="row justify-content-center">
@@ -148,8 +155,7 @@
                         </div>
                         <div class="financial-item">
                             <div class="bit-coin-img-area">
-                                <img class="img-fluid" src="{{ asset('assets/web/images/bitSilver.png') }}"
-                                    alt="">
+                                <img class="img-fluid" src="{{ asset('assets/web/images/bitSilver.png') }}" alt="">
                             </div>
                             <div class="inner-financial-content text-center">
                                 <div class="">
@@ -279,8 +285,7 @@
                     <div class="review-slider">
 
                         @foreach ($reviews as $review)
-                        <x-review-item :name="$review->full_name" :message="$review->message"></x-review-item>
-
+                            <x-review-item :name="$review->full_name" :message="$review->message"></x-review-item>
                         @endforeach
 
 
