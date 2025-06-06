@@ -21,9 +21,7 @@ use App\Http\Controllers\Web\IndexController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\ShopController;
-use App\Models\ProductImage;
-use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,42 +44,40 @@ Route::controller(ShopController::class)->name('shop.')->group(function () {
 });
 
 // Web Cart Routes
-
-Route::get('cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('cart/store/{id}', [CartController::class, 'store'])->name('cart.store');
-Route::post('cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::get('cart/destroy/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-
+Route::controller(CartController::class)->group(function () {
+    Route::get('cart', 'index')->name('cart.index');
+    Route::post('cart/store/{id}', 'store')->name('cart.store');
+    Route::post('cart/update/{id}', 'update')->name('cart.update');
+    Route::get('cart/destroy/{id}', 'destroy')->name('cart.destroy');
+});
 
 // Web Coupon Routes
 
 Route::get('check-coupon/{couponCode}/', [WebCouponController::class, 'checkCoupon'])->name('checkCoupon');
 
-// Route::get('dcart',function () {
-//    session()->forget('cart');
-//     return back();
-// });
-
-
 //Checkout Routes
-
-Route::get('checkout', [CheckoutController::class, 'index'])->middleware('CheckCustomer')->name('checkout.index');
-Route::post('checkout/store', [CheckoutController::class, 'store'])->middleware('CheckCustomer')->name('checkout.store');
-
-Route::get('confirmed-order', [CheckoutController::class, 'confirm'])->name('checkout.confirm');
-
-
+Route::middleware('CheckCustomer')->controller(CheckoutController::class)->name('checkout.')->group(function () {
+    Route::get('checkout', 'index')->name('index');
+    Route::post('checkout/store', 'store')->name('store');
+    Route::get('confirmed-order', 'confirm')->name('confirm');
+});
 
 // Authorization and Authentication of Customers
-
-Route::get('login', [AuthController::class, 'loginView'])->name('login')->middleware('guest');
-Route::post('login', [AuthController::class, 'login']);
-Route::get('register', [AuthController::class, 'registerView'])->name('register')->middleware('guest');
-Route::post('register', [AuthController::class, 'register']);
-Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::controller(AuthController::class)->group(function () {
+        Route::get('login', [AuthController::class, 'loginView'])->name('login');
+        Route::post('login', [AuthController::class, 'login']);
+        Route::get('register', [AuthController::class, 'registerView'])->name('register');
+        Route::post('register', [AuthController::class, 'register']);
+        Route::get('/forgot-password', [AuthController::class, 'forgotPasswordView'])->name('forgotpassword');
+        Route::post('/forgot-password', [AuthController::class, 'forgotPasswordPost']);
+        Route::get('/view/{token}', 'resetpasswordView')->name('reset');
+        Route::post('/', 'resetpassword')->name('update');
+    });
+    Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+});
 
 // Manage Customer Profile
-
 Route::middleware('CheckCustomer')->prefix('profile')->controller(ProfileController::class)->name('profile.')->group(function () {
     Route::get('/details', 'index')->name('index');
     Route::get('/edit', 'edit')->name('edit');
@@ -91,11 +87,8 @@ Route::middleware('CheckCustomer')->prefix('profile')->controller(ProfileControl
     Route::get('/orders', 'orders')->name('order');
     Route::get('order/details/{id}', 'orderDetail')->name('order.detail');
 });
-
 // Customer Reviews
-
 Route::post('store/reviews/{id}', [ReviewController::class, 'store'])->middleware('CheckCustomer')->name('store.reviews');
-
 // Admin Routes
 
 Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexController::class)->name('admin.')->group(function () {
@@ -108,32 +101,25 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
         Route::post('/store', 'store')->name('.store');
         Route::get('/edit-products/{id}', 'edit')->name('.edit');
         Route::post('/update/{id}', 'update')->name('.update');
-        Route::get('/destroy/{id}', 'destroy')->name('.destroy');
+        Route::post('/update-status', 'updateStatus')->name('.update.status');
     });
-
     // Product Images
-
     Route::post('/product-image/destroy', [ProductImagesController::class, 'destroy'])->name('productimage.destroy');
-
-
     // Category
-
     Route::prefix('/category')->controller(CategoryController::class)->name('category.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
-        Route::get('/destroy/{id}', 'destroy')->name('destroy');
+        Route::post('/update-status', 'updateStatus')->name('update.status');
     });
-
     // Orders
-
     Route::prefix('/orders')->controller(OrderController::class)->name('order.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/details/{id}', 'details')->name('detail');
+        Route::post('/status-update', 'updateStatus')->name('.status.update');
     });
-
     // Coupons
     Route::prefix('/coupon')->controller(CouponController::class)->name('coupon.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -142,10 +128,9 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/destroy/{id}', 'destroy')->name('destroy');
+        Route::post('/update-status', 'updateStatus')->name('update');
     });
-
     //  Blogs
-
     Route::prefix('/blogs')->controller(AdminBlogController::class)->name('blog.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
@@ -154,31 +139,27 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/destroy/{id}', 'destroy')->name('destroy');
     });
-
     // Users
 
     Route::prefix('/users')->controller(UserController::class)->name('users.')->group(function () {
         Route::get('/', 'index')->name('index');
     });
-
     // Carousels
 
     Route::prefix('carousel')->controller(CarouselController::class)->name('carousel.')->group(function () {
-        Route::get('/index','index')->name('index');
-        Route::get('/create','create')->name('create');
-        Route::post('/store','store')->name('store');
-        Route::get('/edit/{id}','edit')->name('edit');
-        Route::post('/update/{id}','update')->name('update');
-        Route::get('/destroy/{id}','destroy')->name('destroy');
+        Route::get('/index', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/destroy/{id}', 'destroy')->name('destroy');
     });
 });
 
-
-
 // Authentication and Authorization of Admin
 
-Route::get('/admin/login', [AdminAuthController::class, 'loginView'])->name('admin.login')->middleware('guest');
-Route::post('/admin/login', [AdminAuthController::class, 'login'])->middleware('guest');
-// Route::get('/admin/register', [AdminAuthController::class, 'registerView'])->name('admin.register')->middleware('guest');
-// Route::post('/admin/register', [AdminAuthController::class, 'register'])->middleware('guest');
-Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+Route::controller(AdminAuthController::class)->middleware('guest')->group(function () {
+    Route::get('/admin/login',  'loginView')->name('admin.login');
+    Route::post('/admin/login',  'login');
+    Route::get('/admin/logout', 'logout')->name('admin.logout');
+});

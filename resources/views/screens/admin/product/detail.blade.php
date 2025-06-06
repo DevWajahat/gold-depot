@@ -76,10 +76,6 @@
                         <p class="card-text"><strong>Added On:</strong> {{ $product->created_at }}</p>
                         <p class="card-text"><strong>Last Updated:</strong> {{ $product->updated_at }}</p>
                         <!-- Action Buttons -->
-                        <div class="mt-4">
-                            <a href="edit_product.html" class="btn btn-primary me-2">Edit Product</a>
-                            <button class="btn btn-danger" onclick="confirmDelete()">Delete Product</button>
-                        </div>
                     </div>
                 </div>
             </div>

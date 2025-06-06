@@ -63,15 +63,7 @@
 
 
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th rowspan="1" colspan="1">id</th>
-                                        <th rowspan="1" colspan="1">Category</th>
-                                        <th rowspan="1" colspan="1">Image</th>
-
-                                        <th rowspan="1" colspan="1">Actions</th>
-                                    </tr>
-                                </tfoot>
+                              
                             </table>
 
 

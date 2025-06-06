@@ -31,7 +31,7 @@ class ProductController extends Controller
 
         if ($request->has('image')) {
             // dd($request->image);
-            $FeaturedImageName = time() . '_' . $request->image->getClientOriginalName();
+            $FeaturedImageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/products/featured'), $FeaturedImageName);
         }
@@ -40,6 +40,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'image' => $FeaturedImageName,
             'price' => $request->price,
+
             'short_description' => $request->shortdescription,
             'long_description' => $request->longdescription
         ]);
@@ -48,7 +49,7 @@ class ProductController extends Controller
             $imageNameArray = [];
             foreach ($request->images as $image) {
                 if ($image) {
-                    $imageName = time() . "_" . $image->getClientOriginalName();
+                    $imageName = time() . "_" . $image->getClientOriginalExtension();
                     $imageNameArray[] = ['image' => $imageName];
                     $image->move(public_path('images/products'), $imageName);
                 }
@@ -87,7 +88,7 @@ class ProductController extends Controller
             // dd($request->image);
 
 
-            $FeaturedImageName = time() . '_' . $request->image->getClientOriginalName();
+            $FeaturedImageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/products/featured'), $FeaturedImageName);
         } else {
@@ -98,17 +99,18 @@ class ProductController extends Controller
         $category->products()->update([
             'name' => $request->name,
             'price' => $request->price,
+            'status' => $request->status,
             'short_description' => $request->short_description,
             'long_description' => $request->long_description,
             'image' => $FeaturedImageName
         ]);
 
         if ($request->file('images')) {
-               $product->productImages()->delete();
+            $product->productImages()->delete();
             $imageNameArray = [];
             foreach ($request->images as $image) {
                 if ($image) {
-                    $imageName = time() . "_" . $image->getClientOriginalName();
+                    $imageName = time() . "_" . $image->getClientOriginalExtension();
                     $imageNameArray[] = ['image' => $imageName];
                     $image->move(public_path('images/products'), $imageName);
                 }
@@ -120,20 +122,40 @@ class ProductController extends Controller
         return back()->with('message', 'Product Updated Successfully.');
     }
 
-    public function destroy($id)
-    {
 
-        $product = Product::find($id);
+    public function updateStatus(Request $request){
 
-        if ($product) {
+        // dd($request->product,$request->status);
+        $product = Product::find($request->product);
 
-            ProductImage::where('product_id', $id)->delete();
+        // dd($product);
 
-            $product->delete();
+        $product->update([
+            'status' => $request->status
+        ]);
 
-            return back()->with('message', 'Product Deleted Successfully');
-        } else {
-            return back()->with('error', 'Product Not Found');
-        }
+        // dd($product);
+
+        return response()->json([
+            'message' => "Done Successfully"
+        ]);
     }
+
+
+    // public function destroy($id)
+    // {
+
+    //     $product = Product::find($id);
+
+    //     if ($product) {
+
+    //         ProductImage::where('product_id', $id)->delete();
+
+    //         $product->delete();
+
+    //         return back()->with('message', 'Product Deleted Successfully');
+    //     } else {
+    //         return back()->with('error', 'Product Not Found');
+    //     }
+    // }
 }

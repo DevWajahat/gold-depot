@@ -54,16 +54,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">id</th>
-                                    <th rowspan="1" colspan="1">First Name</th>
-                                    <th rowspan="1" colspan="1">Last Name</th>
-                                    <th rowspan="1" colspan="1">Role</th>
-                                    <th rowspan="1" colspan="1">Email</th>
-                                    <th rowspan="1" colspan="1">Phone</th>
-                                </tr>
-                            </tfoot>
+
                         </table>
                     </div>
                 </div>
@@ -73,3 +64,4 @@
     </div>
     <!-- /.card-body -->
 @endsection
+

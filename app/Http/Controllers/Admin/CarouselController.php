@@ -28,7 +28,7 @@ class CarouselController extends Controller
     {
 
         if ($request->has('banner')) {
-            $imageName = time() . '_' . $request->banner->getClientOriginalName();
+            $imageName = time() . '_' . $request->banner->getClientOriginalExtension();
 
             $request->banner->move(public_path('images/banner'), $imageName);
         }

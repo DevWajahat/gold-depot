@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreCheckoutRequest extends FormRequest
+class UpdateCouponRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +23,14 @@ class StoreCheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|min:3|max:40',
-            'country' => 'required',
-            'address' => 'required',
-            'zip_code' => 'required',
-            'phone' => 'required|min:8',
-            'city' => 'required',
-            'coupon' => 'sometimes',
-            'state' => 'required',
-            'radio' => 'required'
+            'coupon_code' =>  [
+                'required',
+                Rule::unique('coupons')->ignore($this->id),
+            ],
+            'discount' => 'required',
+            'max_usage' => 'required|min:1',
+            'expiry' => 'required',
+            'status' => 'required',
         ];
     }
 }

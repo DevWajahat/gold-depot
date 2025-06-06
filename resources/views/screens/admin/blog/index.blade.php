@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h2 class="fw-bold">All Categories</h2>
+            <h2 class="fw-bold">All Blogs</h2>
         </div>
         @if (session()->has('message'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -58,15 +58,6 @@
 
 
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th rowspan="1" colspan="1">id</th>
-                                        <th rowspan="1" colspan="1">Blog</th>
-                                        <th rowspan="1" colspan="1">Image</th>
-
-                                        <th rowspan="1" colspan="1">Actions</th>
-                                    </tr>
-                                </tfoot>
                             </table>
 
 

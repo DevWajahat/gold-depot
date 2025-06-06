@@ -25,7 +25,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         if ($request->has('image')) {
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
+            $imageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/category'), $imageName);
         }
@@ -33,14 +33,14 @@ class CategoryController extends Controller
             'name' => $request->name,
             'image' => $imageName
         ]);
-        return back()->with('message','Category Added Successfully');
+        return back()->with('message', 'Category Added Successfully');
     }
 
     public function edit($id)
     {
         $category = Category::find($id);
 
-        return view('screens.admin.category.edit',get_defined_vars());
+        return view('screens.admin.category.edit', get_defined_vars());
     }
     public function update($id, StoreUpdateCategoryRequest $request)
     {
@@ -48,30 +48,43 @@ class CategoryController extends Controller
 
         $category = Category::find($id);
 
-          if ($request->has('image')) {
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
+        if ($request->has('image')) {
+            $imageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/category'), $imageName);
             // dd($imageName);
-        }
-
-        else{
+        } else {
             $imageName = $category->image;
         }
-
-
         $category->update([
-            'name' =>$request->name,
+            'name' => $request->name,
             'image' => $imageName
         ]);
-        return redirect()->route('admin.category.index')->with('message','category updated Successfully');
-
+        return redirect()->route('admin.category.index')->with('message', 'category updated Successfully');
     }
 
-    public function destroy ($id)
+    public function updateStatus(Request $request)
     {
-      $category =  Category::find($id);
-        $category->delete();
-        return back()->with('message','Category Deleted Successfully');
+        $category = Category::find($request->category);
+        if ($request->status == 'unavailable') {
+
+            $category->products()->update([
+                'status' => "discontinued"
+            ]);
+            $category->update([
+                'status' => $request->status
+            ]);
+        } else {
+
+            $category->update([
+                'status' => $request->status
+            ]);
+        }
+
+
+        return response()->json([
+            'message' => 'Successfully',
+            'category' => $category
+        ]);
     }
 }

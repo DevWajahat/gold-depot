@@ -13,10 +13,10 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function products(): BelongsToMany 
+    public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class)->withTimestamps()->withPivot('quantity','price','total_price','product_name','category');
     }
 
-    protected $fillable = ['user_id','sub_total','shipping','total_amount','full_name','city','country','address','zip_code','phone','status'];
+    protected $fillable = ['user_id','sub_total','shipping','total_amount','full_name','city','country','address','zip_code','phone','status','state','coupon_code','discount'];
 }

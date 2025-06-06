@@ -16,10 +16,9 @@ class ReviewController extends Controller
 
         if (auth()->user()) {
             $product =  Product::find($id);
-
             $user = User::find(auth()->user()->id);
 
-
+            
             if (!$user->orders->isEmpty()) {
                 $product->reviews()->create([
                     'user_id' => $user->id,

@@ -12,8 +12,6 @@ class CartController extends Controller
     public function index()
     {
         //  dd(session()->get('cart'));
-
-
         $subTotal = 0;
         if (session()->has('cart')) {
             foreach (session()->get('cart') as $id => $cart) {
@@ -21,14 +19,7 @@ class CartController extends Controller
                 $subTotal += $cart['price'] * $cart['quantity'];
             }
         }
-        $shipping = 9.95;
-
-        if ($subTotal > 199) {
-
-            $shipping = "FREE SHIPPING";
-            return view('screens.web.cart.index', get_defined_vars());
-        }
-
+        $shipping = $subTotal > 199 ? "FREE SHIPPING" : 9.95;
 
         return view('screens.web.cart.index', get_defined_vars());
     }
@@ -108,17 +99,16 @@ class CartController extends Controller
 
         return back()->with('message', 'Product added to cart Successfully');
     }
+
     public function destroy($id)
     {
         if ($id) {
             $cart = session()->get('cart');
             if (isset($cart[$id])) {
                 unset($cart[$id]);
-
-                session()->put('cart', $cart);
+                // session()->put('cart', $cart);
             }
         }
-
         return back()->with('message', 'product Removed From Cart Successfully');
     }
 }

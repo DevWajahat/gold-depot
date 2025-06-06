@@ -7,12 +7,7 @@
                 <div class="col-12 m-0">
                     <div class="sub-sec">
                         <h1 class="cart-hd">Checkout</h1>
-                        <div class="return-area">
-                            <p>
-                                Returning customer?
-                            </p>
-                            <a href="{{ route('login') }}">Click here to login</a>
-                        </div>
+
                     </div>
                 </div>
 
@@ -46,6 +41,14 @@
                                 <input type="text" name="city" value="{{ old('city') }}"
                                     class="@error('city') is-invalid @enderror">
                                 @error('city')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                             <div class="mb-2">
+                                <label for="">State</label>
+                                <input type="text" name="state" value="{{ old('state') }}"
+                                    class="@error('state') is-invalid @enderror">
+                                @error('state')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -232,10 +235,13 @@
                                     </div>
                                 </div> --}}
                                 <label class="form-check-label payment-radio tearm-label" for="flexRadioDefault2">
-                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                    <input class="form-check-input" type="checkbox" name="radio"
                                         id="flexRadioDefault2">
                                     I have read and agree to the website terms and conditions
                                 </label>
+                                @error('radio')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                                 <button class="primary-btn" type="submit">Place Order</button>
                             </div>
                         </div>

@@ -38,6 +38,8 @@
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                         colspan="1" aria-label="Price: activate to sort column ascending">price</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-label="Status: activate to sort column ascending">Status</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                         colspan="1" aria-label="CSS grade: activate to sort column ascending">Actions
                                     </th>
                                 </tr>
@@ -50,24 +52,23 @@
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->price }}</td>
                                         <td>
+                                            <select  name="status" id="status-{{ $product->id }}" class="form-control status">
+                                                <option value="available" {{ $product->status == "available" ? 'selected': '' }}>Available</option>
+                                                <option value="out-of-stock" {{ $product->status == "out-of-stock" ? 'selected': '' }}>Out Of Stock</option>
+                                                <option value="discontinued" {{ $product->status == "discontinued" ? 'selected': '' }}>Discontinued</option>
+                                            </select>
+                                        </td>
+                                        <td>
                                             <a href="{{ route('admin.products.detail', $product->id) }}"
                                                 class="btn btn-secondary">View</a>
-                                            <a href="{{ route('admin.products.edit',$product->id) }}" class="btn btn-warning">Edit</a>
-                                            <a href="{{ route('admin.products.destroy', $product->id) }}"
-                                                class="btn btn-danger">Delete</button>
+                                            <a href="{{ route('admin.products.edit', $product->id) }}"
+                                                class="btn btn-warning">Edit</a>
+
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">id</th>
-                                    <th rowspan="1" colspan="1">Category</th>
-                                    <th rowspan="1" colspan="1">Name</th>
-                                    <th rowspan="1" colspan="1">Price</th>
-                                    <th rowspan="1" colspan="1">Actions</th>
-                                </tr>
-                            </tfoot>
+
                         </table>
                     </div>
                 </div>
@@ -78,3 +79,29 @@
     <!-- /.card-body -->
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $(document).on("change", ".status", function() {
+                 var status = $(this).find(":selected").val();
+                 var product = $(this).attr('id');
+                 product = product.split('-');
+                 product = product[1];
+                 console.log(status + product)
+
+                 $.ajax({
+                    type: 'POST',
+                    url: '/admin/products/update-status',
+                    data: {
+                        '_token': "{{ csrf_token() }}",
+                        "product": product,
+                        "status" : status
+                    },
+                    success: function (response){
+                        console.log(response)
+                    }
+                 });
+            });
+        });
+    </script>
+@endpush

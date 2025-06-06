@@ -19,6 +19,20 @@ class OrderController extends Controller
     {
         $order = Order::find($id);
 
-        return view('screens.admin.orders.details',get_defined_vars());
+        return view('screens.admin.orders.details', get_defined_vars());
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $order = Order::find($request->order);
+
+        $order->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'status' => $order->status,
+            'message' => "Done"
+        ]);
     }
 }

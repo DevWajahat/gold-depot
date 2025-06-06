@@ -25,8 +25,6 @@ class CheckoutController extends Controller
             $shipping = "FREE SHIPPING";
         }
 
-
-
         return view('screens.web.checkout.index', get_defined_vars());
     }
 
@@ -42,6 +40,8 @@ class CheckoutController extends Controller
             $couponCode->update([
                 'remaining' => $couponCode->remaining - 1,
             ]);
+
+        //  $discount = $couponCode->type == 'percent' ? ;
         }
 
 
@@ -51,6 +51,7 @@ class CheckoutController extends Controller
             'total_amount' => $request->total,
             'full_name' => $request->full_name,
             'city' => $request->city,
+            'state' => $request->state,
             'country' => $request->country,
             'address' => $request->address,
             'zip_code' => $request->zip_code,
@@ -58,7 +59,6 @@ class CheckoutController extends Controller
         ]);
 
         foreach (session()->get('cart') as $id => $cart) {
-
             // $couponCode
 
             $order->products()->attach([

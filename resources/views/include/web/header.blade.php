@@ -120,9 +120,11 @@
                                     <li><a class="dropdown-item " href="{{ route('profile.index') }}">Manage My profile</a>
                                     </li>
                                     <li>
-                                        <hr class="dropdown-divider">
+                                        @if (auth()->user()->role == 'admin')
+                                            <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.index') }}">Admin Dashboard</a></li>
+                                    @endif
                                 </ul>
                             </li>
                         @else
@@ -150,7 +152,8 @@
                         <nav class="navbar-menu">
                             <ul class="list">
                                 <li class="list-item"><a class="" href="{{ route('index') }}">Home</a></li>
-                                <li class="list-item"><a class="" href="{{ route('about') }}">About Us</a></li>
+                                <li class="list-item"><a class="" href="{{ route('about') }}">About Us</a>
+                                </li>
 
                                 @foreach ($categories as $category)
                                     <li class="list-item"><a
@@ -160,9 +163,9 @@
 
                                 {{-- <li class="list-item"><a href="{{ route('shop.category') }}">Gold</a></li>
                                 <li class="list-item"><a href="{{ route('shop.category') }}">Platinum</a></li> --}}
-                                <li class="list-item"><a  href="{{ route('shop.index') }}">Shop All</a></li>
-                                <li class="list-item"><a  href="{{ route('blog') }}">Blog</a></li>
-                                <li class="list-item"><a  href="{{ route('contact') }}">Contact Us</a></li>
+                                <li class="list-item"><a href="{{ route('shop.index') }}">Shop All</a></li>
+                                <li class="list-item"><a href="{{ route('blog') }}">Blog</a></li>
+                                <li class="list-item"><a href="{{ route('contact') }}">Contact Us</a></li>
 
                             </ul>
                             <div>
@@ -174,12 +177,10 @@
                     </div>
                     <div class="col-lg-3 col-md-5 col-6">
                         <div class="header-cart-area">
-                            <div class="search-open">
+                            {{-- <div class="search-open">
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                            </div>
-                            <div class="call-area">
-                                <i class="fa-solid fa-phone-volume"></i>
-                            </div>
+                            </div> --}}
+
                             <a href="{{ route('cart.index') }}" class="black">
                                 @if (session()->has('cart') && count(session()->get('cart')))
                                     <div class="cart-area">
@@ -192,9 +193,8 @@
                                         <span class="cart-text">Cart</span>
 
                                     </div>
-
-                                    @else
-                                     <div class="cart-area">
+                                @else
+                                    <div class="cart-area">
                                         <span class="cart-count">
                                             {{ 0 }}
 

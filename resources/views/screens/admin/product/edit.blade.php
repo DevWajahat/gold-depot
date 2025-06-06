@@ -29,13 +29,31 @@
                     </div>
 
                     <div class="mt-3">
-                        <img src="{{ asset('images/products/featured/' . $product->image) }}"
-                            style="width: 100px !important; height:100px !important" alt="">
-
+                        <label for="" class="form-label">Status: </label>
+                        <select class="form-control" name="status" id="">
+                            <option value="available" {{ $product->status == 'available' ? 'selected' : '' }}>Available
+                            </option>
+                            <option value="out-of-stock" {{ $product->status == 'out-of-stock' ? 'selected' : '' }}>Out Of
+                                Stock</option>
+                            <option value="discontinued" {{ $product->status == 'discontinued' ? 'selected' : '' }}>
+                                Discontinued</option>
+                        </select>
                     </div>
+
                     <div class="mt-3">
                         <label for="name" class="form-label">Featured Image:</label>
                         <input type="file" class="form-control" name="image" id="img">
+                    </div>
+                    <div class="mt-5">
+                        <img src="{{ asset('images/products/featured/' . $product->image) }}"
+                            style="width: 100px !important; height:100px !important" alt="">
+                    </div>
+
+
+
+                    <div class="mt-3">
+                        <label for="name" class="form-label">Multiple Images:</label>
+                        <input type="file" class="form-control" name="images[]" id="img" multiple>
                     </div>
 
                     <div class="mt-3 product-multi-img">
@@ -48,12 +66,6 @@
                                 id="deleteImage-{{ $productimage->id }}">Delete</button>
                         @endforeach
                     </div>
-
-                    <div class="mt-3">
-                        <label for="name" class="form-label">Multiple Images:</label>
-                        <input type="file" class="form-control" name="images[]" id="img" multiple>
-                    </div>
-
 
                     <div class="mt-3">
                         <label for="price" class="form-label">Price: </label>
@@ -90,7 +102,7 @@
             // var deleteImg = document.getElementById('deleteImage');
             // console.log(deleteImg)
             $(document).ready(function() {
-                $(document).on("click",'.deleteImg',function(event) {
+                $(document).on("click", '.deleteImg', function(event) {
                     event.preventDefault();
                     var deleteBtn = $('.deleteImg');
                     var deleteId = deleteBtn.attr('id');
@@ -112,7 +124,8 @@
                             let html = '';
                             response.images.forEach(element => {
                                 console.log(element);
-                                let url = `{{ asset('images/products/') }}/` + element.image;
+                                let url = `{{ asset('images/products/') }}/` + element
+                                    .image;
                                 let id = `${element.id}`;
                                 html +=
                                     `   <img src="${url}"

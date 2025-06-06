@@ -26,6 +26,14 @@
                         <label for="name" class="form-label">Category image:</label>
                         <input type="file" class="form-control" name="image" id="img">
                     </div>
+
+                    {{-- <div class="mt-3">
+                        <label for="" class="form-label">Status: </label>
+                        <select name="status" id="">
+                            <option value=""></option>
+                        </select>
+                    </div> --}}
+
                     <div class="mt-5">
                         <input type="submit" value="Update Category" class="btn btn-primary col-lg-12" name="" id="">
                         @error('image')

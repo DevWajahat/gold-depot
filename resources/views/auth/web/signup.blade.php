@@ -19,7 +19,6 @@
                                     @enderror
                                 </div>
 
-
                                 <div class="col-12">
                                     <input type="text" name="last_name"
                                         class="form-input @error('last_name') is-invalid   @enderror"
@@ -42,7 +41,6 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <input type="hidden" name="role" value="customer" id="">
                                 <div class="col-12">
 
                                     <div class="login-pass-area">

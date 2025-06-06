@@ -11,7 +11,7 @@ use Laravel\Scout\Searchable;
 class Product extends Model
 {
 
-    protected $fillable = ['name', 'price', 'image', 'category_id', 'short_description', 'long_description'];
+    protected $fillable = ['name', 'price', 'image', 'category_id', 'short_description', 'long_description', 'status'];
 
     public function category(): BelongsTo
     {

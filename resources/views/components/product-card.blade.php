@@ -22,7 +22,7 @@
               <p class="shipping-para pr"><strong>${{ $price }}</strong></p>
               <div class="cart-btn-area">
                   <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i> Add To Cart</button>
-                  <button class="cart-btn"><i class="fa-solid fa-code-compare"></i> Compare</button>
+                 
               </div>
           </div>
       </a>

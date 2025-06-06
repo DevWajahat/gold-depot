@@ -14,7 +14,6 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8 col-md-10 col-12">
                                 <div class="banner-content">
-
                                     <h1 class="primary-hd">Gold Depot</h1>
                                     <h2 class="secondary-hd">{{ $carousel->title }}</h2>
                                     <p class="para white">{{ $carousel->description }}</p>
@@ -268,6 +267,8 @@
         </div>
     </section>
 
+    @if(!$reviews == '')
+
     <section class="review-sec fix-pading">
         <div class="container">
             <div class="row justify-content-center">
@@ -283,11 +284,9 @@
 
                 <div class="col-12">
                     <div class="review-slider">
-
                         @foreach ($reviews as $review)
                             <x-review-item :name="$review->full_name" :message="$review->message"></x-review-item>
                         @endforeach
-
 
                         {{-- <x-review-item></x-review-item>
                         <x-review-item></x-review-item>
@@ -303,6 +302,7 @@
         </div>
     </section>
 
+    @endif
 
     <section class="standared-sec fix-pading pb-0">
         <div class="container">

@@ -21,20 +21,25 @@
                                         aria-label="id: activate to sort column ascending">id
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                        colspan="1" aria-label="Full Name: activate to sort column ascending">Product Name
+                                        colspan="1" aria-label="Full Name: activate to sort column ascending">Product
+                                        Name
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                         colspan="1" aria-label="Price: activate to sort column ascending">
                                         Price</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                        colspan="1" aria-label="Quantity: activate to sort column ascending">Quantity</th>
+                                        colspan="1" aria-label="Quantity: activate to sort column ascending">Quantity
+                                    </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                        colspan="1" aria-label="Total Price: activate to sort column ascending">Total Price</th>
+                                        colspan="1" aria-label="Total Price: activate to sort column ascending">Total
+                                        Price</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                        colspan="1" aria-label="Product Name: activate to sort column ascending">Product Name</th>
+                                        colspan="1" aria-label="Product Name: activate to sort column ascending">Product
+                                        Name</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
-                                        colspan="1" aria-label="Category: activate to sort column ascending">Category</th>
-                                    
+                                        colspan="1" aria-label="Category: activate to sort column ascending">Category
+                                    </th>
+
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                         colspan="1" aria-label="CSS grade: activate to sort column ascending">Actions
                                     </th>
@@ -63,16 +68,7 @@
 
 
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">id</th>
-                                    <th rowspan="1" colspan="1">Full Name</th>
-                                    <th rowspan="1" colspan="1">Total Amount</th>
-                                    <th rowspan="1" colspan="1">Address</th>
-                                    <th rowspan="1" colspan="1">Status</th>
-                                    <th rowspan="1" colspan="1">Action</th>
-                                </tr>
-                            </tfoot>
+                           
                         </table>
                     </div>
                 </div>
@@ -83,3 +79,8 @@
     <!-- /.card-body -->
     </div>
 @endsection
+@push('scripts')
+    <script>
+
+    </script>
+@endpush

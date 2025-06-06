@@ -46,8 +46,8 @@
                                 </div>
                                 <div class="col-12">
                                     <textarea name="message" id="" class="form-input @error('message') is-invalid @enderror" placeholder="Message">{{ old('message') }}</textarea>
-                                    @error('messsage')
-                                    <div class="text-danger">{{ $mesage }}</div>
+                                    @error('message')
+                                    <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-12">

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCheckoutRequest extends FormRequest
+class StoreResetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +22,8 @@ class StoreCheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|min:3|max:40',
-            'country' => 'required',
-            'address' => 'required',
-            'zip_code' => 'required',
-            'phone' => 'required|min:8',
-            'city' => 'required',
-            'coupon' => 'sometimes',
-            'state' => 'required',
-            'radio' => 'required'
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8|max:16|confirmed'
         ];
     }
 }

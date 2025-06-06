@@ -13,42 +13,36 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-10 col-12">
                     <div class="detail-img">
-                        <img class="img-fluid" src="{{ asset('images/products/featured/' . $product->image) }}"
+                        <img class="img-fluid" src="{{ asset('images/products/featured/' . $product?->image) }}"
                             alt="">
                     </div>
                     <div class="d-flex mt-3 gap-3">
-                        {{-- @if ($product->productImages === '')
 
-                        @endif --}}
-
-                        @foreach ($product->productImages as $productImage)
+                        @forelse($product?->productImages as $productImage)
                             <div class="gallery">
 
-                                {{-- @dd() --}}
                                 <img class="img-fluid" src="{{ asset('images/products/' . $productImage->image) }}"
                                     alt="">
                             </div>
-                        @endforeach
-                        {{-- <div class="gallery">
-                        <img class="img-fluid" src="{{ asset('assets/web/images/gold2.png') }}" alt="">
-                    </div> --}}
+                        @empty
+                        @endforelse
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12 col-12">
                     <div class="detail-pr-area">
-                        <h4 class="inner-financial-hd detail-pr-hd">{{ $product->name }}</h4>
-                        <p class="shipping-para pr"><strong>${{ $product->price }}</strong></p>
+                        <h4 class="inner-financial-hd detail-pr-hd">{{ $product?->name }}</h4>
+                        <p class="shipping-para pr"><strong>${{ $product?->price }}</strong></p>
                         <p class="para my-3">
-                            {{ $product->short_description }}
+                            {{ $product?->short_description }}
                         </p>
-                        <form action="{{ route('cart.store', $product->id) }}" method="post">
+                        <form action="{{ route('cart.store', $product?->id) }}" method="post">
                             @csrf
                             <div class="d-flex align-items-center add-input-area">
 
-                                <input type="hidden" name="name" value="{{ $product->name }}">
-                                <input type="hidden" name="image" value="{{ $product->image }}">
-                                <input type="hidden" name="category" value="{{ $product->category->name }}">
-                                <input type="hidden" name="price" value="{{ $product->price }}">
+                                <input type="hidden" name="name" value="{{ $product?->name }}">
+                                <input type="hidden" name="image" value="{{ $product?->image }}">
+                                <input type="hidden" name="category" value="{{ $product?->category->name }}">
+                                <input type="hidden" name="price" value="{{ $product?->price }}">
 
                                 <label for="Quantity" class="form-label">Quantity: &nbsp;</label>
                                 <input type="number" min="1" placeholder="" name="quantity" class="form-input-add"
@@ -57,7 +51,7 @@
                             </div>
 
                         </form>
-                        <p class="para">Category {{ $product->category->name }}</p>
+                        <p class="para">Category {{ $product?->category->name }}</p>
                     </div>
                 </div>
             </div>
@@ -87,7 +81,7 @@
                                                     <ul class="comments">
 
                                                         {{-- @dd($reviews->pivot) --}}
-                                                        @foreach ($product->reviews as $review)
+                                                        @forelse($product?->reviews as $review)
                                                             <li class="clearfix">
                                                                 <img src="https://bootdey.com/img/Content/user_2.jpg"
                                                                     class="avatar" alt="">
@@ -103,7 +97,8 @@
                                                                     </p>
                                                                 </div>
                                                             </li>
-                                                        @endforeach
+                                                        @empty
+                                                        @endforelse
                                                         {{-- @dd(auth()->user()->orders()->get()) --}}
 
 
@@ -155,6 +150,10 @@
                                                         </li> --}}
                                                     </ul>
                                                 </div>
+                                                {{-- @dd($review) --}}
+                                                {{-- @dd($orders) --}}
+                                                @dd($product->orders->where('user_id',auth()->user()->id))
+                                                @if($product->orders->where('user_id',auth()->user()->id))
                                                 <form action="{{ route('store.reviews', $id) }}" method="post"
                                                     class="contact-form">
                                                     @csrf
@@ -206,7 +205,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
-
+                                                @endif
 
                                                 {{-- @endif --}}
 
@@ -226,18 +225,19 @@
                     <div class="des-content active" data-content="description">
 
 
-                        <h4 class="latest-hd detail">{{ $product->long_description }}</h4>
+                        <h4 class="latest-hd detail">{{ $product?->long_description }}</h4>
 
                     </div>
                 </div>
                 @php
                     use App\Models\Category;
-                    $category = Category::where('name', $product->category->name)->first();
+                    $category = Category::where('name', $product?->category->name)->first();
                 @endphp
-                @foreach ($category->products as $product)
-                    <x-product-card :id="$product->id" :name="$product->name" :price="$product->price"
-                        :image="$product->image"></x-product-card>
-                @endforeach
+                @forelse($category->products as $product)
+                    <x-product-card :id="$product?->id" :name="$product?->name" :price="$product?->price"
+                        :image="$product?->image"></x-product-card>
+                @empty
+                @endforelse
             </div>
         </div>
     </div>

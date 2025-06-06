@@ -27,7 +27,7 @@ class StoreUserRegisterRequest extends FormRequest
             'email' => 'required|unique:users|email',
             'password' => 'required|min:8|max:16',
             'phone' => 'required|min:8|max:30',
-            'role' => 'required'
+            
         ];
     }
 }

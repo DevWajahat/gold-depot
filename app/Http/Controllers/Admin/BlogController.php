@@ -25,7 +25,7 @@ class BlogController extends Controller
     {
 
         if ($request->has('image')) {
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
+            $imageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/blogs'), $imageName);
         }
@@ -48,7 +48,7 @@ class BlogController extends Controller
         $blog = Blog::find($id);
 
         if ($request->has('image')) {
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
+            $imageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/blogs'), $imageName);
             // dd($imageName);

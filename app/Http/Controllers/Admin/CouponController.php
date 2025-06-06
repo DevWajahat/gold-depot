@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCouponRequest;
+use App\Http\Requests\UpdateCouponRequest;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 
@@ -47,7 +48,7 @@ class CouponController extends Controller
         return view('screens.admin.coupon.edit', get_defined_vars());
     }
 
-    public function update(StoreCouponRequest $request, $id)
+    public function update(UpdateCouponRequest $request, $id)
     {
 
         $coupon = Coupon::find($id);
@@ -73,5 +74,18 @@ class CouponController extends Controller
         return back()->with('message', 'Coupon Deleted Successfully');
     }
 
-    
+    public function updateStatus(Request $request)
+    {
+
+        $coupon = Coupon::find($request->coupon);
+
+        $coupon->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json([
+            'message' => "Coupon Deleted Successfully. "
+        ]);
+    }
+
 }
