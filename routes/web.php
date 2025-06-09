@@ -49,6 +49,7 @@ Route::controller(CartController::class)->group(function () {
     Route::post('cart/store/{id}', 'store')->name('cart.store');
     Route::post('cart/update/{id}', 'update')->name('cart.update');
     Route::get('cart/destroy/{id}', 'destroy')->name('cart.destroy');
+    Route::get('cart/flush','flush')->name('cart.flush');
 });
 
 // Web Coupon Routes

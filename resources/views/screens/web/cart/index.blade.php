@@ -10,7 +10,7 @@
         @endif
     @endif
 
-
+{{-- @dd(session()->get('cart')) --}}
     <section class="cart-section sec-pd fix-pading">
         <div class="container">
             <div class="row">
@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                             </div> --}}
-                           
+
                             <div class="sub-total">
                                 <div class="row align-items-center ">
                                     <div class="col-lg-6 col-md-5 col-6 m-0">

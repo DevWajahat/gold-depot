@@ -73,14 +73,11 @@
                                         <div class="row">
                                             <div class="col-md-12">
 
-
-                                                {{-- @dd(auth()->user()->orders()) --}}
                                                 <div class="blog-comment">
                                                     <h3 class="text-warning">Reviews</h3>
                                                     <hr />
                                                     <ul class="comments">
 
-                                                        {{-- @dd($reviews->pivot) --}}
                                                         @forelse($product?->reviews as $review)
                                                             <li class="clearfix">
                                                                 <img src="https://bootdey.com/img/Content/user_2.jpg"
@@ -99,61 +96,12 @@
                                                             </li>
                                                         @empty
                                                         @endforelse
-                                                        {{-- @dd(auth()->user()->orders()->get()) --}}
 
-
-                                                        {{-- <li class="clearfix">
-                                                                <img src="https://bootdey.com/img/Content/user_1.jpg"
-                                                                    class="avatar" alt="">
-                                                                <div class="post-comments">
-                                                                    <a href="#"></a>
-                                                                    <p>
-                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                                        elit.
-                                                                        Etiam a sapien odio, sit amet
-                                                                    </p>
-                                                                </div>
-                                                            </li> --}}
-
-
-                                                        {{-- <li class="clearfix">
-                                                            <img src="https://bootdey.com/img/Content/user_2.jpg"
-                                                                class="avatar" alt="">
-                                                            <div class="post-comments">
-                                                                <p class="meta">Dec 19, 2014 <a href="#">JohnDoe</a>
-                                                                    says : <i class="pull-right"><a
-                                                                            href="#"><small>Reply</small></a></i></p>
-                                                                <p>
-                                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                                    Etiam a sapien odio, sit amet
-                                                                </p>
-                                                            </div>
-
-                                                            <ul class="comments">
-                                                                <li class="clearfix">
-                                                                    <img src="https://bootdey.com/img/Content/user_3.jpg"
-                                                                        class="avatar" alt="">
-                                                                    <div class="post-comments">
-                                                                        <p class="meta">Dec 20, 2014 <a
-                                                                                href="#">JohnDoe</a> says : <i
-                                                                                class="pull-right"><a
-                                                                                    href="#"><small>Reply</small></a></i>
-                                                                        </p>
-                                                                        <p>
-                                                                            Lorem ipsum dolor sit amet, consectetur
-                                                                            adipiscing elit.
-                                                                            Etiam a sapien odio, sit amet
-                                                                        </p>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </li> --}}
                                                     </ul>
                                                 </div>
-                                                {{-- @dd($review) --}}
-                                                {{-- @dd($orders) --}}
-                                                @dd($product->orders->where('user_id',auth()->user()->id))
-                                                @if($product->orders->where('user_id',auth()->user()->id))
+
+                                               
+                                                @if(count($product->orders->where('user_id',auth()->id())))
                                                 <form action="{{ route('store.reviews', $id) }}" method="post"
                                                     class="contact-form">
                                                     @csrf
@@ -207,10 +155,6 @@
                                                 </form>
                                                 @endif
 
-                                                {{-- @endif --}}
-
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -229,11 +173,8 @@
 
                     </div>
                 </div>
-                @php
-                    use App\Models\Category;
-                    $category = Category::where('name', $product?->category->name)->first();
-                @endphp
-                @forelse($category->products as $product)
+
+                @forelse($product?->category?->products as $product)
                     <x-product-card :id="$product?->id" :name="$product?->name" :price="$product?->price"
                         :image="$product?->image"></x-product-card>
                 @empty

@@ -11,7 +11,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        //  dd(session()->get('cart'));
+        dd(session()->get('cart'));
         $subTotal = 0;
         if (session()->has('cart')) {
             foreach (session()->get('cart') as $id => $cart) {
@@ -74,29 +74,36 @@ class CartController extends Controller
             abort(404);
         }
 
-        $total = $product->price * $request->quantity;
+        $itemtotal = $product->price * $request->quantity;
 
         $cart = session()->get('cart');
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] = $request->quantity;
+
+        if (isset($cart['items'][$id])) {
+            $cart['items'][$id]['quantity'] = $request->quantity;
             session()->put('cart', $cart);
             return redirect()->back()->with('success', 'Product added to cart successfully!');
         }
 
-        $cart[$id] = [
+        $cart['items'][$id] = [
             'category' => $product->category->name,
             'name' => $product->name,
             'image' => $product->image,
             'price' => $product->price,
             'quantity' => $request->quantity,
-            'product_total' =>  $total
+            'product_total' =>  $itemtotal
         ];
-
-        session()->put('cart', $cart);
-
-        // dd(session()->get('cart'));
-
-
+        $subTotal = 0;
+        foreach ($cart['items'] as $cartItem) {
+            $productTotal = $cartItem['product_total'];
+            $productTotal = (int)$productTotal;
+            $subTotal += $productTotal;
+        }
+        $shipping = $subTotal > 199 ? 0 : 9.95;
+        $total = $shipping + $subTotal;
+        $cart['shippping'] = $shipping;
+        $cart['total'] = $total;
+        $cart['sub_total'] = $subTotal;
+        $cart =  session()->put('cart', $cart);
         return back()->with('message', 'Product added to cart Successfully');
     }
 
@@ -110,5 +117,10 @@ class CartController extends Controller
             }
         }
         return back()->with('message', 'product Removed From Cart Successfully');
+    }
+    public function flush()
+    {
+        session()->flush();
+        return back();
     }
 }

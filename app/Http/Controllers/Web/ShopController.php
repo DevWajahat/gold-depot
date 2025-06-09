@@ -25,21 +25,7 @@ class ShopController extends Controller
     }
     public function details($id)
     {
-        $product = Product::find($id);
-
-        if (auth()->user()) {
-            $user = User::find(auth()->user()->id);
-
-            // $find = ;
-
-            // dd($find);
-
-
-
-        }
-
-
-
+        $product = Product::with('productImages','category','reviews')->find($id);
 
         return view('screens.web.shop.detail', get_defined_vars());
     }
