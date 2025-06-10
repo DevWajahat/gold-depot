@@ -12,7 +12,7 @@ class ShopController extends Controller
 {
     public function index()
     {
-        $Products = Product::paginate(2);
+        $Products = Product::where('status', 'available')->paginate(2);
 
         return view('screens.web.shop.index', get_defined_vars());
     }
@@ -25,7 +25,19 @@ class ShopController extends Controller
     }
     public function details($id)
     {
-        $product = Product::with('productImages','category','reviews')->find($id);
+        $product = Product::with('productImages', 'category', 'reviews')->find($id);
+
+        // $user = User::find(auth()->user()->id);
+        if(auth()->user()){
+            $userOrders =  auth()->user()->orders()->whereHas('products', function ($queryproduct) use ($id) {
+            // dd($queryproduct);
+            $queryproduct->where('product_id', $id);
+        })->count();
+
+        }
+
+
+
 
         return view('screens.web.shop.detail', get_defined_vars());
     }

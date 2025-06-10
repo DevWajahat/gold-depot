@@ -122,7 +122,7 @@
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
                                         <h4 class="subttl-hd">Products</h4>
                                         @if (session()->has('cart') && count(session()->get('cart')))
-                                            @foreach (session()->get('cart') as $id => $cart)
+                                            @foreach (session()->get('cart')["items"] as $id => $cart)
                                                 <h4 class="subttl-hd mt-2">{{ $cart['name'] }} x{{ $cart['quantity'] }}
                                                 </h4>
                                             @endforeach
@@ -130,9 +130,9 @@
                                     </div>
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
                                         @if (session()->has('cart') && count(session()->get('cart')))
-                                            @foreach (session()->get('cart') as $id => $cart)
+                                            @foreach (session()->get('cart')["items"] as $id => $cart)
                                                 <p class="subttl-para mt-2" id="subTotal">
-                                                    ${{ $cart['price'] * $cart['quantity'] }}</p>
+                                                    ${{ $cart["product_total"] }}</p>
                                             @endforeach
                                         @endif
                                     </div>
@@ -145,8 +145,8 @@
                                             <h4 class="subttl-hd">subtotal</h4>
                                         </div>
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            <p class="subttl-para" id="subTotal">${{ $subTotal }}</p>
-                                            <input type="hidden" name="sub_total" value={{ $subTotal }}>
+                                            <p class="subttl-para" id="subTotal">${{ session()->get('cart')["sub_total"] }}</p>
+                                            <input type="hidden" name="sub_total" >
                                         </div>
                                     </div>
                                 </div>
@@ -157,22 +157,19 @@
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
                                             <h4 class="subttl-hd">SHIPPING</h4>
                                         </div>
+                                        @if(session()->get('cart')["shipping"] == 0)
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            <p class="subttl-para" id="shipping">{{ $shipping }}</p>
-                                            <input type="text" style="display:none" name="shipping"  value="{{ $shipping == 'FREE SHIPPING' ? 0 : $shipping  }}">
+                                            <p class="subttl-para" id="shipping">FREE SHIPPING</p>
                                         </div>
+                                        @else
+                                        <div class="col-lg-6 col-md-5 col-6 m-0">
+                                            <p class="subttl-para" id="shipping">{{ session->get('cart')["shipping"] }}</p>
+                                        </div>
+
+                                        @endif
                                     </div>
                                 </div>
-                                {{-- <div class="sub-total">
-                                <div class="row align-items-center ">
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <h4 class="subttl-hd">SALES</h4>
-                                    </div>
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para">$23</p>
-                                    </div>
-                                </div>
-                            </div> --}}
+
                                 <div class="sub-total">
                                     <div class="row align-items-center ">
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
@@ -205,13 +202,10 @@
                                             <h4 class="subttl-hd">TOTAL</h4>
                                         </div>
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            @if ($shipping == 'FREE SHIPPING')
-                                                <p class="subttl-para" id="total">${{ $subTotal }}</p>
-                                                <input type="hidden" style="display:none;" name="total" id="totalValue" value="{{ $subTotal }}">
-                                            @else
-                                                <p class="subttl-para" id="total">${{ $total }}</p>
-                                                <input type="hidden" style="display :none;" name="total" id="totalValue" value="{{ $total }}">
-                                            @endif
+
+                                                <p class="subttl-para" id="total">${{ session()->get('cart')["total"] }}</p>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -287,6 +281,10 @@
                         $('#flashMessage').css("color",response.class);
                         $('#total').text(`$`+response.total);
                         $('#totalValue').val(response.total);
+                        if(response.class == 'green'){
+                            $('#couponInput').attr("readonly","");
+
+                        }
                     }
                 })
             });
@@ -301,28 +299,6 @@
         // var icon2 = cpBtn.querySelector("i");
         var cpArea = document.querySelector(".coupan-area");
 
-
-        // notBtn.addEventListener("click", function() {
-        //     noteArea.classList.toggle("active")
-        //     if (icon.classList.contains("fa-plus")) {
-        //         icon.classList.remove("fa-plus");
-        //         icon.classList.add("fa-minus");
-        //     } else {
-        //         icon.classList.remove("fa-minus");
-        //         icon.classList.add("fa-plus");
-        //     }
-        // })
-
-        // cpBtn.addEventListener("click", function() {
-        //     cpArea.classList.toggle("active")
-        //     if (icon2.classList.contains("fa-plus")) {
-        //         icon2.classList.remove("fa-plus");
-        //         icon2.classList.add("fa-minus");
-        //     } else {
-        //         icon2.classList.remove("fa-minus");
-        //         icon2.classList.add("fa-plus");
-        //     }
-        // })
 
 
         function toggleCardInput() {

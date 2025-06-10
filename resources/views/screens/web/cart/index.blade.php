@@ -10,7 +10,7 @@
         @endif
     @endif
 
-{{-- @dd(session()->get('cart')) --}}
+    {{-- @dd(session()->get('cart')) --}}
     <section class="cart-section sec-pd fix-pading">
         <div class="container">
             <div class="row">
@@ -32,7 +32,9 @@
                 </div>
                 {{-- @dd(count(session()->get('cart'))) --}}
 
-                @if (session()->has('cart') && count(session()->get('cart')))
+                {{-- @dd(session()->get('cart')) --}}
+
+                @if (session()->has('cart') )
                     <div class="col-12 col-lg-12">
                         <div class="parent-table-area">
                             <table class="cart-table mt-3">
@@ -53,18 +55,18 @@
 
                                     </th>
                                 </tr>
-                                @foreach (session()->get('cart') as $id => $cart)
-                                    @php
-                                        $total = $cart['price'] * $cart['quantity'];
-                                    @endphp
-                                    <x-cart-item :name="$cart['name']" :category="$cart['category']" :price="$cart['price']" :image="$cart['image']"
-                                        :quantity="$cart['quantity']" :total="$total" :dataid="$id" />
-                                @endforeach
+                                @forelse (session()->get('cart')["items"] as $k => $item)
+
+                                        <x-cart-item :name="$item['name']" :category="$item['category']" :price="$item['price']" :image="$item['image']"
+                                            :quantity="$item['quantity']" :total="$item['product_total']" :dataid="$k" />
+
+                                    @empty
+                                @endforelse
                             </table>
                         </div>
                     </div>
 
-
+                    {{-- @if(session()->has('cart')) --}}
                     <div class="col-12 offset-lg-8 col-lg-4">
                         <div class="total total-area">
                             <div class="sub-total">
@@ -73,7 +75,7 @@
                                         <h4 class="subttl-hd">subtotal</h4>
                                     </div>
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para" id="subTotal">${{ $subTotal }}</p>
+                                        <p class="subttl-para" id="subTotal">${{ session()->get('cart')["sub_total"] }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -83,9 +85,18 @@
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
                                         <h4 class="subttl-hd">SHIPPING</h4>
                                     </div>
+                                    @if (session()->get('cart')["shipping"] == 0)
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para" id="shipping">{{ $shipping }}</p>
+                                        <p class="subttl-para" id="shipping">FREE SHIPPING</p>
                                     </div>
+
+                                    {{-- @else --}}
+
+                                    <div class="col-lg-6 col-md-5 col-6 m-0">
+                                        <p class="subttl-para" id="shipping">$ {{ session()->get('cart')["shipping"] }}</p>
+                                    </div>
+
+                                    {{-- @endif --}}
                                 </div>
                             </div>
                             {{-- <div class="sub-total">
@@ -105,12 +116,8 @@
                                         <h4 class="subttl-hd">TOTAL</h4>
                                     </div>
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        @if($shipping == 'FREE SHIPPING')
-                                        <p class="subttl-para" id="total">${{ $subTotal }}</p>
-                                        @else
+                                            <p class="subttl-para" id="total">${{ session()->get('cart')["total"] }}</p>
 
-                                        <p class="subttl-para" id="total">${{ $subTotal + $shipping }}</p>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -120,6 +127,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 @else
                     <div class="container">
                         <h1>Cart Is empty</h1>

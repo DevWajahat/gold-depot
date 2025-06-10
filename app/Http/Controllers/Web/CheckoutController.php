@@ -7,22 +7,15 @@ use App\Http\Requests\StoreCheckoutRequest;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 
+use function PHPUnit\Framework\isEmpty;
+
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $subTotal = 0;
-        if (session()->has('cart')) {
-            foreach (session()->get('cart') as $id => $cart) {
-
-                $subTotal += $cart['price'] * $cart['quantity'];
-            }
-        }
-        $shipping = 9.95;
-        $total = $subTotal + $shipping;
-
-        if ($subTotal > 199) {
-            $shipping = "FREE SHIPPING";
+        dd(session()->all());
+        if (isEmpty(session()->has('cart')) ) {
+            return  abort('404');
         }
 
         return view('screens.web.checkout.index', get_defined_vars());
@@ -31,26 +24,24 @@ class CheckoutController extends Controller
     public function store(StoreCheckoutRequest $request)
     {
         $user = auth()->user();
-
-        // dd($request->coupon_value);
-
         $couponCode = Coupon::where('coupon_code', $request->coupon_value)->first();
 
+        // dd($couponCode->coupon_code);
         if ($couponCode) {
             $couponCode->update([
                 'remaining' => $couponCode->remaining - 1,
             ]);
-
-        //  $discount = $couponCode->type == 'percent' ? ;
         }
-
+        $cart = session()->get('cart');
 
         $order = $user->orders()->create([
-            'sub_total' => $request->sub_total,
-            'shipping' => $request->shipping,
-            'total_amount' => $request->total,
+            'sub_total' => $cart['sub_total'],
+            'shipping' => $cart['shipping'],
+            'total_amount' => $cart['total'],
             'full_name' => $request->full_name,
             'city' => $request->city,
+            'coupon_code' => $couponCode->coupon_code,
+            'discount' => $couponCode->discount,
             'state' => $request->state,
             'country' => $request->country,
             'address' => $request->address,
@@ -58,7 +49,7 @@ class CheckoutController extends Controller
             'phone' => $request->phone
         ]);
 
-        foreach (session()->get('cart') as $id => $cart) {
+        foreach (session()->get('cart')["items"] as $id => $cart) {
             // $couponCode
 
             $order->products()->attach([
@@ -67,7 +58,7 @@ class CheckoutController extends Controller
                     'price' => $cart['price'],
                     'product_name' => $cart['name'],
                     'category' => $cart['category'],
-                    'total_price' => $cart['price'] * $cart['quantity']
+                    'total_price' => $cart["product_total"]
                 ]
             ]);
         }

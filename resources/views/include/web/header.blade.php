@@ -180,14 +180,17 @@
                             {{-- <div class="search-open">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </div> --}}
-
+                            @php
+                                if (session()->has('cart')) {
+                                    $cart = session()->get('cart');
+                                    $cartProduct = count($cart['items']);
+                                }
+                            @endphp
                             <a href="{{ route('cart.index') }}" class="black">
-                                @if (session()->has('cart') && count(session()->get('cart')))
+                                @if (session()->has('cart'))
                                     <div class="cart-area">
                                         <span class="cart-count">
-                                            {{ count(session()->get('cart')) }}
-
-
+                                            {{ $cartProduct}}
                                         </span>
                                         <i class="fa-solid fa-cart-shopping"></i>
                                         <span class="cart-text">Cart</span>

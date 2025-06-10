@@ -19,7 +19,7 @@
                     </div>
                 </div>
 
-                @foreach ($category->products as $product)
+                @foreach ($category->products->where('status','available') as $product)
                     <x-product-card :id="$product->id" :name="$product->name" :price="$product->price" :image="$product->image" />
                 @endforeach
 

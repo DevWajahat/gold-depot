@@ -8,6 +8,8 @@
         </div>
     @endif
 
+
+    {{-- @dd(auth()->user()->orders) --}}
     <div class="details fix-pading">
         <div class="container">
             <div class="row justify-content-center">
@@ -100,59 +102,59 @@
                                                     </ul>
                                                 </div>
 
-                                               
-                                                @if(count($product->orders->where('user_id',auth()->id())))
-                                                <form action="{{ route('store.reviews', $id) }}" method="post"
-                                                    class="contact-form">
-                                                    @csrf
-                                                    <div class="contact-form-inner">
-                                                        <p class="para white">Be the first to review “20 Peace Dollars,
-                                                            Mixed Dates,
-                                                            Brilliant Uncirculated (20 Coin Roll)”
-                                                            Your email address will not be published. Required fields
-                                                            are marked *</p>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <textarea name="message" id="" class="form-input @error('message') is-invalid  @enderror"
-                                                                    placeholder="Your Review"></textarea>
-                                                                @error('message')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="col-lg-6 col-md-6 col-12">
-                                                                <input type="text"
-                                                                    class="form-input @error('full_name') is-invalid  @enderror"
-                                                                    name="full_name" placeholder="Full Name">
-                                                                @error('full_name')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="col-lg-6 col-md-6 col-12">
-                                                                <input type="email"
-                                                                    class="form-input @error('email') is-invalid  @enderror"
-                                                                    name="email" placeholder="Email">
-                                                                @error('email')
-                                                                    <div class="text-danger">{{ $message }}</div>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div class="form-check mt-4">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        value="" id="flexCheckDefault">
-                                                                    <label class="form-check-label white"
-                                                                        for="flexCheckDefault">
-                                                                        Save my name, email, and website in this browser
-                                                                        for the next
-                                                                        time I comment.
-                                                                    </label>
+
+                                                @if (auth()->user() && $userOrders > 0)
+                                                    <form action="{{ route('store.reviews', $id) }}" method="post"
+                                                        class="contact-form">
+                                                        @csrf
+                                                        <div class="contact-form-inner">
+                                                            <p class="para white">Be the first to review “20 Peace Dollars,
+                                                                Mixed Dates,
+                                                                Brilliant Uncirculated (20 Coin Roll)”
+                                                                Your email address will not be published. Required fields
+                                                                are marked *</p>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <textarea name="message" id="" class="form-input @error('message') is-invalid  @enderror"
+                                                                        placeholder="Your Review"></textarea>
+                                                                    @error('message')
+                                                                        <div class="text-danger">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-12">
+                                                                    <input type="text"
+                                                                        class="form-input @error('full_name') is-invalid  @enderror"
+                                                                        name="full_name" placeholder="Full Name">
+                                                                    @error('full_name')
+                                                                        <div class="text-danger">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-12">
+                                                                    <input type="email"
+                                                                        class="form-input @error('email') is-invalid  @enderror"
+                                                                        name="email" placeholder="Email">
+                                                                    @error('email')
+                                                                        <div class="text-danger">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <div class="form-check mt-4">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="" id="flexCheckDefault">
+                                                                        <label class="form-check-label white"
+                                                                            for="flexCheckDefault">
+                                                                            Save my name, email, and website in this browser
+                                                                            for the next
+                                                                            time I comment.
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <button class="primary-btn">SUbmit</button>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12">
-                                                                <button class="primary-btn">SUbmit</button>
-                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
                                                 @endif
 
                                             </div>

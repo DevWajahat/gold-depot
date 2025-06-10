@@ -92,6 +92,8 @@ Route::middleware('CheckCustomer')->prefix('profile')->controller(ProfileControl
 Route::post('store/reviews/{id}', [ReviewController::class, 'store'])->middleware('CheckCustomer')->name('store.reviews');
 // Admin Routes
 
+    // Route::middleware('CheckAdmin')->get('admin/index',[AdminIndexController::class,'index'])->name('admin.index');
+
 Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexController::class)->name('admin.')->group(function () {
     Route::middleware('CheckAdmin')->get('/', 'index')->name('index');
     // Products

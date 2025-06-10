@@ -11,15 +11,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        dd(session()->get('cart'));
-        $subTotal = 0;
-        if (session()->has('cart')) {
-            foreach (session()->get('cart') as $id => $cart) {
-
-                $subTotal += $cart['price'] * $cart['quantity'];
-            }
-        }
-        $shipping = $subTotal > 199 ? "FREE SHIPPING" : 9.95;
+        // dd(session('cart'));
 
         return view('screens.web.cart.index', get_defined_vars());
     }
@@ -27,42 +19,42 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         $cart = session()->get('cart');
-        if (isset($cart[$id])) {
-
-            $subTotal = 0;
-
-            $cart[$id]['quantity'] = $request['value'];
-            // $cart[$id]['total']
+        if (isset($cart['items'][$id])) {
+            $cart['items'][$id]['quantity'] = $request['value'];
+            $cart['items'][$id]['product_total'] = intval($request['value']) * floatval($cart['items'][$id]['price']);
             session()->put('cart', $cart);
-            $total = $cart[$id]['quantity'] * $cart[$id]['price'];
+            $calculated = $this->calculate();
 
-
-            if (session()->has('cart')) {
-                foreach (session()->get('cart') as $id => $cart) {
-
-                    $subTotal += $cart['price'] * $cart['quantity'];
-                }
-            }
-            $shipping = 9.95;
-
-            if ($subTotal > 199) {
-
-                return response()->json([
-                    'message' => 'Updated Successfully',
-                    'itemTotal' => $total,
-                    'subTotal' => $subTotal,
-                    'shipping' => 'FREE SHIPPING',
-                    'total' => $subTotal
-                ]);
-            }
             return response()->json([
-                'message' => 'Updated Successfully',
-                'itemTotal' => $total,
-                'subTotal' => $subTotal,
-                'shipping' => $shipping,
-                'total' => $shipping + $subTotal
+                "message" => "Run",
+                "itemTotal" => $cart['items'][$id]['product_total'],
+                "subTotal" =>  $calculated['subTotal'],
+                "shipping" => $calculated['shipping'],
+                "total" => $calculated['total']
             ]);
         }
+    }
+    public function calculate()
+    {
+        $cart = session()->get('cart', []);
+        $subTotal = 0;
+        foreach ($cart['items'] as $cartItem) {
+            $productTotal = $cartItem['product_total'];
+            $productTotal = (int)$productTotal;
+            $subTotal += $productTotal;
+        }
+        $shipping = $subTotal > 199 ? 0 : 9.95;
+        $total = $shipping + $subTotal;
+        $cart['shipping'] = $shipping;
+        $cart['total'] = $total;
+        $cart['sub_total'] = $subTotal;
+
+        session()->put('cart', $cart);
+        return [
+            "subTotal" =>  $cart['sub_total'],
+            "shipping" => $cart['shipping'],
+            "total" => $cart['total']
+        ];
     }
 
     public function store(Request $request, $id)
@@ -92,18 +84,8 @@ class CartController extends Controller
             'quantity' => $request->quantity,
             'product_total' =>  $itemtotal
         ];
-        $subTotal = 0;
-        foreach ($cart['items'] as $cartItem) {
-            $productTotal = $cartItem['product_total'];
-            $productTotal = (int)$productTotal;
-            $subTotal += $productTotal;
-        }
-        $shipping = $subTotal > 199 ? 0 : 9.95;
-        $total = $shipping + $subTotal;
-        $cart['shippping'] = $shipping;
-        $cart['total'] = $total;
-        $cart['sub_total'] = $subTotal;
         $cart =  session()->put('cart', $cart);
+        $this->calculate();
         return back()->with('message', 'Product added to cart Successfully');
     }
 
@@ -111,16 +93,22 @@ class CartController extends Controller
     {
         if ($id) {
             $cart = session()->get('cart');
-            if (isset($cart[$id])) {
-                unset($cart[$id]);
-                // session()->put('cart', $cart);
+            if (isset($cart['items'][$id])) {
+                // dd($cart['items'][$id], $cart, $id);
+                unset($cart['items'][$id]);
+                unset($cart['shipping']);
+                unset($cart['total']);
+                unset($cart['sub_total']);
             }
         }
+        $this->calculate();
+        session()->put('cart', $cart);
         return back()->with('message', 'product Removed From Cart Successfully');
     }
+
     public function flush()
     {
-        session()->flush();
+        session()->forget('cart');
         return back();
     }
 }

@@ -15,7 +15,7 @@ class IndexController extends Controller
     {
         $orders = Order::all();
         $users = User::all();
-        $products = Product::all();
+        $products = Product::where('status','available')->get();
 
         return view('screens.admin.index',get_defined_vars())  ;
     }
