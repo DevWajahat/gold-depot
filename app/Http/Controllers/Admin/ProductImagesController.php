@@ -14,7 +14,6 @@ class ProductImagesController extends Controller
         $productImage = ProductImage::find($request->imageId);
         $product = Product::find($request->id);
         $productImage->delete();
-        // dd($product->productImages);
 
         return response()->json([
             'message' => 'Deleted Successfully',
@@ -24,6 +23,7 @@ class ProductImagesController extends Controller
 
     public function index(){
         $productImage = ProductImage::all();
+        
         return response()->json([
             'instance'=> $productImage
         ]);

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-
 use App\Events\PasswordReset;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
@@ -9,15 +8,13 @@ use App\Http\Requests\ForgotPasswordViewRequst;
 use App\Http\Requests\PostUserLoginRequest;
 use App\Http\Requests\StoreResetPasswordRequest;
 use App\Http\Requests\StoreUserRegisterRequest;
-use App\Mail\ResetPassword;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
+
 
 class AuthController extends Controller
 {

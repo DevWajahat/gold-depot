@@ -32,11 +32,12 @@
                 </div>
                 <div class="col-lg-6 col-md-12 col-12">
                     <div class="detail-pr-area">
-                        <h4 class="inner-financial-hd detail-pr-hd">{{ $product?->name }}</h4>
+                        <h2 class="inner-financial-hd detail-pr-hd">{{ $product?->name }}</h2>
                         <p class="shipping-para pr"><strong>${{ $product?->price }}</strong></p>
-                        <p class="para my-3">
-                            {{ $product?->short_description }}
-                        </p>
+                        <p style="display: none" id="shortDescription">{{ $product?->short_description }}</p>
+                        <div class="para my-3" id="shortDescriptionDisplay">
+
+                        </div>
                         <form action="{{ route('cart.store', $product?->id) }}" method="post">
                             @csrf
                             <div class="d-flex align-items-center add-input-area">
@@ -61,7 +62,8 @@
                 <div class="col-12">
                     <div class="review-area-detail">
                         <ul class="review-detail-list">
-                            <li class="active" data-tab="description">Descrioption</li>
+
+                            <li class="active" data-tab="description">Description</li>
                             <li data-tab="revuiews">Reviews</li>
                         </ul>
                     </div>
@@ -138,7 +140,7 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-12">
-                                                                    <div class="form-check mt-4">
+                                                                    {{-- <div class="form-check mt-4">
                                                                         <input class="form-check-input" type="checkbox"
                                                                             value="" id="flexCheckDefault">
                                                                         <label class="form-check-label white"
@@ -147,7 +149,7 @@
                                                                             for the next
                                                                             time I comment.
                                                                         </label>
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
                                                                 <div class="col-12">
                                                                     <button class="primary-btn">SUbmit</button>
@@ -156,23 +158,17 @@
                                                         </div>
                                                     </form>
                                                 @endif
-
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
-
                             </div>
                         </div>
 
                     </div>
                     <div class="des-content active" data-content="description">
-
-
-                        <h4 class="latest-hd detail">{{ $product?->long_description }}</h4>
-
+                        <p id="longDescription" style="display: none;">{{ $product?->long_description }}</p>
+                        <div id="longDescriptionDisplay"></div>
                     </div>
                 </div>
 
@@ -219,3 +215,15 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        var shortDescription = document.getElementById("shortDescription").innerHTML;
+        var converter = new showdown.Converter();
+        var html = converter.makeHtml(shortDescription);
+        document.getElementById("shortDescriptionDisplay").innerHTML = html;
+        var longDescription = document.getElementById("longDescription").innerHTML;
+        var convert = new showdown.Converter();
+        var html = convert.makeHtml(longDescription)
+        document.getElementById("longDescriptionDisplay").innerHTML = html;
+    </script>
+@endpush

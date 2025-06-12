@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,12 +17,19 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
+
+
         return view('screens.admin.product.index', get_defined_vars());
     }
 
     public function create()
     {
+
+
         $categories = Category::all();
+
+        $attributes = Attribute::all();
+
 
         return view('screens.admin.product.create', get_defined_vars());
     }
@@ -27,23 +37,29 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
 
+
         $productCategory = Category::find($request->category);
 
         if ($request->has('image')) {
-            // dd($request->image);
             $FeaturedImageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/products/featured'), $FeaturedImageName);
         }
-
         $product = $productCategory->products()->create([
             'name' => $request->name,
             'image' => $FeaturedImageName,
             'price' => $request->price,
-
             'short_description' => $request->shortdescription,
             'long_description' => $request->longdescription
         ]);
+        if ($request->product_attributes[0] != null) {
+
+            $product->attributes()->attach($request->product_attributes);
+            foreach ($request->variants as $variant) {
+                $product->variants()->attach($variant);
+            }
+        }
+
 
         if ($request->file('images')) {
             $imageNameArray = [];
@@ -72,21 +88,35 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
+        $attributes = Attribute::all();
 
         $categories = Category::all();
+
+        $variants = Variant::all();
+
+        // $selected_attributes = [];
+        // $selected_variants = [];
+
+        // foreach ($product->attributes as $attribute) {
+        //     array_push($selected_attributes, $attribute->id);
+
+        //     foreach ($attribute->variants as $variant) {
+        //         array_push($selected_variants, $variant->id);
+        //     }
+        // }
+
+
 
         return view('screens.admin.product.edit', get_defined_vars());
     }
 
+
+
     public function update(Request $request, $id)
     {
-
-        // dd($request->name,$request->price,$request->short_description,$request->long_description, $request->has('image'),$request->file('image'));
         $product = Product::find($id);
 
         if ($request->has('image')) {
-            // dd($request->image);
-
 
             $FeaturedImageName = time() . '_' . $request->image->getClientOriginalExtension();
 
@@ -95,18 +125,32 @@ class ProductController extends Controller
             $FeaturedImageName = $product->image;
         }
 
-        $category = Category::find($request->category);
-        $category->products()->update([
+
+
+        if ($request->has('product_attributes')) {
+
+            $product->attributes()->sync($request->product_attributes);
+
+            $product->variants()->sync($request->variants);
+        }
+
+
+        $product->update([
+
             'name' => $request->name,
             'price' => $request->price,
             'status' => $request->status,
             'short_description' => $request->short_description,
             'long_description' => $request->long_description,
-            'image' => $FeaturedImageName
+            'image' => $FeaturedImageName,
+            'category_id' => $request->category
         ]);
 
+
+
+
         if ($request->file('images')) {
-            $product->productImages()->delete();
+            // $product->productImages()->delete();
             $imageNameArray = [];
             foreach ($request->images as $image) {
                 if ($image) {
@@ -123,39 +167,17 @@ class ProductController extends Controller
     }
 
 
-    public function updateStatus(Request $request){
+    public function updateStatus(Request $request)
+    {
 
-        // dd($request->product,$request->status);
         $product = Product::find($request->product);
-
-        // dd($product);
 
         $product->update([
             'status' => $request->status
         ]);
 
-        // dd($product);
-
         return response()->json([
             'message' => "Done Successfully"
         ]);
     }
-
-
-    // public function destroy($id)
-    // {
-
-    //     $product = Product::find($id);
-
-    //     if ($product) {
-
-    //         ProductImage::where('product_id', $id)->delete();
-
-    //         $product->delete();
-
-    //         return back()->with('message', 'Product Deleted Successfully');
-    //     } else {
-    //         return back()->with('error', 'Product Not Found');
-    //     }
-    // }
 }

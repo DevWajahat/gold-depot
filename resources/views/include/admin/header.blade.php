@@ -19,6 +19,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+        integrity="sha512-XcIsjKMcuVe0Ucj/xgIXQnytNwBttJbNjltBV18IOnru2lDPe9KRRyvCXw6Y5H415vbBLRm8+q6fmLUU7DfO6Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
         integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.8/slick.min.css">
@@ -43,8 +46,14 @@
         href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
-    <!-- jsvectormap -->
+
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet"> --}}
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
 </head>
@@ -66,20 +75,20 @@
                         </a>
                     </li>
                     <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
-                    <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+                    {{-- <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li> --}}
                 </ul>
                 <!--end::Start Navbar Links-->
                 <!--begin::End Navbar Links-->
                 <ul class="navbar-nav ms-auto">
                     <!--begin::Navbar Search-->
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                             <i class="bi bi-search"></i>
                         </a>
-                    </li>
+                    </li> --}}
                     <!--end::Navbar Search-->
                     <!--begin::Messages Dropdown Menu-->
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link" data-bs-toggle="dropdown" href="#">
                             <i class="bi bi-chat-text"></i>
                             <span class="navbar-badge badge text-bg-danger">3</span>
@@ -155,10 +164,10 @@
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
                         </div>
-                    </li>
+                    </li> --}}
                     <!--end::Messages Dropdown Menu-->
                     <!--begin::Notifications Dropdown Menu-->
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <a class="nav-link" data-bs-toggle="dropdown" href="#">
                             <i class="bi bi-bell-fill"></i>
                             <span class="navbar-badge badge text-bg-warning">15</span>
@@ -183,7 +192,7 @@
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item dropdown-footer"> See All Notifications </a>
                         </div>
-                    </li>
+                    </li> --}}
                     <!--end::Notifications Dropdown Menu-->
                     <!--begin::Fullscreen Toggle-->
                     <li class="nav-item">
@@ -207,25 +216,25 @@
                                 <img src="{{ asset('assets/admin/images/user2-160x160.jpg') }}"
                                     class="rounded-circle shadow" alt="User Image" />
                                 <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2023</small>
+                                    {{ auth()->user()->first_name }} - {{ auth()->user()->role }}
+                                    {{-- <small>Member since Nov. 2023</small> --}}
                                 </p>
                             </li>
                             <!--end::User Image-->
                             <!--begin::Menu Body-->
                             <li class="user-body">
                                 <!--begin::Row-->
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-4 text-center"><a href="#">Followers</a></div>
                                     <div class="col-4 text-center"><a href="#">Sales</a></div>
                                     <div class="col-4 text-center"><a href="#">Friends</a></div>
-                                </div>
+                                </div> --}}
                                 <!--end::Row-->
                             </li>
                             <!--end::Menu Body-->
                             <!--begin::Menu Footer-->
                             <li class="user-footer">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                {{-- <a href="#" class="btn btn-default btn-flat">Profile</a> --}}
                                 <a href="{{ route('admin.logout') }}" class="btn btn-default btn-flat float-end">Sign
                                     out</a>
                             </li>
@@ -275,7 +284,7 @@
 
 
                         <li
-                            class="nav-item  {{ Route::currentRouteName() == 'admin.products.index' || Route::currentRouteName() == 'admin.products.create'  ? 'menu-open' : '' }}">
+                            class="nav-item  {{ Route::currentRouteName() == 'admin.products.index' || Route::currentRouteName() == 'admin.products.create' ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-box-seam-fill"></i>
                                 <p>
@@ -292,7 +301,8 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.products.create') }}" class="nav-link {{ Route::currentRouteName() == 'admin.products.create' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.products.create') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.products.create' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Add Product</p>
                                     </a>
@@ -300,7 +310,8 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item {{ Route::currentRouteName() == 'admin.category.index' || Route::currentRouteName() ==  'admin.category.create' ? 'menu-open' : '' }}">
+                        <li
+                            class="nav-item {{ Route::currentRouteName() == 'admin.category.index' || Route::currentRouteName() == 'admin.category.create' ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link ">
                                 <i class="nav-icon bi bi-box-seam-fill"></i>
                                 <p>
@@ -310,13 +321,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.category.index') }}" class="nav-link {{ Route::currentRouteName() == 'admin.category.index' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.category.index') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.category.index' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>All Categories</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.category.create') }}" class="nav-link {{ Route::currentRouteName() == 'admin.category.create' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.category.create') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.category.create' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Add Category</p>
                                     </a>
@@ -324,7 +337,8 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item {{ Route::currentRouteName() == 'admin.coupon.index' || Route::currentRouteName() == 'admin.coupon.create' ? 'menu-open' : '' }}">
+                        <li
+                            class="nav-item {{ Route::currentRouteName() == 'admin.coupon.index' || Route::currentRouteName() == 'admin.coupon.create' ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-box-seam-fill"></i>
                                 <p>
@@ -334,13 +348,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.coupon.index') }}" class="nav-link {{ Route::currentRouteName() == 'admin.coupon.index' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.coupon.index') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.coupon.index' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>All Coupons</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.coupon.create') }}" class="nav-link {{ Route::currentRouteName() == 'admin.coupon.create' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.coupon.create') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.coupon.create' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Add Coupons</p>
                                     </a>
@@ -370,7 +386,8 @@
                         </li>
 
 
-                        <li class="nav-item {{ Route::currentRouteName() == 'admin.blog.index' || Route::currentRouteName() == 'admin.blog.create' ? 'menu-open' : '' }}">
+                        <li
+                            class="nav-item {{ Route::currentRouteName() == 'admin.blog.index' || Route::currentRouteName() == 'admin.blog.create' ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon bi bi-box-seam-fill"></i>
                                 <p>
@@ -380,13 +397,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.blog.index') }}" class="nav-link {{ Route::currentRouteName() == 'admin.blog.index' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.blog.index') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.blog.index' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>All BLOGS</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.blog.create') }}" class="nav-link {{ Route::currentRouteName() == 'admin.blog.create' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.blog.create') }}"
+                                        class="nav-link {{ Route::currentRouteName() == 'admin.blog.create' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Add Blog</p>
                                     </a>
@@ -394,7 +413,8 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item {{  Route::currentRouteName() == 'admin.carousel.index' ||  Route::currentRouteName() == 'admin.carousel.create' ? 'menu-open' : '' }}">
+                        <li
+                            class="nav-item {{ Route::currentRouteName() == 'admin.carousel.index' || Route::currentRouteName() == 'admin.carousel.create' ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link ">
                                 <i class="nav-icon bi bi-box-seam-fill"></i>
                                 <p>
@@ -404,21 +424,44 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.carousel.index') }}" class="nav-link {{ Route::CurrentRouteName() == 'admin.carousel.index'  ? 'active' : '' }}">
+                                    <a href="{{ route('admin.carousel.index') }}"
+                                        class="nav-link {{ Route::CurrentRouteName() == 'admin.carousel.index' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>All Carousels</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.carousel.create') }}" class="nav-link {{ Route::CurrentRouteName() == 'admin.carousel.create' ? 'active' : '' }}">
+                                    <a href="{{ route('admin.carousel.create') }}"
+                                        class="nav-link {{ Route::CurrentRouteName() == 'admin.carousel.create' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Add Carousel</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-
-
+                        <li class="nav-item ">
+                            <a href="#" class="nav-link ">
+                                <i class="nav-icon bi bi-box-seam-fill"></i>
+                                <p>
+                                    Attribute & Variants
+                                    <i class="nav-arrow bi bi-chevron-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.product.attribute.index') }}" class="nav-link ">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>All Variants</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.product.attribute.create') }}" class="nav-link ">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>Add Attributes</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>

@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReviewRequest;
 use App\Models\Product;
-use App\Models\Review;
 use App\Models\User;
-use Illuminate\Http\Request;
+
 
 class ReviewController extends Controller
 {
@@ -18,7 +16,7 @@ class ReviewController extends Controller
             $product =  Product::find($id);
             $user = User::find(auth()->user()->id);
 
-            
+
             if (!$user->orders->isEmpty()) {
                 $product->reviews()->create([
                     'user_id' => $user->id,

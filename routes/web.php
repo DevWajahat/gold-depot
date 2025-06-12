@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\CarouselController;
@@ -21,7 +22,6 @@ use App\Http\Controllers\Web\IndexController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\ShopController;
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -49,7 +49,7 @@ Route::controller(CartController::class)->group(function () {
     Route::post('cart/store/{id}', 'store')->name('cart.store');
     Route::post('cart/update/{id}', 'update')->name('cart.update');
     Route::get('cart/destroy/{id}', 'destroy')->name('cart.destroy');
-    Route::get('cart/flush','flush')->name('cart.flush');
+    Route::get('cart/flush', 'flush')->name('cart.flush');
 });
 
 // Web Coupon Routes
@@ -92,7 +92,7 @@ Route::middleware('CheckCustomer')->prefix('profile')->controller(ProfileControl
 Route::post('store/reviews/{id}', [ReviewController::class, 'store'])->middleware('CheckCustomer')->name('store.reviews');
 // Admin Routes
 
-    // Route::middleware('CheckAdmin')->get('admin/index',[AdminIndexController::class,'index'])->name('admin.index');
+// Route::middleware('CheckAdmin')->get('admin/index',[AdminIndexController::class,'index'])->name('admin.index');
 
 Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexController::class)->name('admin.')->group(function () {
     Route::middleware('CheckAdmin')->get('/', 'index')->name('index');
@@ -147,8 +147,17 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
     Route::prefix('/users')->controller(UserController::class)->name('users.')->group(function () {
         Route::get('/', 'index')->name('index');
     });
-    // Carousels
+    // Attributes & Variants
 
+    Route::prefix('attribute')->controller(AttributeController::class)->name('product.attribute.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/variant/{id}', 'getVariant');
+    });
+    // Carousels
     Route::prefix('carousel')->controller(CarouselController::class)->name('carousel.')->group(function () {
         Route::get('/index', 'index')->name('index');
         Route::get('/create', 'create')->name('create');

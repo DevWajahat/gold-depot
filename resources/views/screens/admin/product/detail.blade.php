@@ -26,7 +26,7 @@
     </style>
     <div class="container my-5">
 
-      
+
         <!-- Product Detail Card -->
         <div class="card">
             <div class="card-header">

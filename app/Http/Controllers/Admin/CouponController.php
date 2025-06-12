@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCouponRequest;
 use App\Http\Requests\UpdateCouponRequest;
@@ -34,7 +33,6 @@ class CouponController extends Controller
             'status' => $request->status
         ]);
 
-        // dd($coupon);
 
         return back()->with('message', 'Coupon Added Successfully');
     }

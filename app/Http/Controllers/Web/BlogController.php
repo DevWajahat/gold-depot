@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBlogRequest;
 use App\Models\Blog;
-use Illuminate\Http\Request;
+
 
 class BlogController extends Controller
 {
@@ -16,6 +14,6 @@ class BlogController extends Controller
         return view('screens.web.blog.index',get_defined_vars());
     }
 
-    
+
 
 }

@@ -1,21 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCheckoutRequest;
 use App\Models\Coupon;
-use Illuminate\Http\Request;
-
-use function PHPUnit\Framework\isEmpty;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        dd(session()->all());
-        if (isEmpty(session()->has('cart')) ) {
-            return  abort('404');
+
+        if (empty(session()->get('cart')["items"])) {
+            return redirect()->route('shop.index');
         }
 
         return view('screens.web.checkout.index', get_defined_vars());
@@ -26,7 +22,7 @@ class CheckoutController extends Controller
         $user = auth()->user();
         $couponCode = Coupon::where('coupon_code', $request->coupon_value)->first();
 
-        // dd($couponCode->coupon_code);
+
         if ($couponCode) {
             $couponCode->update([
                 'remaining' => $couponCode->remaining - 1,

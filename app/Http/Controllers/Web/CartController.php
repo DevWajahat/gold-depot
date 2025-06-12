@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-
 use App\Http\Controllers\Controller;
-use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -11,8 +9,6 @@ class CartController extends Controller
 {
     public function index()
     {
-        // dd(session('cart'));
-
         return view('screens.web.cart.index', get_defined_vars());
     }
 
@@ -96,9 +92,11 @@ class CartController extends Controller
             if (isset($cart['items'][$id])) {
                 // dd($cart['items'][$id], $cart, $id);
                 unset($cart['items'][$id]);
-                unset($cart['shipping']);
-                unset($cart['total']);
-                unset($cart['sub_total']);
+                if(count(session()->get('cart')["items"]) == 0 ){
+                    $cart['total'] = 0;
+                    $cart['sub_total'] = 0;
+                    $cart['shipping'] = 0;
+                }
             }
         }
         $this->calculate();

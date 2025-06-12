@@ -64,7 +64,6 @@ class CarouselController extends Controller
          else {
             $imageName = $carousel->banner;
         }
-        // dd($imageName, $request->file('banner'));
 
         $carousel->update([
             'title' => $request->title,

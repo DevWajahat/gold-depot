@@ -10,13 +10,12 @@
         @endif
     @endif
 
-    {{-- @dd(session()->get('cart')) --}}
     <section class="cart-section sec-pd fix-pading">
         <div class="container">
             <div class="row">
                 <div class="col-12 m-0">
                     <div class="sub-sec">
-                        @if (session()->has('cart'))
+                        @if (!empty(session()->get('cart')["items"]))
                             <h1 class="cart-hd">Shopping Cart</h1>
                         @endif
                         @auth
@@ -30,11 +29,7 @@
                         @endauth
                     </div>
                 </div>
-                {{-- @dd(count(session()->get('cart'))) --}}
-
-                {{-- @dd(session()->get('cart')) --}}
-
-                @if (session()->has('cart') )
+                @if (!empty(session()->get('cart')["items"]))
                     <div class="col-12 col-lg-12">
                         <div class="parent-table-area">
                             <table class="cart-table mt-3">
@@ -66,7 +61,7 @@
                         </div>
                     </div>
 
-                    {{-- @if(session()->has('cart')) --}}
+
                     <div class="col-12 offset-lg-8 col-lg-4">
                         <div class="total total-area">
                             <div class="sub-total">

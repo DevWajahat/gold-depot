@@ -12,8 +12,6 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        // $categories = Category::all();
-
         return view('screens.admin.category.index', get_defined_vars());
     }
 
@@ -44,7 +42,7 @@ class CategoryController extends Controller
     }
     public function update($id, StoreUpdateCategoryRequest $request)
     {
-        // dd($id);
+
 
         $category = Category::find($id);
 
@@ -52,7 +50,7 @@ class CategoryController extends Controller
             $imageName = time() . '_' . $request->image->getClientOriginalExtension();
 
             $request->image->move(public_path('images/category'), $imageName);
-            // dd($imageName);
+    
         } else {
             $imageName = $category->image;
         }
