@@ -148,68 +148,7 @@
                         @endif
                         <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
                     </div>
-                    {{-- @if ($product->attributes)
-                    <div class="parent-container">
-                        @forelse ($product->attributes as $attribute)
-                            <div class="mt-3 par">
-                                <label for="" class="form-label">Attribute: </label>
-                                <select name="product_attributes[]" class="form-control" id="attrDropDown">
-                                    <option value="" selected>Select Attribute</option>
-                                    @foreach ($attributes as $attr)
-                                        <option value="{{ $attr->id }}"
-                                            {{ $attr->id == $attribute->id ? 'selected' : '' }}>
-                                            {{ $attr->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            @empty
-                        @endforelse
-                        @forelse ($product->variants as $variant)
-                            <div class="mt-3">
-                                <label for="" class="form-label">Variant: </label>
-                                <div class="input-group">
-                                    <select name="variants[]" class="form-control" id="variantsDropDown">
-                                        @foreach ($variants as $var)
-                                            <option value="{{ $var->id }}"
-                                                {{ $var->id == $variant->id ? 'selected' : '' }}>{{ $var->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button class="btn btn-light closebtn" type="button"><span
-                                            class="btn-close"></span></button>
-                                </div>
-                            </div>
-                    </div>
-                        @empty
-                    @endforelse
-                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
-                    </div>
-                    @else
-
-                    <div class="parent-container">
-                        <div class="mt-3 par">
-                            <label for="" class="form-label">Attribute: </label>
-                            <select name="product_attributes[]" class="form-control" id="attrDropDown">
-                                <option value="" selected>Select Attribute</option>
-                                @foreach ($attributes as $attribute)
-                                    <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="mt-3">
-                                <label for="" class="form-label">Variant: </label>
-                                <div class="input-group">
-                                    <select name="variants[]" class="form-control" id="variantsDropDown">
-                                    </select>
-                                    <button class="btn btn-light closebtn" type="button"><span
-                                            class="btn-close"></span></button>
-                                </div>
-
-                            </div>
-                        </div>
-                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
-                    </div>
-                    @endif --}}
-
+                 
 
                     <div class="mt-3">
                         <label for="shortdescription">Short Description</label>
