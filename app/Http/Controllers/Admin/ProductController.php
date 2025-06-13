@@ -53,7 +53,7 @@ class ProductController extends Controller
             'long_description' => $request->longdescription
         ]);
         if ($request->product_attributes[0] != null) {
-
+            // dd($request->product_attributes);
             $product->attributes()->attach($request->product_attributes);
             foreach ($request->variants as $variant) {
                 $product->variants()->attach($variant);
@@ -93,20 +93,6 @@ class ProductController extends Controller
         $categories = Category::all();
 
         $variants = Variant::all();
-
-        // $selected_attributes = [];
-        // $selected_variants = [];
-
-        // foreach ($product->attributes as $attribute) {
-        //     array_push($selected_attributes, $attribute->id);
-
-        //     foreach ($attribute->variants as $variant) {
-        //         array_push($selected_variants, $variant->id);
-        //     }
-        // }
-
-
-
         return view('screens.admin.product.edit', get_defined_vars());
     }
 
@@ -115,6 +101,8 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
+
+        // dd($request->product_attributes, $request->variants);
 
         if ($request->has('image')) {
 
@@ -127,11 +115,13 @@ class ProductController extends Controller
 
 
 
-        if ($request->has('product_attributes')) {
+        if ($request->product_attributes[0] != null) {
 
             $product->attributes()->sync($request->product_attributes);
-
             $product->variants()->sync($request->variants);
+        } else{
+            $product->attributes()->detach();
+             $product->variants()->detach();
         }
 
 

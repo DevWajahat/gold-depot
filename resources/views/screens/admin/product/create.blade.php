@@ -74,13 +74,6 @@
                                 <label for="" class="form-label">Variant: </label>
                                 <div class="input-group">
                                     <select name="variants[]" class="form-control" id="variantsDropDown">
-                                        {{-- @foreach ($attributes as $attribute)
-                                            @foreach ($attribute->variants as $variant) --}}
-                                        {{-- <option class="varDropDown" id="varDropDown" value="{{ $variant->id }}">
-                                                    {{ $variant->name }}
-                                                </option> --}}
-                                        {{-- @endforeach
-                                        @endforeach --}}
                                     </select>
                                     <button class="btn btn-light closebtn" type="button"><span
                                             class="btn-close"></span></button>
@@ -141,9 +134,11 @@
 
             $(document).on("change", "#attrDropDown", function() {
                 var attrDropDown = $(this);
-                // console.log()
                 variantDropDown = $(this).parent(".par").first().find("#variantsDropDown");
                 var attr = $(this).val();
+                if (attrDropDown.val() == '') {
+                    variantDropDown.empty();
+                }
                 console.log(attr);
                 var options;
                 $.ajax({
@@ -160,14 +155,7 @@
 
                     }
                 });
-
-
-
-                // }, 1000);
             });
-
-
-
         })
 
 

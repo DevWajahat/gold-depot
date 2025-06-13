@@ -27,11 +27,12 @@
                         <label for="category" class="form-label">Category</label>
 
                         <select name="category" id="category" class="form-control">
-                            @foreach ($categories as $category)
+                            @forelse ($categories as $category)
                                 <option value="{{ $category->id }}"
                                     {{ $product->category->name == $category->name ? 'selected' : '' }}>
                                     {{ $category->name }}</option>
-                            @endforeach
+                            @empty
+                            @endforelse
                         </select>
                     </div>
 
@@ -64,14 +65,13 @@
                     </div>
 
                     <div class="mt-3 product-multi-img">
-                        @foreach ($product->productImages as $productimage)
-                            {{-- @dd() --}}
-
+                        @forelse ($product->productImages as $productimage)
                             <img src="{{ asset('images/products/' . $productimage->image) }}"
                                 style="width: 100px !important; height:100px !important" alt="">
                             <button class="ml-4 btn btn-danger deleteImg"
                                 id="deleteImage-{{ $productimage->id }}">Delete</button>
-                        @endforeach
+                        @empty
+                        @endforelse
                     </div>
 
                     <div class="mt-3">
@@ -80,90 +80,224 @@
                             name="price" id="price" multiple>
                     </div>
 
+                    <div class="parent-container">
+                        @if ($product->attributes && $product->attributes->isNotEmpty())
+                            @forelse($product->attributes as $index => $attribute)
 
+                                <div class="mt-3 par">
+                                   {{-- Attributes Ka selection --}}
+                                    <label for="attrDropDown_{{ $index }}" class="form-label">Attribute:</label>
+                                    <select name="product_attributes[]" class="form-control"
+                                        id="attrDropDown">
+                                        <option value="" {{ !$attribute->id ? 'selected' : '' }}>None
+                                        </option>
+                                        @foreach ($attributes as $attr)
+                                            <option value="{{ $attr->id }}"
+                                                {{ $attr->id == $attribute->id ? 'selected' : '' }}>
+                                                {{ $attr->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <!-- Variants ka selection -->
+                                    <div class="mt-3">
+                                        <label for="variantsDropDown"
+                                            class="form-label">Variant:</label>
+                                        <div class="input-group">
+                                            <select name="variants[]" class="form-control"
+                                                id="variantsDropDown">
+                                                <option value="" selected>Select Variant</option>
+                                                @foreach ($variants as $var)
+                                                    @if($attribute->id == $var->attribute_id)
+                                                    <option value="{{ $var->id }}"  >{{ $var->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            <button class="btn btn-light closebtn" type="button"><span
+                                                    class="btn-close"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+
+                            @endforelse
+                        @else
+                            <!-- Default empty state -->
+                            <div class="mt-3 par">
+                                <label for="attrDropDown_0" class="form-label">Attribute:</label>
+                                <select name="product_attributes[]" class="form-control" id="attrDropDown">
+                                    <option value="" selected>Select Attribute</option>
+                                    @foreach ($attributes as $attribute)
+                                        <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="mt-3">
+                                    <label for="variantsDropDown_0" class="form-label">Variant:</label>
+                                    <div class="input-group">
+                                        <select name="variants[]" class="form-control" id="variantsDropDown">
+                                            <option value="" selected>Select Variant</option>
+                                            @foreach ($variants as $var)
+                                                <option value="{{ $var->id }}">{{ $var->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button class="btn btn-light closebtn" type="button"><span
+                                                class="btn-close"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
+                    </div>
+                    {{-- @if ($product->attributes)
                     <div class="parent-container">
                         @forelse ($product->attributes as $attribute)
                             <div class="mt-3 par">
                                 <label for="" class="form-label">Attribute: </label>
-
-                                <select name="product_attributes[]" class="form-control" id="">
-                                    @forelse ($attributes as $attr)
+                                <select name="product_attributes[]" class="form-control" id="attrDropDown">
+                                    <option value="" selected>Select Attribute</option>
+                                    @foreach ($attributes as $attr)
                                         <option value="{{ $attr->id }}"
-                                            {{ $attribute->id == $attr->id ? 'selected' : '' }}>
+                                            {{ $attr->id == $attribute->id ? 'selected' : '' }}>
                                             {{ $attr->name }}
                                         </option>
-                                    @empty
-                                        <option value="">asd</option>
-                                    @endforelse
+                                    @endforeach
                                 </select>
-                                <button class="btn btn-light closebtn" type="button"><span
-                                        class="btn-close"></span></button>
-                                @forelse ($product->variants as $variant)
-                                    <div class="mt-3">
-                                        @if ($attribute->id == $variant->attribute_id)
-                                        <label for="" class="form-label">Variant: </label>
-                                            <select name="variants[]" class="form-control" id="">
-                                                @forelse ($variants as $var)
-                                                    <option value="{{ $var->id }}"
-                                                        {{ $variant->id == $var->id ? 'selected' : '' }}>
-                                                        {{ $var->name }}</option>
-                                                @empty
-                                                    <option value="">asdf</option>
-                                                @endforelse
-
-                                            </select>
-                                        @endif
-                                    @empty
-                                @endforelse
+                            @empty
+                        @endforelse
+                        @forelse ($product->variants as $variant)
+                            <div class="mt-3">
+                                <label for="" class="form-label">Variant: </label>
+                                <div class="input-group">
+                                    <select name="variants[]" class="form-control" id="variantsDropDown">
+                                        @foreach ($variants as $var)
+                                            <option value="{{ $var->id }}"
+                                                {{ $var->id == $variant->id ? 'selected' : '' }}>{{ $var->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-light closebtn" type="button"><span
+                                            class="btn-close"></span></button>
+                                </div>
                             </div>
                     </div>
-                @empty
+                        @empty
                     @endforelse
-                    <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
+                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
+                    </div>
+                    @else
+
+                    <div class="parent-container">
+                        <div class="mt-3 par">
+                            <label for="" class="form-label">Attribute: </label>
+                            <select name="product_attributes[]" class="form-control" id="attrDropDown">
+                                <option value="" selected>Select Attribute</option>
+                                @foreach ($attributes as $attribute)
+                                    <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="mt-3">
+                                <label for="" class="form-label">Variant: </label>
+                                <div class="input-group">
+                                    <select name="variants[]" class="form-control" id="variantsDropDown">
+                                    </select>
+                                    <button class="btn btn-light closebtn" type="button"><span
+                                            class="btn-close"></span></button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
+                    </div>
+                    @endif --}}
+
+
+                    <div class="mt-3">
+                        <label for="shortdescription">Short Description</label>
+                        <textarea name="short_description" id="shortDesription" class="form-control" cols="30" rows="5"> {{ $product->short_description }}</textarea>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="longdescription">Long Description</label>
+                        <textarea name="long_description" id="longDescription" class="form-control" cols="30" rows="8"> {{ $product->long_description }}</textarea>
+                    </div>
+
+
+                    <div class="mt-5">
+                        <input type="submit" value="Update Prouduct" class="btn btn-primary col-lg-12" name=""
+                            id="">
+                    </div>
+                </form>
+
+
+
             </div>
-
-
-
-            <div class="mt-3">
-                <label for="shortdescription">Short Description</label>
-                <textarea name="short_description" id="shortDesription" class="form-control" cols="30" rows="5"> {{ $product->short_description }}</textarea>
-            </div>
-
-            <div class="mt-3">
-                <label for="longdescription">Long Description</label>
-                <textarea name="long_description" id="longDescription" class="form-control" cols="30" rows="8"> {{ $product->long_description }}</textarea>
-            </div>
-
-
-            <div class="mt-5">
-                <input type="submit" value="Update Prouduct" class="btn btn-primary col-lg-12" name=""
-                    id="">
-            </div>
-            </form>
-
-
-
+            <div class="col col-lg-2"></div>
         </div>
-        <div class="col col-lg-2"></div>
-    </div>
     </div>
 
     @push('scripts')
         <script>
+            // $(document).ready(function() {
+            //     $("#addBtn").on("click", function(e) {
+            //         e.preventDefault();
+            //         let parentContainer = $(".parent-container");
+            //         let par = parentContainer.find(".par").first().clone();
+            //         par.find("input").val('');
+            //         par.insertBefore("#addBtn");
+            //     });
+            //     $(document).on("click", ".closebtn", function(e) {
+            //         console.log($(this).parent(`.par`).first());
+
+            //         $(this).closest(".par").remove();
+
+            //     })
+            // })
+
             $(document).ready(function() {
                 $("#addBtn").on("click", function(e) {
                     e.preventDefault();
-                    let parentContainer = $(".parent-container");
-                    let par = parentContainer.find(".par").first().clone();
+                    var parentContainer = $(".parent-container");
+                    var par = parentContainer.find(".par").first().clone();
+
                     par.find("input").val('');
+                    par.find("#variantsDropDown").empty();
                     par.insertBefore("#addBtn");
                 });
                 $(document).on("click", ".closebtn", function(e) {
                     console.log($(this).parent(`.par`).first());
 
-                    $(this).closest(".par").remove();
+                    if ($(".parent-container .par").length > 1) {
+                        $(this).closest(".par").remove();
+                    }
+
 
                 })
+
+                $(document).on("change", "#attrDropDown", function() {
+                    var attrDropDown = $(this);
+
+                    variantDropDown = $(this).parent(".par").first().find("#variantsDropDown");
+                    if (attrDropDown.val() == '') {
+                        variantDropDown.empty();
+                    }
+                    var attr = $(this).val();
+                    console.log(attr);
+                    var options;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/admin/attribute/variant/' + attr,
+                        success: function(response) {
+                            console.log(response);
+                            options = response.variants;
+                            $(variantDropDown).empty();
+                            options.forEach(e => {
+                                $(variantDropDown).append($('<option></option>').attr(
+                                    'value', e.id).text(e.name))
+                            });
+
+                        }
+                    });
+                });
             })
 
 
