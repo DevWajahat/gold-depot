@@ -40,6 +40,6 @@ class Product extends Model
 
     public function variants(): BelongsToMany
     {
-        return $this->belongsToMany(Variant::class, 'product_variants','product_id','variant_id')->withTimestamps();
+        return $this->belongsToMany(Variant::class, 'product_variants','product_id','variant_id')->withPivot('price')->withTimestamps();
     }
 }

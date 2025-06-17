@@ -22,6 +22,7 @@ class ProductController extends Controller
         return view('screens.admin.product.index', get_defined_vars());
     }
 
+
     public function create()
     {
 
@@ -48,18 +49,24 @@ class ProductController extends Controller
         $product = $productCategory->products()->create([
             'name' => $request->name,
             'image' => $FeaturedImageName,
-            'price' => $request->price,
+            'price' => $request->base_price,
             'short_description' => $request->shortdescription,
             'long_description' => $request->longdescription
         ]);
+
+        // dd($variantPrice);
         if ($request->product_attributes[0] != null) {
-            // dd($request->product_attributes);
+
+
             $product->attributes()->attach($request->product_attributes);
-            foreach ($request->variants as $variant) {
-                $product->variants()->attach($variant);
+            $variantPrices =   array_map(function ($variant, $price) {
+                return ([$variant => ['price' => $price]]);
+            }, $request->variants, $request->prices);
+
+            foreach ($variantPrices as $variantPrice) {
+                $product->variants()->attach($variantPrice);
             }
         }
-
 
         if ($request->file('images')) {
             $imageNameArray = [];
@@ -76,6 +83,8 @@ class ProductController extends Controller
 
         return back()->with('message', 'Product Added Successfully');
     }
+
+
 
     public function detail($id)
     {
@@ -102,7 +111,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
 
-        // dd($request->product_attributes, $request->variants);
+
 
         if ($request->has('image')) {
 
@@ -118,10 +127,20 @@ class ProductController extends Controller
         if ($request->product_attributes[0] != null) {
 
             $product->attributes()->sync($request->product_attributes);
-            $product->variants()->sync($request->variants);
-        } else{
+
+            $variantPrices =   array_map(function ($variant, $price) {
+                return ([$variant => ['price' => $price]]);
+            }, $request->variants, $request->prices);
+
+            $varPrice = [];
+            foreach ($variantPrices as $variantPrice) {
+                $varPrice += $variantPrice;
+            }
+            // dd($varPrice)
+            $product->variants()->sync($varPrice);
+        } else {
             $product->attributes()->detach();
-             $product->variants()->detach();
+            $product->variants()->detach();
         }
 
 

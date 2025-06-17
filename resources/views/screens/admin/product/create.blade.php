@@ -11,7 +11,15 @@
                     <a href="{{ route('admin.products.index') }}" class="btn btn-secondary mt-3 mb-3">Back</a>
                     <h2>Add Product</h2>
                 </div>
-
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 @if (session()->has('message'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -59,34 +67,45 @@
                     </div>
                     <div class="mt-3">
                         <label for="price" class="form-label">Price: </label>
-                        <input type="number" step=".01" value="{{ old('price') }}" name="price"
-                            class="form-control @error('price') is-invalid  @enderror" id="price">
-                        @error('price')
+                        <input type="number" step=".01" value="{{ old('base_price') }}" name="base_price"
+                            class="form-control @error('base_price') is-invalid  @enderror" id="price">
+                        @error('base_price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="parent-container">
-                        <div class="mt-3 par">
-                            <label for="" class="form-label">Attribute: </label>
+                        <div class="mt-3 par border border-secondary">
+                            <label for=""
+                                class="form-label d-flex justify-content-between align-items-center">Attribute: <button
+                                    class="btn btn-light closebtn" type="button"><span
+                                        class="btn-close"></span></button></label>
                             <select name="product_attributes[]" class="form-control" id="attrDropDown">
                                 <option value="" selected>Select Attribute</option>
                                 @foreach ($attributes as $attribute)
                                     <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
                                 @endforeach
                             </select>
-                            <div class="mt-3">
-                                <label for="" class="form-label">Variant: </label>
-                                <div class="input-group">
-                                    <select name="variants[]" class="form-control" id="variantsDropDown">
-                                    </select>
-                                    <button class="btn btn-light closebtn" type="button"><span
-                                            class="btn-close"></span></button>
-                                </div>
+                            <div class="mt-3 variant-par ">
+                                <div class="var-par  border border-primary">
+                                    <label for="" class="form-label">Variant: </label>
+                                    <div class="input-group">
+                                        <select name="variants[]" class="form-control" id="variantsDropDown">
+                                        </select>
+                                        <button class="btn btn-light remove-variant" type="button"><span
+                                                class="btn-close"></span></button>
+                                    </div>
 
+                                    <div class="mt-3">
+                                        <label for="" class="form-label">Price: </label>
+                                        <input type="number" name="prices[]" class="form-control" step="0.01">
+                                    </div>
+                                </div>
+                                <button class="btn add-variant-btn" id="" type="button"><i
+                                        class="ri-add-fill"></i>Add Variant</button>
                             </div>
                         </div>
-                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
+                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i>Add Attribute</button>
                     </div>
 
                     <div class="mt-3">
@@ -118,25 +137,52 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $("#addBtn").on("click", function(e) {
+            // Add new attribute
+            $('#addBtn').on('click', function(e) {
                 e.preventDefault();
-                var parentContainer = $(".parent-container");
-                var par = parentContainer.find(".par").first().clone();
+                var parentContainer = $('.parent-container');
+                var par = parentContainer.find('.par').first().clone();
 
-                par.find("input").val('');
-                par.find("#variantsDropDown").empty();
-                par.insertBefore("#addBtn");
+                // Clear values and reset select
+                par.find('select').val('');
+                par.find('input').val('');
+                // Remove all variants except the first one
+                par.find('.var-par').slice(1).remove();
+
+                parentContainer.append(par);
             });
-            $(document).on("click", ".closebtn", function(e) {
-                console.log($(this).parent(`.par`).first());
 
-                if ($(".parent-container .par").length > 1) {
-                    $(this).closest(".par").remove();
+            // Remove attribute
+            $(document).on('click', '.closebtn', function(e) {
+                e.preventDefault();
+                if ($('.parent-container .par').length > 1) {
+                    $(this).closest('.par').remove();
                 }
+            });
 
+            // Add new variant
+            $(document).on('click', '.add-variant-btn', function(e) {
+                e.preventDefault();
+                var varParentContainer = $(this).closest('.variant-par');
+                var varPar = varParentContainer.find('.var-par').first().clone();
 
-            })
+                // Clear values
+                varPar.find('select').val('');
+                varPar.find('input').val('');
 
+                varPar.insertBefore($(this));
+            });
+
+            // Remove variant
+            $(document).on('click', '.remove-variant', function(e) {
+                e.preventDefault();
+                var varPar = $(this).closest('.var-par');
+                if (varPar.closest('.variant-par').find('.var-par').length > 1) {
+                    varPar.remove();
+                }
+            });
+        });
+        $(document).ready(function() {
             $(document).on("change", "#attrDropDown", function() {
                 var attrDropDown = $(this);
                 variantDropDown = $(this).parent(".par").first().find("#variantsDropDown");

@@ -84,214 +84,289 @@
 
                     <div class="parent-container">
                         @if ($product->variants && $product->variants->isNotEmpty())
-                            @forelse($product->variants as $index => $variant)
-                                <div class="mt-3 par">
-                                    <label for="attrDropDown_{{ $index }}" class="form-label">Attribute:</label>
+                            @forelse ($product->attributes as $attribute)
+                                <div class="mt-3 par border border-secondary">
+                                    <label for=""
+                                        class="form-label d-flex justify-content-between align-items-center">Attribute:
+                                        <button class="btn btn-light closebtn" type="button"><span
+                                                class="btn-close"></span></button></label>
                                     <select name="product_attributes[]" class="form-control" id="attrDropDown">
-                                        <option value="">None </option>
-                                        @foreach ($attributes as $k => $attr)
+                                        <option value="">Select Attribute</option>
+                                        @foreach ($attributes as $attr)
                                             <option value="{{ $attr->id }}"
-                                                {{ $attr->id == $variant->attribute->id ? 'selected' : '' }}>
-                                                {{ $attr->name }}
+                                                {{ $attribute->id == $attr->id ? 'selected' : '' }}>{{ $attr->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <div class="mt-3">
-                                        <label for="variantsDropDown" class="form-label">Variant:</label>
-                                        <div class="input-group">
-                                            <select name="variants[]" class="form-control" id="variantsDropDown">
-                                                <option value="">Select Variant</option>
-                                                @foreach ($product->attributes as $attribute)
-                                                    @forelse ($attribute->variants as $var)
-                                                        @if ($attribute->id == $variant->attribute_id)
-                                                            <option value="{{ $var->id }}"
-                                                                {{ $variant->id == $var->id ? 'selected' : '' }}>
-                                                                {{ $var->name }}
-                                                            </option>
-                                                        @endif
-                                                    @empty
-                                                    @endforelse
-                                                @endforeach
-                                            </select>
-                                            <button class="btn btn-light closebtn" type="button"><span
-                                                    class="btn-close"></span></button>
-                                        </div>
+                                    <div class="mt-3 variant-par ">
+                                        @forelse ($product->variants as $variant)
+                                            <div class="var-par  border border-primary">
+                                                @if ($attribute->id == $variant->attribute->id)
+                                                <label for="" class="form-label">Variant: </label>
+                                                <div class="input-group">
+                                                        <select name="variants[]" class="form-control variantsDropDown"
+                                                            id="">
+                                                            @forelse ($variants as $var)
+                                                            @if ($attribute->id == $var->attribute->id)
+
+                                                            <option
+                                                            value="{{ $var->id }}"{{ $var->id == $variant->id ? 'selected' : '' }}>
+                                                            {{ $var->name }}</option>
+                                                            @endif
+                                                            @empty
+                                                            @endforelse
+                                                        </select>
+                                                        <button class="btn btn-light remove-variant" type="button"><span
+                                                                class="btn-close"></span></button>
+                                                            </div>
+
+                                                            <div class="mt-3">
+                                                                <label for="" class="form-label">Price: </label>
+
+                                                                <input type="number" name="prices[]"
+                                                                value="{{ $variant->pivot->price }}" class="form-control"
+                                                                step="0.01">
+                                                            </div>
+                                                            @endif
+                                                        </div>
+
+                                        @empty
+                                        @endforelse
+                                        <button class="btn add-variant-btn" id="" type="button"><i
+                                                class="ri-add-fill"></i>Add Variant</button>
                                     </div>
                                 </div>
-                                @empty
-                                @endforelse
-                            @else
-                                <!-- Default empty state -->
-                                <div class="mt-3 par">
-                                    <label for="attrDropDown_0" class="form-label">Attribute:</label>
-                                    <select name="product_attributes[]" class="form-control" id="attrDropDown">
-                                        <option value="" selected>Select Attribute</option>
-                                        @foreach ($attributes as $attribute)
-                                            <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="mt-3">
-                                        <label for="variantsDropDown_0" class="form-label">Variant:</label>
-                                        <div class="input-group">
-                                            <select name="variants[]" class="form-control" id="variantsDropDown">
-                                                <option value="" selected>Select Variant</option>
-                                                @foreach ($variants as $var)
-                                                    <option value="{{ $var->id }}">{{ $var->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <button class="btn btn-light closebtn" type="button"><span
-                                                    class="btn-close"></span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            <button class="btn" id="addBtn"><i class="ri-add-fill"></i></button>
-                        </div>
-
-
-                        <div class="mt-3">
-                            <label for="shortdescription">Short Description</label>
-                            <textarea name="short_description" id="shortDesription" class="form-control" cols="30" rows="5"> {{ $product->short_description }}</textarea>
-                        </div>
-
-                        <div class="mt-3">
-                            <label for="longdescription">Long Description</label>
-                            <textarea name="long_description" id="longDescription" class="form-control" cols="30" rows="8"> {{ $product->long_description }}</textarea>
-                        </div>
-
-
-                        <div class="mt-5">
-                            <input type="submit" value="Update Prouduct" class="btn btn-primary col-lg-12" name=""
-                                id="">
-                        </div>
-                    </form>
+                            @empty
+                            @endforelse
+                            <button class="btn" id="addBtn"><i class="ri-add-fill"></i>Add Attribute</button>
+                        @endif
+                    </div>
 
 
 
-                </div>
-                <div class="col col-lg-2"></div>
+
+
+                    <div class="mt-3">
+                        <label for="shortdescription">Short Description</label>
+                        <textarea name="short_description" id="shortDesription" class="form-control" cols="30" rows="5"> {{ $product->short_description }}</textarea>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="longdescription">Long Description</label>
+                        <textarea name="long_description" id="longDescription" class="form-control" cols="30" rows="8"> {{ $product->long_description }}</textarea>
+                    </div>
+
+
+                    <div class="mt-5">
+                        <input type="submit" value="Update Prouduct" class="btn btn-primary col-lg-12" name=""
+                            id="">
+                    </div>
+
+                </form>
+
+
             </div>
+            <div class="col col-lg-2"></div>
         </div>
+    </div>
 
-        @push('scripts')
-            <script>
-                // $(document).ready(function() {
-                //     $("#addBtn").on("click", function(e) {
-                //         e.preventDefault();
-                //         let parentContainer = $(".parent-container");
-                //         let par = parentContainer.find(".par").first().clone();
-                //         par.find("input").val('');
-                //         par.insertBefore("#addBtn");
-                //     });
-                //     $(document).on("click", ".closebtn", function(e) {
-                //         console.log($(this).parent(`.par`).first());
+    @push('scripts')
+        <script>
 
-                //         $(this).closest(".par").remove();
+            //$(document).ready(function() {
+            //     $("#addBtn").on("click", function(e) {
+            //         e.preventDefault();
+            //         let parentContainer = $(".parent-container");
+            //         let par = parentContainer.find(".par").first().clone();
+            //         par.find("input").val('');
+            //         par.insertBefore("#addBtn");
+            //     });
+            //     $(document).on("click", ".closebtn", function(e) {
+            //         console.log($(this).parent(`.par`).first());
 
-                //     })
-                // })
+            //         $(this).closest(".par").remove();
 
-                $(document).ready(function() {
-                    $("#addBtn").on("click", function(e) {
-                        e.preventDefault();
-                        var parentContainer = $(".parent-container");
-                        var par = parentContainer.find(".par").first().clone();
+            //     })
+            // })
 
-                        par.find("input").val('');
-                        par.find("#variantsDropDown").empty();
-                        par.insertBefore("#addBtn");
-                    });
-                    $(document).on("click", ".closebtn", function(e) {
-                        console.log($(this).parent(`.par`).first());
+            // $(document).ready(function() {
+            //     $("#addBtn").on("click", function(e) {
+            //         e.preventDefault();
+            //         var parentContainer = $(".parent-container");
+            //         var par = parentContainer.find(".par").first().clone();
 
-                        if ($(".parent-container .par").length > 1) {
-                            $(this).closest(".par").remove();
-                        }
+            //         par.find("input").val('');
+            //         par.find("#variantsDropDown").empty();
+            //         par.insertBefore("#addBtn");
+            //     });
+            //     $(document).on("click", ".closebtn", function(e) {
+            //         console.log($(this).parent(`.par`).first());
 
-
-                    })
-
-                    $(document).on("change", "#attrDropDown", function() {
-                        var attrDropDown = $(this);
-
-                        variantDropDown = $(this).parent(".par").first().find("#variantsDropDown");
-                        if (attrDropDown.val() == '') {
-                            variantDropDown.empty();
-                        }
-                        var attr = $(this).val();
-                        console.log(attr);
-                        var options;
-                        $.ajax({
-                            type: 'GET',
-                            url: '/admin/attribute/variant/' + attr,
-                            success: function(response) {
-                                console.log(response);
-                                options = response.variants;
-                                $(variantDropDown).empty();
-                                options.forEach(e => {
-                                    $(variantDropDown).append($('<option></option>').attr(
-                                        'value', e.id).text(e.name))
-                                });
-
-                            }
-                        });
-                    });
-                })
+            //         if ($(".parent-container .par").length > 1) {
+            //             $(this).closest(".par").remove();
+            //         }
 
 
+            //     })
 
-                var shortDescription = new SimpleMDE({
-                    element: $("#shortDescription")[0]
+            //     $(document).on("change", "#attrDropDown", function() {
+            //         var attrDropDown = $(this);
+
+            //         variantDropDown = $(this).parent(".par").first().find("#variantsDropDown");
+            //         if (attrDropDown.val() == '') {
+            //             variantDropDown.empty();
+            //         }
+            //         var attr = $(this).val();
+            //         console.log(attr);
+            //         var options;
+            //         $.ajax({
+            //             type: 'GET',
+            //             url: '/admin/attribute/variant/' + attr,
+            //             success: function(response) {
+            //                 console.log(response);
+            //                 options = response.variants;
+            //                 $(variantDropDown).empty();
+            //                 options.forEach(e => {
+            //                     $(variantDropDown).append($('<option></option>').attr(
+            //                         'value', e.id).text(e.name))
+            //                 });
+
+            //             }
+            //         });
+            //     });
+            // })
+
+
+
+            $(document).ready(function() {
+                // Add new attribute
+                $('#addBtn').on('click', function(e) {
+                    e.preventDefault();
+                    var parentContainer = $('.parent-container');
+                    var par = parentContainer.find('.par').first().clone();
+
+                    // Clear values and reset select
+                    par.find('select').val('');
+                    par.find('input').val('');
+                    // Remove all variants except the first one
+                    par.find('.var-par').slice(1).remove();
+
+                    parentContainer.append(par);
                 });
-                shortDescription.value();
 
-                var longDescription = new SimpleMDE({
-                    element: $("#longDescription")[0]
+                // Remove attribute
+                $(document).on('click', '.closebtn', function(e) {
+                    e.preventDefault();
+                    if ($('.parent-container .par').length > 1) {
+                        $(this).closest('.par').remove();
+                    }
                 });
-                longDescription.value();
+
+                // Add new variant
+                $(document).on('click', '.add-variant-btn', function(e) {
+                    e.preventDefault();
+                    var varParentContainer = $(this).closest('.variant-par');
+                    var varPar = varParentContainer.find('.var-par').first().clone();
+
+                    // Clear values
+                    varPar.find('select').val('');
+                    varPar.find('input').val('');
+
+                    varPar.insertBefore($(this));
+                });
+
+                // Remove variant
+                $(document).on('click', '.remove-variant', function(e) {
+                    e.preventDefault();
+                    var varPar = $(this).closest('.var-par');
+                    if (varPar.closest('.variant-par').find('.var-par').length > 1) {
+                        varPar.remove();
+                    }
+                });
+            });
+            $(document).ready(function() {
+                $(document).on("change", "#attrDropDown", function() {
+                    var attrDropDown = $(this);
+                    variantDropDown =$(this).parent(".par").find(".variantsDropDown");
+                    // variantDropDown = variantDropDown.childrexn('#variantsDropDown');
+                    var attr = $(this).val();
+                    if (attrDropDown.val() == '') {
+                        variantDropDown.empty();
+                    }
+                    console.log(attr);
+                    var options;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/admin/attribute/variant/' + attr,
+                        success: function(response) {
+                            console.log(response);
+                            options = response.variants;
+                            $(variantDropDown).empty();
+                            options.forEach(e => {
+                                $(variantDropDown).append($('<option></option>').attr(
+                                    'value', e.id).text(e.name))
+                            });
+
+                        }
+                    });
+                });
+            })
 
 
 
-                $(document).ready(function() {
-                    $(document).on("click", '.deleteImg', function(event) {
-                        event.preventDefault();
-                        var deleteBtn = $('.deleteImg');
-                        var deleteId = deleteBtn.attr('id');
-                        var deleteId = deleteId.split("-");
-                        var product = {{ $product->id }};
-                        var deleteId = deleteId[1];
-                        console.log(deleteId)
-                        $.ajax({
-                            url: '/admin/product-image/destroy/',
-                            type: 'POST',
 
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id': product,
-                                'imageId': deleteId
-                            },
-                            success: function(response) {
-                                console.log(response);
-                                let html = '';
-                                response.images.forEach(element => {
-                                    console.log(element);
-                                    let url = `{{ asset('images/products/') }}/` + element
-                                        .image;
-                                    let id = `${element.id}`;
-                                    html +=
-                                        `   <img src="${url}"
+            var shortDescription = new SimpleMDE({
+                element: $("#shortDescription")[0]
+            });
+            shortDescription.value();
+
+            var longDescription = new SimpleMDE({
+                element: $("#longDescription")[0]
+            });
+            longDescription.value();
+
+
+
+            $(document).ready(function() {
+                $(document).on("click", '.deleteImg', function(event) {
+                    event.preventDefault();
+                    var deleteBtn = $('.deleteImg');
+                    var deleteId = deleteBtn.attr('id');
+                    var deleteId = deleteId.split("-");
+                    var product = {{ $product->id }};
+                    var deleteId = deleteId[1];
+                    console.log(deleteId)
+                    $.ajax({
+                        url: '/admin/product-image/destroy/',
+                        type: 'POST',
+
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            'id': product,
+                            'imageId': deleteId
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            let html = '';
+                            response.images.forEach(element => {
+                                console.log(element);
+                                let url = `{{ asset('images/products/') }}/` + element
+                                    .image;
+                                let id = `${element.id}`;
+                                html +=
+                                    `   <img src="${url}"
                                             style="width: 100px !important; height:100px !important" alt="">
                                         <button class="ml-4 btn btn-danger deleteImg" type="button" id="deleteImage-${id}">
                                             Delete
                                         </button>
                                         `
 
-                                });
-                                $(".product-multi-img").html(html);
-                            }
-                        })
+                            });
+                            $(".product-multi-img").html(html);
+                        }
                     })
                 })
-            </script>
-        @endpush
-    @endsection
+            })
+        </script>
+    @endpush
+@endsection
