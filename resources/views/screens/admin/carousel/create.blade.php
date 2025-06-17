@@ -14,7 +14,12 @@
 
                 <form action="{{ route('admin.carousel.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
+
+                    <a href="{{ route('admin.carousel.index') }}" class="btn btn-secondary mb-3">Back</a>
+
                     <h2 class="fw-bold">Add Carousel</h2>
+
+
 
                     <div class="mt-3">
                         <label for="" class="form-label">Title: </label>

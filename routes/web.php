@@ -44,12 +44,13 @@ Route::controller(ShopController::class)->name('shop.')->group(function () {
 });
 
 // Web Cart Routes
-Route::controller(CartController::class)->group(function () {
-    Route::get('cart', 'index')->name('cart.index');
-    Route::post('cart/store/{id}', 'store')->name('cart.store');
-    Route::post('cart/update/{id}', 'update')->name('cart.update');
-    Route::get('cart/destroy/{id}', 'destroy')->name('cart.destroy');
-    Route::get('cart/flush', 'flush')->name('cart.flush');
+Route::prefix('cart')->controller(CartController::class)->group(function () {
+    Route::get('/', 'index')->name('cart.index');
+    Route::post('store/{id}', 'store')->name('cart.store');
+    Route::post('update/{id}', 'update')->name('cart.update');
+    Route::get('destroy/{id}', 'destroy')->name('cart.destroy');
+    Route::post('update-variant/','updateVariant');
+    Route::get('flush', 'flush')->name('cart.flush');
 });
 
 // Web Coupon Routes

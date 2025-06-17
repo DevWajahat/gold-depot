@@ -22,9 +22,7 @@
 
                         @forelse($product?->productImages as $productImage)
                             <div class="gallery">
-
-                                <img class="img-fluid" src="{{ asset('images/products/' . $productImage->image) }}"
-                                    alt="">
+                                <img class="img-fluid" src="{{ asset('images/products/' . $productImage->image) }}" alt="">
                             </div>
                         @empty
                         @endforelse
@@ -40,17 +38,44 @@
                         </div>
                         <form action="{{ route('cart.store', $product?->id) }}" method="post">
                             @csrf
-                            <div class="d-flex align-items-center add-input-area">
+                            <div class=" align-items-center add-input-area">
 
                                 <input type="hidden" name="name" value="{{ $product?->name }}">
                                 <input type="hidden" name="image" value="{{ $product?->image }}">
                                 <input type="hidden" name="category" value="{{ $product?->category->name }}">
                                 <input type="hidden" name="price" value="{{ $product?->price }}">
 
-                                <label for="Quantity" class="form-label">Quantity: &nbsp;</label>
-                                <input type="number" min="1" placeholder="" name="quantity" class="form-input-add"
-                                    value="1">
-                                <input type="submit" class="primary-btn" value="Add To Cart">
+                                @forelse ($product->attributes as $attribute)
+                                    <div class="mt-3">
+                                        <label for="" class="form-label">{{ ucfirst($attribute->name) }}: </label>
+
+                                        <select name="variants[]" id="" class="form-control ml-3">
+                                            @foreach ($product->variants as $variant)
+                                                @if ($attribute->id == $variant->attribute_id)
+                                                    <option value="{{ $variant->id }}" >
+                                                        {{ $variant->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+
+                                         {{-- <select name="variants[]" id="" class="form-control ml-3">
+                                            @foreach ($product->variants as $variant)
+                                                @if ($attribute->id == $variant->attribute_id)
+                                                    <option value="{{ $variant->id }}" >{{ $variant->name }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select> --}}
+                                    </div>
+                                @empty
+                                @endforelse
+                                <div class="mt-3">
+                                    <label for="Quantity" class="form-label">Quantity: &nbsp;</label>
+
+                                    <input type="number" min="1" placeholder="" name="quantity"
+                                        class="form-input-add" value="1">
+                                    <input type="submit" class="primary-btn" value="Add To Cart">
+                                </div>
+
                             </div>
 
                         </form>
@@ -132,6 +157,8 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-lg-6 col-md-6 col-12">
+
+
                                                                     <input type="email"
                                                                         class="form-input @error('email') is-invalid  @enderror"
                                                                         name="email" placeholder="Email">

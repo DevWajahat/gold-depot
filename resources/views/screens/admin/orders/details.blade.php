@@ -3,12 +3,15 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">DataTable with default features</h3>
+            <h2 class="fw-bolder">Order Details</h2>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                <div class="row">
+                <div class="row mb-3">
+                    <div class="col col-lg-4">
+                        <a href="{{ route('admin.order.index') }}" class="btn btn-secondary">Back</a>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
@@ -40,9 +43,9 @@
                                         colspan="1" aria-label="Category: activate to sort column ascending">Category
                                     </th>
 
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                    {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                         colspan="1" aria-label="CSS grade: activate to sort column ascending">Actions
-                                    </th>
+                                    </th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,11 +59,7 @@
                                         <td>{{ $orderProduct->pivot->product_name }}</td>
                                         <td>{{ $orderProduct->pivot->category }}</td>
 
-                                        <td>
 
-                                            {{-- <a href="{{ route('') }}" class="btn btn-warning">Edit</a>
-                                        <a href="{{ route('') }}" class="btn btn-danger">Delete</a> --}}
-                                        </td>
                                     </tr>
                                 @endforeach
 
@@ -68,7 +67,7 @@
 
 
                             </tbody>
-                           
+
                         </table>
                     </div>
                 </div>
@@ -80,7 +79,5 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-
-    </script>
+    <script></script>
 @endpush

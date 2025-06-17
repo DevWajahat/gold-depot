@@ -3,11 +3,15 @@
 @section('content')
     <div class="container mt-4 mb-5">
         <div class="row">
-            <div class="col col-lg-2"></div>
+            <div class="col col-lg-2">
+
+            </div>
             <div class="col col-lg-8">
                 <div class="mt-3">
+                    <a href="{{ route('admin.products.index') }}" class="btn btn-secondary mt-3 mb-3">Back</a>
                     <h2>Add Product</h2>
                 </div>
+
 
                 @if (session()->has('message'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -15,6 +19,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
 
                 <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data"
                     class="mt-4">

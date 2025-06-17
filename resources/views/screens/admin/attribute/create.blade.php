@@ -11,6 +11,9 @@
         <div class="row mt-5">
             <div class="col-lg-2"></div>
             <div class="col-lg-8 mt-5">
+
+                <a href="{{ route('admin.product.attribute.index') }}" class="btn btn-secondary mb-3">Back</a>
+
                 <h3>Create Attribute</h3>
                 <form action="{{ route('admin.product.attribute.store') }}" method="POST">
                     @csrf
@@ -61,7 +64,6 @@
                     alert("At least one variant is required.");
                 }
             })
-
         })
     </script>
 @endpush

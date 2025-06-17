@@ -10,6 +10,7 @@
                 <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+
         <!-- /.card-header -->
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -17,6 +18,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
+                        <a href="{{ route('admin.category.create') }}" class="btn btn-primary mb-3 w-100">Create</a>
                         {{-- @dd($categories) --}}
                         @if ($categories)
                             <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
@@ -33,9 +35,9 @@
                                         <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                             colspan="1" aria-label="Image: activate to sort column ascending">
                                             Image</th>
-                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                        {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                             colspan="1" aria-label="Status: activate to sort column ascending">
-                                            Status</th>
+                                            Status</th> --}}
                                         <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                             colspan="1" aria-label="CSS grade: activate to sort column ascending">Actions
                                         </th>
@@ -48,7 +50,7 @@
                                             <td>{{ $category->name }}</td>
                                             <td><img src="{{ asset('images/category/' . $category->image) }}" width="50"
                                                     height="50" alt=""></td>
-                                            <td>
+                                            {{-- <td>
                                                 <select name="status" id="status-{{ $category->id }}"
                                                     class="form-control status">
                                                     <option value="available"
@@ -59,7 +61,7 @@
                                                         Unavailable</option>
                                                 </select>
 
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <a href="{{ route('admin.category.edit', $category->id) }}"
                                                     class="btn btn-warning">Edit</a>

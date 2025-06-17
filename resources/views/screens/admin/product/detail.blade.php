@@ -26,6 +26,8 @@
     </style>
     <div class="container my-5">
 
+          <a href="{{ route('admin.products.index') }}" class="btn btn-secondary mt-3 mb-3">Back</a>
+
 
         <!-- Product Detail Card -->
         <div class="card">

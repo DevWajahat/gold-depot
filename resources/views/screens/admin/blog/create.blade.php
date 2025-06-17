@@ -6,6 +6,9 @@
             <div class="col col-lg-2"></div>
             <div class="col col-lg-8">
                 <div class="mt-3">
+
+                    <a href="{{ route('admin.blog.index') }}" class="btn btn-secondary mb-3">Back</a>
+
                     <h2>Add Blog</h2>
                 </div>
 

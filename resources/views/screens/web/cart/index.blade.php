@@ -10,12 +10,14 @@
         @endif
     @endif
 
+    {{-- @dd(session('cart')) --}}
+
     <section class="cart-section sec-pd fix-pading">
         <div class="container">
             <div class="row">
                 <div class="col-12 m-0">
                     <div class="sub-sec">
-                        @if (!empty(session()->get('cart')["items"]))
+                        @if (!empty(session()->get('cart')['items']))
                             <h1 class="cart-hd">Shopping Cart</h1>
                         @endif
                         @auth
@@ -29,7 +31,7 @@
                         @endauth
                     </div>
                 </div>
-                @if (!empty(session()->get('cart')["items"]))
+                @if (!empty(session()->get('cart')['items']))
                     <div class="col-12 col-lg-12">
                         <div class="parent-table-area">
                             <table class="cart-table mt-3">
@@ -44,84 +46,80 @@
                                         QUANTITY
                                     </th>
                                     <th class="">
+                                        VARIANTS
+                                    </th>
+                                    <th class="">
                                         TOTAL
                                     </th>
                                     <th class="">
 
                                     </th>
                                 </tr>
+                                {{-- @dd(session()->get('cart')["items"]["210-20-16-23"]) --}}
                                 @forelse (session()->get('cart')["items"] as $k => $item)
 
-                                        <x-cart-item :name="$item['name']" :category="$item['category']" :price="$item['price']" :image="$item['image']"
-                                            :quantity="$item['quantity']" :total="$item['product_total']" :dataid="$k" />
-
-                                    @empty
+                                {{-- @dd($item['name']) --}}
+                                    <x-cart-item :name="$item['name']" :category="$item['category']" :price="$item['price']" :image="$item['image']"
+                                        :quantity="$item['quantity']" :productid="$item['id']" :total="$item['product_total']" :dataid="$k" :item="$item" />
+                                @empty
+                                        :quantity="$item['quantity']" :productid="$item['id']" :total="$item['product_total']" :dataid="$k"  />
                                 @endforelse
                             </table>
                         </div>
                     </div>
 
-
-                    <div class="col-12 offset-lg-8 col-lg-4">
-                        <div class="total total-area">
-                            <div class="sub-total">
-                                <div class="row align-items-center ">
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <h4 class="subttl-hd">subtotal</h4>
-                                    </div>
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para" id="subTotal">${{ session()->get('cart')["sub_total"] }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="sub-total">
-                                <div class="row align-items-center ">
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <h4 class="subttl-hd">SHIPPING</h4>
-                                    </div>
-                                    @if (session()->get('cart')["shipping"] == 0)
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para" id="shipping">FREE SHIPPING</p>
-                                    </div>
-
-                                    {{-- @else --}}
-
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para" id="shipping">$ {{ session()->get('cart')["shipping"] }}</p>
-                                    </div>
-
-                                    {{-- @endif --}}
-                                </div>
-                            </div>
-                            {{-- <div class="sub-total">
-                                <div class="row align-items-center ">
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <h4 class="subttl-hd">SALES</h4>
-                                    </div>
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <p class="subttl-para">$23</p>
+                    @if (!empty(session()->get('cart')['items']))
+                        <div class="col-12 offset-lg-8 col-lg-4">
+                            <div class="total total-area">
+                                <div class="sub-total">
+                                    <div class="row align-items-center ">
+                                        <div class="col-lg-6 col-md-5 col-6 m-0">
+                                            <h4 class="subttl-hd">subtotal</h4>
+                                        </div>
+                                        <div class="col-lg-6 col-md-5 col-6 m-0">
+                                            <p class="subttl-para" id="subTotal">
+                                                ${{ session()->get('cart')['sub_total'] }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div> --}}
 
-                            <div class="sub-total">
-                                <div class="row align-items-center ">
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                        <h4 class="subttl-hd">TOTAL</h4>
-                                    </div>
-                                    <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            <p class="subttl-para" id="total">${{ session()->get('cart')["total"] }}</p>
-
+                                <div class="sub-total">
+                                    <div class="row align-items-center ">
+                                        <div class="col-lg-6 col-md-5 col-6 m-0">
+                                            <h4 class="subttl-hd">SHIPPING</h4>
+                                        </div>
+                                        @if (session()->get('cart')['shipping'] == 0)
+                                            <div class="col-lg-6 col-md-5 col-6 m-0">
+                                                <p class="subttl-para" id="shipping">$0</p>
+                                            </div>
+                                        @else
+                                            <div class="col-lg-6 col-md-5 col-6 m-0">
+                                                <p class="subttl-para" id="shipping">$
+                                                    {{ session()->get('cart')['shipping'] }}</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="mt-5">
-                                <a class="primary-btn" href="{{ route('checkout.index') }}" class="white">Check Out </a>
+                                <div class="sub-total">
+                                    <div class="row align-items-center ">
+                                        <div class="col-lg-6 col-md-5 col-6 m-0">
+                                            <h4 class="subttl-hd">TOTAL</h4>
+                                        </div>
+                                        <div class="col-lg-6 col-md-5 col-6 m-0">
+                                            <p class="subttl-para" id="total">${{ session()->get('cart')['total'] }}
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5">
+                                    <a class="primary-btn" href="{{ route('checkout.index') }}" class="white">Check Out
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endif
                 @else
                     <div class="container">
@@ -145,22 +143,34 @@
             });
         });
 
+
         $(document).ready(function() {
-            $('#couponSubmitBtn').on('click', function() {
-                var couponCode = $('#couponInput').val()
+            $('.variant').on("change", function() {
+
+                var variant = $(this).val()
+                // console.log(variant)
+                var id = $(this).attr("id")
+                id = id.split("#")
+                id = id[1]
+                var attribute = $(this).parent(".par").first().find(".attr-name").text();
+                console.log(id)
+                console.log(variant)
+                console.log(attribute)
                 $.ajax({
-                    url: "check-coupon/" + couponCode,
-                    type: 'GET',
+                    type: 'POST',
+                    url: '/cart/update-variant/',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "variant": variant,
+                        "id": id,
+                        "attribute": attribute
+                    },
                     success: function(response) {
-                        console.log(response);
-                        $('.coupon-hidden').after(
-                            `<p class="text-success" id="flash" >${response.message}</p>`
-                        );
+                        console.log(response)
                     }
                 })
-            });
-        });
-
+            })
+        })
 
 
 

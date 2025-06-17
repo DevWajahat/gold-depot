@@ -20,6 +20,10 @@
                                         colspan="1" aria-sort="ascending"
                                         aria-label="id: activate to sort column ascending">id
                                     </th>
+                                     <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
+                                        aria-label="id: activate to sort column ascending">User id
+                                    </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
                                         colspan="1" aria-label="Full Name: activate to sort column ascending">Full Name
                                     </th>
@@ -54,6 +58,7 @@
                                 @foreach ($orders as $order)
                                     <tr class="odd">
                                         <td class="dtr-control sorting_1" tabindex="0">{{ $order->id }}</td>
+                                        <td>{{ $order->user->first_name }}</td>
                                         <td>{{ $order->full_name }}</td>
                                         <td>{{ $order->sub_total }}</td>
                                         <td>{{ $order->shipping }}</td>

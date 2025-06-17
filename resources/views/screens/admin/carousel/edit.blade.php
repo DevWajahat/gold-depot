@@ -12,8 +12,13 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.carousel.update',$carousel->id) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.carousel.update', $carousel->id) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
+                    
+                    <a href="{{ route('admin.carousel.index') }}" class="btn btn-secondary mb-3">Back</a>
+
+
                     <h2 class="fw-bold">Edit Carousel</h2>
 
                     <div class="mt-3">

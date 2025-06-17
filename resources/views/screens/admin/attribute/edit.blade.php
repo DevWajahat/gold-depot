@@ -11,6 +11,10 @@
                 </div>
             @endif
 
+
+            <a href="{{ route('admin.product.attribute.index') }}" class="btn btn-secondary mb-3">Back</a>
+
+
             <h3>Edit Attribute</h3>
             <form action="{{ route('admin.product.attribute.update', $attribute->id) }}" method="POST">
                 @csrf
@@ -24,8 +28,8 @@
                 </div>
                 <div class="parent-container">
                     @foreach ($attribute->variants as $variant)
-                    {{-- @dd($variant) --}}
-                    {{-- @empty --}}
+                        {{-- @dd($variant) --}}
+                        {{-- @empty --}}
                         <div class="mt-3 par">
                             <label for="" class="form-label">Variant Name</label>
                             <input type="text" name="variant_name[]" value="{{ $variant->name }}" class="form-control"

@@ -44,7 +44,7 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                             <div class="mb-2">
+                            <div class="mb-2">
                                 <label for="">State</label>
                                 <input type="text" name="state" value="{{ old('state') }}"
                                     class="@error('state') is-invalid @enderror">
@@ -94,22 +94,6 @@
                             </div>
 
 
-                            {{-- <div class="mt-5 mb-3">
-                                <h4>ADDITIONAL OPTIONS</h4>
-                                <div class="note-area">
-                                    <textarea></textarea>
-                                </div>
-
-                                <button class="add-address-btn note-btn p-0" type="button"><i class="fa-solid fa-plus"></i>
-                                    Add a note to this order</button>
-                                <div class="coupan-area">
-                                    <input type="text">
-                                    <button class="primary-btn mt-0">apply</button>
-                                </div>
-                                <button class="add-address-btn coupan-btn p-0" type="button"><i
-                                        class="fa-solid fa-plus"></i> Apply a coupon code</button>
-
-                            </div> --}}
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-12 m-0">
@@ -122,7 +106,7 @@
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
                                         <h4 class="subttl-hd">Products</h4>
                                         @if (session()->has('cart') && count(session()->get('cart')))
-                                            @foreach (session()->get('cart')["items"] as $id => $cart)
+                                            @foreach (session()->get('cart')['items'] as $id => $cart)
                                                 <h4 class="subttl-hd mt-2">{{ $cart['name'] }} x{{ $cart['quantity'] }}
                                                 </h4>
                                             @endforeach
@@ -130,9 +114,9 @@
                                     </div>
                                     <div class="col-lg-6 col-md-5 col-6 m-0">
                                         @if (session()->has('cart') && count(session()->get('cart')))
-                                            @foreach (session()->get('cart')["items"] as $id => $cart)
+                                            @foreach (session()->get('cart')['items'] as $id => $cart)
                                                 <p class="subttl-para mt-2" id="subTotal">
-                                                    ${{ $cart["product_total"] }}</p>
+                                                    ${{ $cart['product_total'] }}</p>
                                             @endforeach
                                         @endif
                                     </div>
@@ -145,8 +129,9 @@
                                             <h4 class="subttl-hd">subtotal</h4>
                                         </div>
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            <p class="subttl-para" id="subTotal">${{ session()->get('cart')["sub_total"] }}</p>
-                                            <input type="hidden" name="sub_total" >
+                                            <p class="subttl-para" id="subTotal">
+                                                ${{ session()->get('cart')['sub_total'] }}</p>
+                                            <input type="hidden" name="sub_total">
                                         </div>
                                     </div>
                                 </div>
@@ -157,15 +142,15 @@
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
                                             <h4 class="subttl-hd">SHIPPING</h4>
                                         </div>
-                                        @if(session()->get('cart')["shipping"] == 0)
-                                        <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            <p class="subttl-para" id="shipping">FREE SHIPPING</p>
-                                        </div>
+                                        @if (session()->get('cart')['shipping'] == 0)
+                                            <div class="col-lg-6 col-md-5 col-6 m-0">
+                                                <p class="subttl-para" id="shipping">FREE SHIPPING</p>
+                                            </div>
                                         @else
-                                        <div class="col-lg-6 col-md-5 col-6 m-0">
-                                            <p class="subttl-para" id="shipping">{{ session->get('cart')["shipping"] }}</p>
-                                        </div>
-
+                                            <div class="col-lg-6 col-md-5 col-6 m-0">
+                                                <p class="subttl-para" id="shipping">
+                                                    {{ session->get('cart')['shipping'] }}</p>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -177,8 +162,8 @@
                                         </div>
                                         <div class=" col-md-6 col-6  d-flex justify-content-end">
                                             <button class="ml-5subttl-para btn couponBtn" id="couponBtn">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-                                                    height="24" fill="currentColor">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    width="24" height="24" fill="currentColor">
                                                     <path
                                                         d="M11 11V7H13V11H17V13H13V17H11V13H7V11H11ZM12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z">
                                                     </path>
@@ -186,10 +171,11 @@
                                             </button>
                                         </div>
                                         <div class="d-flex justify-content-end coupon-hidden" style="display: none">
-                                            <input type="text" style="display: none" id="couponInput" name="coupon_value"
-                                                class="">
-                                            <br>
-                                            <button style="display: none" class="btn btn-light " id="couponSubmitBtn">Apply
+                                            <input type="text" style="display: none" id="couponInput"
+                                                name="coupon_value" class="">
+                                            <br>x
+                                            <button style="display: none" class="btn btn-light "
+                                                id="couponSubmitBtn">Apply
                                                 Coupon</button>
 
                                             <p class="" id="flashMessage"></p>
@@ -203,7 +189,8 @@
                                         </div>
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
 
-                                                <p class="subttl-para" id="total">${{ session()->get('cart')["total"] }}</p>
+                                            <p class="subttl-para" id="total">${{ session()->get('cart')['total'] }}
+                                            </p>
 
 
                                         </div>
@@ -234,7 +221,7 @@
                                     I have read and agree to the website terms and conditions
                                 </label>
                                 @error('radio')
-                                <div class="text-danger">{{ $message }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                 @enderror
                                 <button class="primary-btn" type="submit">Place Order</button>
                             </div>
@@ -247,8 +234,6 @@
 @endsection
 @push('scripts')
     <script>
-
-
         $(document).ready(function() {
             $('#couponBtn').click(function(event) {
                 event.preventDefault();
@@ -273,16 +258,16 @@
                 var couponCode = $('#couponInput').val();
 
                 $.ajax({
-                    url: "check-coupon/" + couponCode + "/" ,
+                    url: "check-coupon/" + couponCode + "/",
                     type: 'GET',
                     success: function(response) {
                         console.log(response);
                         $('#flashMessage').text(response.message);
-                        $('#flashMessage').css("color",response.class);
-                        $('#total').text(`$`+response.total);
+                        $('#flashMessage').css("color", response.class);
+                        $('#total').text(`$` + response.total);
                         $('#totalValue').val(response.total);
-                        if(response.class == 'green'){
-                            $('#couponInput').attr("readonly","");
+                        if (response.class == 'green') {
+                            $('#couponInput').attr("readonly", "");
 
                         }
                     }

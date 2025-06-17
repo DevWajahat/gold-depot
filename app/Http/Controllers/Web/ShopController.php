@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
+use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Variant;
+
 
 class ShopController extends Controller
 {
@@ -27,7 +30,8 @@ class ShopController extends Controller
     {
         $product = Product::with('productImages', 'category', 'reviews')->find($id);
 
-
+        $attributes = Attribute::all();
+        $variants = Variant::all();
 
 
         if(auth()->user()){

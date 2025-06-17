@@ -6,6 +6,9 @@
         <div class="row">
             <div class="col col-lg-2"></div>
             <div class="col col-lg-8">
+
+                <a href="{{ route('admin.category.index') }}" class="btn btn-secondary">Back</a>
+
                 <div class="mt-3">
                     <h2>Add Category</h2>
                 </div>
@@ -17,6 +20,8 @@
                 </div>
 
                 @endif
+
+
 
                 <form action="{{ route('admin.category.store') }}" method="post" class="mt-4" enctype="multipart/form-data">
                     @csrf

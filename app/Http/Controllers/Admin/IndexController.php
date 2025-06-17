@@ -13,6 +13,8 @@ class IndexController extends Controller
         $users = User::all();
         $products = Product::where('status','available')->get();
 
+        $revenue = $orders->sum('total_amount');
+
         return view('screens.admin.index',get_defined_vars())  ;
     }
 }

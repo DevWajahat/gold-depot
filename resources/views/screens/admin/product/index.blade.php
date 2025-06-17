@@ -18,9 +18,13 @@
         <div class="card-body">
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                 <div class="row">
+
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
+
+                        <a href="{{ route('admin.products.create') }}" class="btn btn-primary mb-3 w-100">Create</a>
+
                         <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
                             aria-describedby="example1_info">
                             <thead>

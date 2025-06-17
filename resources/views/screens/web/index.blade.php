@@ -267,7 +267,7 @@
         </div>
     </section>
 
-    @if(!$reviews == '')
+    @if(isset($reviews) && is_array($reviews))
 
     <section class="review-sec fix-pading">
         <div class="container">
@@ -287,10 +287,6 @@
                         @foreach ($reviews as $review)
                             <x-review-item :name="$review->full_name" :message="$review->message"></x-review-item>
                         @endforeach
-
-                        {{-- <x-review-item></x-review-item>
-                        <x-review-item></x-review-item>
-                        <x-review-item></x-review-item> --}}
 
                     </div>
                     <div class="banner-slider-btn-rev">
@@ -327,44 +323,7 @@
                                     <x-blog-item :name="$blog->name" :image="$blog->image" :description="substr($blog->description, 0, 100)"></x-blog-item>
                                 @endforeach
 
-                                {{-- <div class="stand-item">
-                                    <img class="img-fluid" src="{{ asset('assets/web/images/stand1.png') }}"
-                                        alt="">
-                                    <div class="mt-3">
-                                        <h4 class="stand-hd">Lorem ipsum dolor sit amet,
-                                            consectetur adipisicing</h4>
-                                        <p class="para mb-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                                            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-                                        <a href="#" class="read-more">Read More</a>
-                                    </div>
-
-                                </div>
-
-                                <div class="stand-item">
-                                    <img class="img-fluid" src="{{ asset('assets/web/images/stand3.png') }}"
-                                        alt="">
-                                    <div class="mt-3">
-                                        <h4 class="stand-hd">Lorem ipsum dolor sit amet,
-                                            consectetur adipisicing</h4>
-                                        <p class="para mb-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                                            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-                                        <a href="#" class="read-more">Read More</a>
-                                    </div>
-
-                                </div>
-
-                                <div class="stand-item">
-                                    <img class="img-fluid" src="{{ asset('assets/images/stand1.png') }}" alt="">
-                                    <div class="mt-3">
-                                        <h4 class="stand-hd">Lorem ipsum dolor sit amet,
-                                            consectetur adipisicing</h4>
-                                        <p class="para mb-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                                            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-                                        <a href="#" class="read-more">Read More</a>
-                                    </div>
-
-                                </div> --}}
-
+                            
                             </div>
                             <div class="banner-slider-btn-rev">
                                 <button class="prev-btn-stand"><i class="fa-solid fa-caret-left"></i></button>
@@ -414,3 +373,6 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+
+@endpush

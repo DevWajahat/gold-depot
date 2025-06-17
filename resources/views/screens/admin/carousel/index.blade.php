@@ -17,8 +17,9 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        {{-- @dd($categories) --}}
-                        @if ($carousels)
+
+                        <a href="{{ route('admin.carousel.create') }}" class="btn btn-primary w-100 mb-3">Create</a>
+
                          <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
                                 aria-describedby="example1_info">
                                 <thead>
@@ -43,7 +44,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($carousels as $carousel)
+                                    @forelse ($carousels as $carousel)
                                         <tr class="odd">
                                             <td class="dtr-control sorting_1" tabindex="0">{{ $carousel->id }}</td>
                                             <td>{{ $carousel->title }}</td>
@@ -58,17 +59,17 @@
                                                     class="btn btn-danger">Delete</a>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                        @empty
 
-
+                                    @endforelse
 
                                 </tbody>
-                              
+
                             </table>
 
 
 
-                        @endif
+
 
                     </div>
                 </div>

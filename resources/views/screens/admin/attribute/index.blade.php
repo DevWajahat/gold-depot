@@ -17,7 +17,8 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        {{-- @dd($categories) --}}
+                        <a href="{{ route('admin.product.attribute.create') }}" class="btn btn-primary w-100 mb-3">Create</a>
+
 
                         <table id="example1" class="table table-bordered table-striped dataTable dtr-inline"
                             aria-describedby="example1_info">
@@ -53,7 +54,8 @@
                                             </ul>
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.product.attribute.edit',$attribute->id) }}" class="btn btn-warning">Edit</a>
+                                            <a href="{{ route('admin.product.attribute.edit', $attribute->id) }}"
+                                                class="btn btn-warning">Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach

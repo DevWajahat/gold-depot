@@ -25,7 +25,7 @@ class Product extends Model
 
     public function orders(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class)->withTimestamps()->withPivot('quantity', 'price', 'total_price', 'product_name', 'category');
+        return $this->belongsToMany(Order::class,'order_product','product_id','order_id')->withPivot('quantity', 'price', 'total_price', 'product_name', 'category','id')->withTimestamps();
     }
 
     public function reviews(): HasMany

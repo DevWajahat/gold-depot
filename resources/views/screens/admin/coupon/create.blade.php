@@ -11,6 +11,7 @@
                     </div>
                 @endif
                 <div class="mt-3">
+                     <a href="{{ route('admin.coupon.index') }}" class="btn btn-secondary mb-3">back</a>
                     <h2>Add Coupon</h2>
                 </div>
 
