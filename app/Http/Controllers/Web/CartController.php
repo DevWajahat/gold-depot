@@ -4,25 +4,35 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class CartController extends Controller
 {
     public function index()
     {
-        // dd(session('cart'));
         return view('screens.web.cart.index', get_defined_vars());
     }
 
     public function update(Request $request, $id)
     {
+
         $cart = session()->get('cart');
         if (isset($cart['items'][$id])) {
-            $cart['items'][$id]['quantity'] = $request['value'];
-            $cart['items'][$id]['product_total'] = intval($request['value']) * floatval($cart['items'][$id]['price']);
-            session()->put('cart', $cart);
-            $calculated = $this->calculate();
+            if (isset($cart['items'][$id]['variants'])) {
+                $cart['items'][$id]['quantity'] = $request['value'];
+
+                $cart['items'][$id]['product_total'] = intval($request['value']) * floatval($cart['items'][$id]['sumprice']);
+                // dd($cart['items'][$id]['product_total']);
+                session()->put('cart', $cart);
+                $calculated = $this->calculate();
+            } else {
+
+                $cart['items'][$id]['quantity'] = $request['value'];
+                $cart['items'][$id]['product_total'] = intval($request['value']) * floatval($cart['items'][$id]['price']);
+                session()->put('cart', $cart);
+                $calculated = $this->calculate();
+            }
 
             return response()->json([
                 "message" => "Run",
@@ -38,7 +48,7 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
         $subTotal = 0;
         foreach ($cart['items'] as $cartItem) {
-            $subTotal += (int) $cartItem['product_total'];
+            $subTotal += (float) $cartItem['product_total'];
         }
         $shipping = $subTotal > 199 ? 0 : 9.95;
         $total = $shipping + $subTotal;
@@ -55,18 +65,21 @@ class CartController extends Controller
         ];
     }
 
+
     public function store(Request $request, $id)
     {
         $product = Product::find($id);
 
-        $itemtotal = $product->price * $request->quantity;
         $cart = session()->get('cart');
+
+        $itemtotal = $product->price * $request->quantity;
 
         if ($request->has('variants')) {
             $cartKey = $id . '-' . implode('-', $request->variants);
 
             if (isset($cart['items'][$cartKey])) {
                 $cart['items'][$id]['quantity'] = $request->quantity;
+
                 $cart['items'][$id]['variants'] = [];
                 $this->setVariants($request->variants, $cart, $id);
 
@@ -79,13 +92,30 @@ class CartController extends Controller
                 'id' => $product->id,
                 'category' => $product->category->name,
                 'name' => $product->name,
-                'image' => $product->image, 
+                'image' => $product->image,
                 'price' => $product->price,
                 'quantity' => $request->quantity,
                 'product_total' =>  $itemtotal,
 
             ];
-            $this->setVariants($request->variants, $cart, $cartKey);
+
+
+
+            $this->setVariants($request->variants, $cart, $cartKey, $id);
+
+            foreach ($cart["items"] as $key => $item) {
+                $sumprice = $item["price"];
+
+                if (isset($item["variants"]) && is_array($item["variants"])) {
+                    foreach ($item["variants"] as $variant) {
+                        $price = Arr::get($variant, 'price', 0);
+                        $sumprice += $price;
+                    }
+                }
+
+
+                $cart["items"][$key]['sumprice'] = $sumprice;
+            }
         } else {
             if (isset($cart['items'][$id])) {
                 $cart['items'][$id]['quantity'] = $request->quantity;
@@ -105,31 +135,22 @@ class CartController extends Controller
             ];
         }
 
-
-        // if (isset($cart['items'][$cartKey])) {
-        //     $cart['items'][$id]['quantity'] = $request->quantity;
-        //     $cart['items'][$id]['variants'] = [];
-        //     $this->setVariants($request->variants, $cart, $id);
-
-        //     session()->put('cart', $cart);
-        //     return redirect()->back()->with('success', 'Product added to cart successfully!');
-        // }
-
-
         $cart =  session()->put('cart', $cart);
 
         $this->calculate();
         return back()->with('message', 'Product added to cart Successfully');
     }
 
-    public function setVariants($ids, &$cart, $cartKey)
+    public function setVariants($ids, &$cart, $cartKey, $id)
     {
         $cart['items'][$cartKey]['variants'] = [];
+
+        $product = Product::find($id);
         foreach ($ids as $varId) {
-            $variant = Variant::find($varId);
+            $variant =  $product->variants->find($varId);
             $cart['items'][$cartKey]['variants'] +=
                 [
-                    $variant->attribute->name => $variant->name
+                    $variant->attribute->name => [$variant->name, 'price' => $variant->pivot->price]
                 ];
         }
     }
@@ -162,21 +183,56 @@ class CartController extends Controller
     public function updateVariant(Request $request)
     {
 
-        // dd($request->all());
-
         $cart = session()->get('cart');
+        $productId = explode("-", $request->id);
+        $productId = $productId[0];
+
+        $product = Product::find($productId);
+
+        $variant = $product->variants->where('name', $request->variant)->first();
+
+        $price = $variant->pivot->price;
 
 
         $cartVariants = $cart["items"][$request->id]["variants"];
+        $cartPrice = $cart["items"][$request->id]["variants"];
 
-        $cartVariants[$request->attribute]   = $request->variant;
+        $cartVariants[$request->attribute][0]   = $request->variant;
+        $cartPrice[$request->attribute]['price']   = $price;
         $cart["items"][$request->id]["variants"] = $cartVariants;
+
+        $cart["items"][$request->id]["variants"][$request->attribute]['price'] = $price;
+
+        $cart["items"][$request->id]["sumprice"] = 0;
+
+        $sumprice = 0;
+
+
+
+
+        foreach ($cart["items"][$request->id]["variants"] as $variant) {
+            $price = Arr::get($variant, 'price', 0);
+            $sumprice += $price;
+        }
+
+        $cart["items"][$request->id]['sumprice'] = $sumprice;
+
+        $cart["items"][$request->id]['product_total'] = intval($cart["items"][$request->id]['quantity']) * floatval($sumprice);
 
         session()->put('cart', $cart);
 
+        $calculated =  $this->calculate();
+
+        // session()->put('cart', $cart);
+
         return response()->json([
             'message' => 'done',
-            'cart' => $cart["items"]
+            'cart' => $cart["items"],
+            'sumprice' => $cart['items'][$request->id]['sumprice'],
+            'product_total' =>   $cart["items"][$request->id]['product_total'],
+            'sub_total' => $calculated["subTotal"],
+            'shipping' => $calculated["shipping"],
+            'total' => $calculated["total"],
         ]);
     }
 }

@@ -55,14 +55,14 @@
 
                                     </th>
                                 </tr>
-                                {{-- @dd(session()->get('cart')["items"]["210-20-16-23"]) --}}
-                                @forelse (session()->get('cart')["items"] as $k => $item)
 
-                                {{-- @dd($item['name']) --}}
+                                @forelse (session()->get('cart')["items"] as $k => $item)
+                                    {{-- @dd($item['name']) --}}
                                     <x-cart-item :name="$item['name']" :category="$item['category']" :price="$item['price']" :image="$item['image']"
-                                        :quantity="$item['quantity']" :productid="$item['id']" :total="$item['product_total']" :dataid="$k" :item="$item" />
+                                        :quantity="$item['quantity']" :productid="$item['id']" :total="$item['product_total']" :dataid="$k"
+                                        :item="$item" />
                                 @empty
-                                        :quantity="$item['quantity']" :productid="$item['id']" :total="$item['product_total']" :dataid="$k"  />
+                                    :quantity="$item['quantity']" :productid="$item['id']" :total="$item['product_total']" :dataid="$k" />
                                 @endforelse
                             </table>
                         </div>
@@ -143,6 +143,64 @@
             });
         });
 
+        $(document).ready(function() {
+
+
+            dropdownValues = []
+            $('.variant :selected').each(function(index) {
+                var dropdownValues = $(".variant").map(function() {
+                    var value = $(this).val()
+                    var key = $(this).attr("id");
+                    var object = {}
+                    object[key] = value;
+                    return object;
+
+                }).get();
+
+
+                console.log(dropdownValues)
+
+                // $.ajax({
+                //     type: 'POST',
+                //     url: 'cart/calculate-price',
+                //     data: {
+                //         "_token": "{{ csrf_token() }}",
+                //         "dropdownValues": dropdownValues,
+                //         "product_id": Object.keys(dropdownValues)
+                //     },
+                //     success: function(response) {
+                //         console.log(response)
+                //         $("#price").text(`$ ${response.calculatedPrice}`)
+                //     }
+                // });
+            });
+
+
+            $(document).on("change", ".variant", function() {
+                var dropdownValues = $(".variant").map(function() {
+                    return $(this).val();
+                }).get();
+
+
+
+                // $.ajax({
+                //     type: 'POST',
+                //     url: '/calculate-price',
+                //     data: {
+                //         "_token": "{{ csrf_token() }}",
+                //         "dropdownValues": dropdownValues,
+                //         "product_id": product
+                //     },
+                //     success: function(response) {
+                //         console.log(response)
+                //         $("#price").text(`$ ${response.calculatedPrice}`)
+                //     }
+                // });
+
+                console.log(dropdownValues);
+            });
+
+        })
 
         $(document).ready(function() {
             $('.variant').on("change", function() {
@@ -150,8 +208,6 @@
                 var variant = $(this).val()
                 // console.log(variant)
                 var id = $(this).attr("id")
-                id = id.split("#")
-                id = id[1]
                 var attribute = $(this).parent(".par").first().find(".attr-name").text();
                 console.log(id)
                 console.log(variant)
@@ -167,6 +223,11 @@
                     },
                     success: function(response) {
                         console.log(response)
+                        $('#sumPrice').html(`$ ${response.sumprice}`)
+                        $(`#item-total-${id}`).html(`$ ${response.product_total}`)
+                        $('#subTotal').text(`$` + response.sub_total);
+                        $('#shipping').text(response.shipping);
+                        $('#total').text(`$` + response.total)
                     }
                 })
             })

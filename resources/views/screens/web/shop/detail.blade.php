@@ -22,7 +22,8 @@
 
                         @forelse($product?->productImages as $productImage)
                             <div class="gallery">
-                                <img class="img-fluid" src="{{ asset('images/products/' . $productImage->image) }}" alt="">
+                                <img class="img-fluid" src="{{ asset('images/products/' . $productImage->image) }}"
+                                    alt="">
                             </div>
                         @empty
                         @endforelse
@@ -31,7 +32,14 @@
                 <div class="col-lg-6 col-md-12 col-12">
                     <div class="detail-pr-area">
                         <h2 class="inner-financial-hd detail-pr-hd">{{ $product?->name }}</h2>
-                        <p class="shipping-para pr"><strong>${{ $product?->price }}</strong></p>
+
+                        {{-- @dd($product->variants) --}}
+                        @if(isset($product->variants) && !empty(is_array($product->variants)))
+                        <p class="shipping-para pr"><strong id="price">$</strong></p>
+                        {{-- @dd($product->price) --}}
+                        @else
+                        <p class="shipping-para pr"><strong id="price">$ {{ $product->price }}</strong></p>
+                        @endif
                         <p style="display: none" id="shortDescription">{{ $product?->short_description }}</p>
                         <div class="para my-3" id="shortDescriptionDisplay">
 
@@ -49,22 +57,17 @@
                                     <div class="mt-3">
                                         <label for="" class="form-label">{{ ucfirst($attribute->name) }}: </label>
 
-                                        <select name="variants[]" id="" class="form-control ml-3">
+                                        <select name="variants[]" id="" class="form-control ml-3 variantDropDown">
+                                            {{-- <option value="">Select {{ $attribute->name }}</option> --}}
                                             @foreach ($product->variants as $variant)
                                                 @if ($attribute->id == $variant->attribute_id)
-                                                    <option value="{{ $variant->id }}" >
+                                                    <option value="{{ $variant->id }}">
                                                         {{ $variant->name }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
 
-                                         {{-- <select name="variants[]" id="" class="form-control ml-3">
-                                            @foreach ($product->variants as $variant)
-                                                @if ($attribute->id == $variant->attribute_id)
-                                                    <option value="{{ $variant->id }}" >{{ $variant->name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select> --}}
+
                                     </div>
                                 @empty
                                 @endforelse
@@ -199,9 +202,9 @@
                     </div>
                 </div>
 
-                @forelse($product?->category?->products as $product)
-                    <x-product-card :id="$product?->id" :name="$product?->name" :price="$product?->price"
-                        :image="$product?->image"></x-product-card>
+                @forelse($product?->category?->products as $prod)
+                    <x-product-card :id="$prod?->id" :name="$prod?->name" :price="$prod?->price"
+                        :image="$prod?->image"></x-product-card>
                 @empty
                 @endforelse
             </div>
@@ -241,16 +244,74 @@
             </div>
         </div>
     </section>
+
+    @dump($product->id)
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+
+                dropdownValues = []
+                $('.variantDropDown :selected').each(function(index) {
+                    var selectedValue = $(this).val();
+                    dropdownValues.push(selectedValue);
+                    var product = {{ $product->id }};
+
+                    console.log(product)
+                    // console.log(dropdownValues)
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/calculate-price',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "dropdownValues": dropdownValues,
+                            "product_id": product
+                        },
+                        success: function(response) {
+                            console.log(response)
+
+                            console.log("run")
+                            $("#price").text(`$ ${response.calculatedPrice}`)
+                        }
+                    });
+                });
+
+
+                $(document).on("change", ".variantDropDown", function() {
+                    var dropdownValues = $(".variantDropDown").map(function() {
+                        return $(this).val();
+                    }).get();
+                    var product = {{ $product->id }};
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/calculate-price',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "dropdownValues": dropdownValues,
+                            "product_id": product
+                        },
+                        success: function(response) {
+                            console.log(response)
+                            $("#price").text(`$ ${response.calculatedPrice}`)
+                        }
+                    });
+
+                    console.log(dropdownValues);
+                });
+
+            })
+
+
+
+            var shortDescription = document.getElementById("shortDescription").innerHTML;
+            var converter = new showdown.Converter();
+            var html = converter.makeHtml(shortDescription);
+            document.getElementById("shortDescriptionDisplay").innerHTML = html;
+            var longDescription = document.getElementById("longDescription").innerHTML;
+            var convert = new showdown.Converter();
+            var html = convert.makeHtml(longDescription)
+            document.getElementById("longDescriptionDisplay").innerHTML = html;
+        </script>
+    @endpush
 @endsection
-@push('scripts')
-    <script>
-        var shortDescription = document.getElementById("shortDescription").innerHTML;
-        var converter = new showdown.Converter();
-        var html = converter.makeHtml(shortDescription);
-        document.getElementById("shortDescriptionDisplay").innerHTML = html;
-        var longDescription = document.getElementById("longDescription").innerHTML;
-        var convert = new showdown.Converter();
-        var html = convert.makeHtml(longDescription)
-        document.getElementById("longDescriptionDisplay").innerHTML = html;
-    </script>
-@endpush

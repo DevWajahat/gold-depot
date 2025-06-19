@@ -54,7 +54,6 @@ class ProductController extends Controller
             'long_description' => $request->longdescription
         ]);
 
-        // dd($variantPrice);
         if ($request->product_attributes[0] != null) {
 
 
@@ -175,6 +174,11 @@ class ProductController extends Controller
         return back()->with('message', 'Product Updated Successfully.');
     }
 
+    public function calculatePrice(Request $request){
+
+
+        return response()->json([]);
+    }
 
     public function updateStatus(Request $request)
     {
