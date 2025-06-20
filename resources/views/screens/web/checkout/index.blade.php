@@ -13,6 +13,16 @@
 
 
             </div>
+
+            @if (session()->has('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</strong>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+
             <form action="{{ route('checkout.store') }}" method="post" class="mt-5" enctype="multipart/form-data">
                 @csrf
                 <div class="row justify-content-between">
@@ -142,6 +152,7 @@
                                         <div class="col-lg-6 col-md-5 col-6 m-0">
                                             <h4 class="subttl-hd">SHIPPING</h4>
                                         </div>
+                                        {{-- @dd(session()->get('cart')['shipping']) --}}
                                         @if (session()->get('cart')['shipping'] == 0)
                                             <div class="col-lg-6 col-md-5 col-6 m-0">
                                                 <p class="subttl-para" id="shipping">FREE SHIPPING</p>
@@ -149,7 +160,7 @@
                                         @else
                                             <div class="col-lg-6 col-md-5 col-6 m-0">
                                                 <p class="subttl-para" id="shipping">
-                                                    {{ session->get('cart')['shipping'] }}</p>
+                                                    {{ session()->get('cart')['shipping'] }}</p>
                                             </div>
                                         @endif
                                     </div>
@@ -173,7 +184,7 @@
                                         <div class="d-flex justify-content-end coupon-hidden" style="display: none">
                                             <input type="text" style="display: none" id="couponInput"
                                                 name="coupon_value" class="">
-                                            <br>x
+                                            <br>
                                             <button style="display: none" class="btn btn-light "
                                                 id="couponSubmitBtn">Apply
                                                 Coupon</button>

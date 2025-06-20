@@ -49,6 +49,7 @@ class ProductController extends Controller
         $product = $productCategory->products()->create([
             'name' => $request->name,
             'image' => $FeaturedImageName,
+            'quantity' => $request->quantity,
             'price' => $request->base_price,
             'short_description' => $request->shortdescription,
             'long_description' => $request->longdescription
@@ -148,6 +149,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'status' => $request->status,
+            'quantity' => $request->quantity,
             'short_description' => $request->short_description,
             'long_description' => $request->long_description,
             'image' => $FeaturedImageName,

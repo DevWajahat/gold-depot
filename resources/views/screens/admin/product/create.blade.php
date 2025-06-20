@@ -11,7 +11,7 @@
                     <a href="{{ route('admin.products.index') }}" class="btn btn-secondary mt-3 mb-3">Back</a>
                     <h2>Add Product</h2>
                 </div>
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
                             @foreach ($errors->all() as $error)
@@ -19,7 +19,7 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                @endif --}}
 
                 @if (session()->has('message'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -71,6 +71,14 @@
                             class="form-control @error('base_price') is-invalid  @enderror" id="price">
                         @error('base_price')
                             <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="" class="form-label">Quantity: </label>
+                        <input type="number"  name="quantity" id="" value="{{ old('quantity') }}" class="form-control @error('quantity') is-invalid @enderror">
+                        @error('quantity')
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 

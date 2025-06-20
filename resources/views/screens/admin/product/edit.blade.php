@@ -82,6 +82,16 @@
                             name="price" id="price" multiple>
                     </div>
 
+                    <div class="mt-3">
+                        <label for="" class="form-label">Quantity: </label>
+                        <input type="number" name="quantity" id="" value="{{ $product->quantity }}"
+                            class="form-control @error('quantity') is-invalid @enderror">
+                        @error('quantity')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+
                     <div class="parent-container">
                         @if ($product->variants && $product->variants->isNotEmpty())
                             @forelse ($product->attributes as $attribute)
@@ -102,33 +112,32 @@
                                         @forelse ($product->variants as $variant)
                                             <div class="var-par  border border-primary">
                                                 @if ($attribute->id == $variant->attribute->id)
-                                                <label for="" class="form-label">Variant: </label>
-                                                <div class="input-group">
+                                                    <label for="" class="form-label">Variant: </label>
+                                                    <div class="input-group">
                                                         <select name="variants[]" class="form-control variantsDropDown"
                                                             id="">
                                                             @forelse ($variants as $var)
-                                                            @if ($attribute->id == $var->attribute->id)
-
-                                                            <option
-                                                            value="{{ $var->id }}"{{ $var->id == $variant->id ? 'selected' : '' }}>
-                                                            {{ $var->name }}</option>
-                                                            @endif
+                                                                @if ($attribute->id == $var->attribute->id)
+                                                                    <option
+                                                                        value="{{ $var->id }}"{{ $var->id == $variant->id ? 'selected' : '' }}>
+                                                                        {{ $var->name }}</option>
+                                                                @endif
                                                             @empty
                                                             @endforelse
                                                         </select>
                                                         <button class="btn btn-light remove-variant" type="button"><span
                                                                 class="btn-close"></span></button>
-                                                            </div>
+                                                    </div>
 
-                                                            <div class="mt-3">
-                                                                <label for="" class="form-label">Price: </label>
+                                                    <div class="mt-3">
+                                                        <label for="" class="form-label">Price: </label>
 
-                                                                <input type="number" name="prices[]"
-                                                                value="{{ $variant->pivot->price }}" class="form-control"
-                                                                step="0.01">
-                                                            </div>
-                                                            @endif
-                                                        </div>
+                                                        <input type="number" name="prices[]"
+                                                            value="{{ $variant->pivot->price }}" class="form-control"
+                                                            step="0.01">
+                                                    </div>
+                                                @endif
+                                            </div>
 
                                         @empty
                                         @endforelse
@@ -172,7 +181,6 @@
 
     @push('scripts')
         <script>
-
             //$(document).ready(function() {
             //     $("#addBtn").on("click", function(e) {
             //         e.preventDefault();
@@ -287,7 +295,7 @@
             $(document).ready(function() {
                 $(document).on("change", "#attrDropDown", function() {
                     var attrDropDown = $(this);
-                    variantDropDown =$(this).parent(".par").find(".variantsDropDown");
+                    variantDropDown = $(this).parent(".par").find(".variantsDropDown");
                     // variantDropDown = variantDropDown.childrexn('#variantsDropDown');
                     var attr = $(this).val();
                     if (attrDropDown.val() == '') {

@@ -48,7 +48,7 @@ class CartController extends Controller
     }
     public function calculate()
     {
-        $cart = session()->get('cart', []);
+        $cart = session()->get('cart');
         $subTotal = 0;
         foreach ($cart['items'] as $cartItem) {
             $subTotal += (float) $cartItem['product_total'];
@@ -171,15 +171,17 @@ class CartController extends Controller
             if (isset($cart['items'][$id])) {
 
                 unset($cart['items'][$id]);
-                if (count(session()->get('cart')["items"]) == 0) {
-                    $cart['total'] = 0;
-                    $cart['sub_total'] = 0;
-                    $cart['shipping'] = 0;
-                }
+                // $this->calculate
+
             }
         }
-        $this->calculate();
+        if (count(session()->get('cart')["items"]) == 0) {
+            $cart['total'] = 0;
+            $cart['sub_total'] = 0;
+            $cart['shipping'] = 0;
+        }
         session()->put('cart', $cart);
+        $this->calculate();
         return back()->with('message', 'product Removed From Cart Successfully');
     }
 
@@ -238,7 +240,7 @@ class CartController extends Controller
 
         $calculated =  $this->calculate();
 
-       $cart = session()->get('cart', $cart);
+        $cart = session()->get('cart', $cart);
 
         return response()->json([
             'message' => 'done',

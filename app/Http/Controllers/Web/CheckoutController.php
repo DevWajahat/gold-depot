@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCheckoutRequest;
 use App\Models\Coupon;
-
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
@@ -26,11 +26,24 @@ class CheckoutController extends Controller
         $couponCode = Coupon::where('coupon_code', $request->coupon_value)->first();
 
         $cart = session()->get('cart');
-
+        
         if ($couponCode) {
             $couponCode->update([
                 'remaining' => $couponCode->remaining - 1,
             ]);
+
+            foreach (session()->get('cart')["items"] as $item) {
+                $product = Product::find($item["id"]);
+                if ($product->quantity < $item["quantity"]) {
+                    return back()->with('error', 'We only have ' . $product->quantity . 'in stocks.');
+                }
+                dd(intval($item["quantity"]) - $product->quantity);
+                $product->update([
+                    'quantity' => intval($item["quantity"]) - $product->quantity
+                ]);
+            }
+
+
             $order = $user->orders()->create([
                 'sub_total' => $cart['sub_total'],
                 'shipping' => $cart['shipping'],
@@ -44,6 +57,21 @@ class CheckoutController extends Controller
                 'address' => $request->address,
                 'zip_code' => $request->zip_code,
                 'phone' => $request->phone
+            ]);
+        }
+
+        foreach (session()->get('cart')["items"] as $item) {
+            $product = Product::find($item["id"]);
+            if ($product->quantity < intval($item["quantity"])) {
+                return back()->with('error', 'We only have ' .$product->name . ' ' . $product->quantity . ' in stocks.');
+            }
+
+            $quantity = intval($product->quantity) - intval($item["quantity"]);
+            // dd(intval($item["quantity"]) - $product->quantity);
+
+            // dd($quantity);
+            $product->update([
+                'quantity' => $quantity
             ]);
         }
 
@@ -81,7 +109,7 @@ class CheckoutController extends Controller
                 DB::table('order_product_variant')->insert([
                     'order_product_id' => $attachedProduct->pivot->id,
                     'attribute' => $attr,
-                    'variant' => $variant,
+                    'variant' => $variant[0],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
