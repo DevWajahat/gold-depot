@@ -10,7 +10,7 @@
             <span>{{ $category }} <br><strong>{{ $name }}</strong></span>
         </td>
         @if (isset($item['variants']))
-        <td class="pr-title"><span><strong id="sumPrice">${{ $item['sumprice']}}</strong></span></td>
+        <td class="pr-title"><span><strong id="sumPrice-{{ $dataid }}">${{ $item['sumprice']}}</strong></span></td>
         @else
         <td class="pr-title"><span><strong>${{ $item["price"] }}</strong></span></td>
         @endif

@@ -11,6 +11,9 @@ class CartController extends Controller
 {
     public function index()
     {
+
+        // dd(session()->get('cart'));
+
         return view('screens.web.cart.index', get_defined_vars());
     }
 
@@ -78,10 +81,13 @@ class CartController extends Controller
             $cartKey = $id . '-' . implode('-', $request->variants);
 
             if (isset($cart['items'][$cartKey])) {
-                $cart['items'][$id]['quantity'] = $request->quantity;
+                $cart['items'][$cartKey]['quantity'] = $request->quantity;
 
-                $cart['items'][$id]['variants'] = [];
-                $this->setVariants($request->variants, $cart, $id);
+
+                $cart['items'][$cartKey]['product_total'] = $cart['items'][$cartKey]['sumprice'] * $request['quantity'];
+
+                // dd($cart['items'][$cartKey]['sumprice']);
+                $this->setVariants($request->variants, $cart, $cartKey, $id);
 
                 session()->put('cart', $cart);
                 return redirect()->back()->with('success', 'Product added to cart successfully!');
@@ -95,7 +101,6 @@ class CartController extends Controller
                 'image' => $product->image,
                 'price' => $product->price,
                 'quantity' => $request->quantity,
-                'product_total' =>  $itemtotal,
 
             ];
 
@@ -104,7 +109,7 @@ class CartController extends Controller
             $this->setVariants($request->variants, $cart, $cartKey, $id);
 
             foreach ($cart["items"] as $key => $item) {
-                $sumprice = $item["price"];
+                $sumprice = 0;
 
                 if (isset($item["variants"]) && is_array($item["variants"])) {
                     foreach ($item["variants"] as $variant) {
@@ -113,8 +118,11 @@ class CartController extends Controller
                     }
                 }
 
+                $cart["items"][$key]['sumprice'] = floatval($sumprice) + floatval($cart["items"][$key]['price']);
+                // dd($cart["items"][$key]['sumprice'],$cart);
 
-                $cart["items"][$key]['sumprice'] = $sumprice;
+                 $cart["items"][$key]['product_total'] = floatval($cart["items"][$key]['sumprice']) * floatval($cart["items"][$key]['quantity']);
+                // dd($cart["items"][$key]['product_total'],$cart);
             }
         } else {
             if (isset($cart['items'][$id])) {
@@ -134,6 +142,7 @@ class CartController extends Controller
 
             ];
         }
+
 
         $cart =  session()->put('cart', $cart);
 
@@ -215,22 +224,28 @@ class CartController extends Controller
             $sumprice += $price;
         }
 
-        $cart["items"][$request->id]['sumprice'] = $sumprice;
+        // dd($sumprice);
 
-        $cart["items"][$request->id]['product_total'] = intval($cart["items"][$request->id]['quantity']) * floatval($sumprice);
 
+        $cart["items"][$request->id]['sumprice'] = floatval($sumprice) + floatval($cart['items'][$request->id]['price']);
+        $sumprice = $cart["items"][$request->id]['sumprice'] ;
+
+        // dd($sumprice);
+
+        $cart["items"][$request->id]['product_total'] = intval($cart["items"][$request->id]['quantity']) * floatval($cart["items"][$request->id]['sumprice']);
+        // dd($cart['items'][$request->id]['sumprice']);
         session()->put('cart', $cart);
 
         $calculated =  $this->calculate();
 
-        // session()->put('cart', $cart);
+       $cart = session()->get('cart', $cart);
 
         return response()->json([
             'message' => 'done',
             'cart' => $cart["items"],
             'sumprice' => $cart['items'][$request->id]['sumprice'],
             'product_total' =>   $cart["items"][$request->id]['product_total'],
-            'sub_total' => $calculated["subTotal"],
+            'sub_total' => $cart["sub_total"],
             'shipping' => $calculated["shipping"],
             'total' => $calculated["total"],
         ]);

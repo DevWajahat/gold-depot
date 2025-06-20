@@ -223,7 +223,8 @@
                     },
                     success: function(response) {
                         console.log(response)
-                        $('#sumPrice').html(`$ ${response.sumprice}`)
+                        console.log(response.sumprice)
+                        $(`#sumPrice-${id}`).html(`$ ${response.sumprice}`)
                         $(`#item-total-${id}`).html(`$ ${response.product_total}`)
                         $('#subTotal').text(`$` + response.sub_total);
                         $('#shipping').text(response.shipping);
@@ -273,7 +274,7 @@
                     console.log(response);
                     $(`#item-total-${id}`).text(`$ ` + response.itemTotal);
                     $('#subTotal').text(`$` + response.subTotal);
-                    $('#shipping').text(response.shipping);
+                    $('#shipping').text(`$` + response.shipping);
                     $('#total').text(`$` + response.total)
                 }
             })
