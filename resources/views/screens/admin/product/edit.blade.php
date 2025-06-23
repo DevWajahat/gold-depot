@@ -146,8 +146,42 @@
                                     </div>
                                 </div>
                             @empty
+
                             @endforelse
                             <button class="btn" id="addBtn"><i class="ri-add-fill"></i>Add Attribute</button>
+                                @else
+                                  <div class="mt-3 par border border-secondary">
+                            <label for=""
+                                class="form-label d-flex justify-content-between align-items-center">Attribute: <button
+                                    class="btn btn-light closebtn" type="button"><span
+                                        class="btn-close"></span></button></label>
+                            <select name="product_attributes[]" class="form-control" id="attrDropDown">
+                                <option value="" selected>Select Attribute</option>
+                                @foreach ($attributes as $attribute)
+                                    <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="mt-3 variant-par ">
+                                <div class="var-par  border border-primary">
+                                    <label for="" class="form-label">Variant: </label>
+                                    <div class="input-group">
+                                        <select name="variants[]" class="form-control variantsDropDown" id="">
+                                        </select>
+                                        <button class="btn btn-light remove-variant" type="button"><span
+                                                class="btn-close"></span></button>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <label for="" class="form-label">Price: </label>
+                                        <input type="number" name="prices[]" class="form-control" step="0.01">
+                                    </div>
+                                </div>
+                                <button class="btn add-variant-btn" id="" type="button"><i
+                                        class="ri-add-fill"></i>Add Variant</button>
+                            </div>
+                        </div>
+                        <button class="btn" id="addBtn"><i class="ri-add-fill"></i>Add Attribute</button>
+
                         @endif
                     </div>
 
@@ -313,6 +347,8 @@
                             options.forEach(e => {
                                 $(variantDropDown).append($('<option></option>').attr(
                                     'value', e.id).text(e.name))
+                                console.log(variantDropDown)
+
                             });
 
                         }
