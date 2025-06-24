@@ -5,7 +5,7 @@
     'id'
 ])
 
-  <div class="col-lg-3 col-md-6 col-12">
+  <div class="col-lg-3 col-md-6 col-12 ">
       <a href="{{ route('shop.details',$id) }}">
           <div class="pro-area">
               <div class="text-center mb-3">
@@ -22,7 +22,7 @@
               <p class="shipping-para pr"><strong>${{ $price }}</strong></p>
               <div class="cart-btn-area">
                   <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i> Add To Cart</button>
-                 
+
               </div>
           </div>
       </a>

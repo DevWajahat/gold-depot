@@ -215,69 +215,6 @@
 
     @push('scripts')
         <script>
-            //$(document).ready(function() {
-            //     $("#addBtn").on("click", function(e) {
-            //         e.preventDefault();
-            //         let parentContainer = $(".parent-container");
-            //         let par = parentContainer.find(".par").first().clone();
-            //         par.find("input").val('');
-            //         par.insertBefore("#addBtn");
-            //     });
-            //     $(document).on("click", ".closebtn", function(e) {
-            //         console.log($(this).parent(`.par`).first());
-
-            //         $(this).closest(".par").remove();
-
-            //     })
-            // })
-
-            // $(document).ready(function() {
-            //     $("#addBtn").on("click", function(e) {
-            //         e.preventDefault();
-            //         var parentContainer = $(".parent-container");
-            //         var par = parentContainer.find(".par").first().clone();
-
-            //         par.find("input").val('');
-            //         par.find("#variantsDropDown").empty();
-            //         par.insertBefore("#addBtn");
-            //     });
-            //     $(document).on("click", ".closebtn", function(e) {
-            //         console.log($(this).parent(`.par`).first());
-
-            //         if ($(".parent-container .par").length > 1) {
-            //             $(this).closest(".par").remove();
-            //         }
-
-
-            //     })
-
-            //     $(document).on("change", "#attrDropDown", function() {
-            //         var attrDropDown = $(this);
-
-            //         variantDropDown = $(this).parent(".par").first().find("#variantsDropDown");
-            //         if (attrDropDown.val() == '') {
-            //             variantDropDown.empty();
-            //         }
-            //         var attr = $(this).val();
-            //         console.log(attr);
-            //         var options;
-            //         $.ajax({
-            //             type: 'GET',
-            //             url: '/admin/attribute/variant/' + attr,
-            //             success: function(response) {
-            //                 console.log(response);
-            //                 options = response.variants;
-            //                 $(variantDropDown).empty();
-            //                 options.forEach(e => {
-            //                     $(variantDropDown).append($('<option></option>').attr(
-            //                         'value', e.id).text(e.name))
-            //                 });
-
-            //             }
-            //         });
-            //     });
-            // })
-
 
 
             $(document).ready(function() {

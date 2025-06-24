@@ -18,6 +18,7 @@ use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\ContactController;
 use App\Http\Controllers\Web\CouponController as WebCouponController;
+use App\Http\Controllers\Web\FilterController;
 use App\Http\Controllers\Web\IndexController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ReviewController;
@@ -39,9 +40,11 @@ Route::get('blog', [BlogController::class, 'index'])->name('blog');
 //  Web Shop Routes
 Route::controller(ShopController::class)->name('shop.')->group(function () {
     Route::get('/products', 'index')->name('index');
+    Route::post('/products', 'index');
     Route::get('/{id}/products', 'category')->name('category');
     Route::get('/product/details/{id}', 'details')->name('details');
     Route::post('/calculate-price','calculatePrice')->name('.calculate.price');
+    Route::post('sort','sort');
 });
 
 // Web Cart Routes
@@ -52,8 +55,11 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::get('destroy/{id}', 'destroy')->name('cart.destroy');
     Route::post('update-variant/','updateVariant');
     Route::get('flush', 'flush')->name('cart.flush');
- 
+
 });
+
+
+
 
 // Web Coupon Routes
 

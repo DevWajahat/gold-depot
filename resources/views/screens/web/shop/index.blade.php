@@ -35,105 +35,67 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
+                            <form action="" id="filterProducts">
 
                                 <div class="container py-5" style="max-width: 700px;">
                                     <!-- Set fixed width like accordion -->
 
-
-                                    <div class="mb-4">
-                                        <label for="sortSelect" class="form-label fw-bold">Sort By Price:</label>
-                                        <select id="sortSelect" class="form-select">
-                                            <option value="high">High to Low</option>
-                                            <option value="low">Low to High</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="sortSelect" class="form-label fw-bold">Sort By Date:</label>
-                                        <select id="sortSelect" class="form-select">
-                                            <option value="low">old to new</option>
-                                            <option value="low">new to old</option>
-                                        </select>
+                                    <div class="par">
+                                        <div class="mb-4">
+                                            <label for="sortSelect" class="form-label fw-bold">Sort By Price:</label>
+                                            <select id="sortByPrice" name="" class="form-select">
+                                                <option value="desc">High to Low</option>
+                                                <option value="asc">Low to High</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="sortSelect" class="form-label fw-bold">Sort By Date:</label>
+                                            <select id="sortByDate" class="form-select">
+                                                <option value="asc">Old to New</option>
+                                                <option value="desc">New to Old</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="accordion" id="mainAccordion">
 
                                         <!-- Main Accordion 1 -->
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="mainHeadingOne">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#mainCollapseOne" aria-expanded="true"
-                                                    aria-controls="mainCollapseOne">
-                                                    color
-                                                </button>
-                                            </h2>
-                                            <div id="mainCollapseOne" class="accordion-collapse collapse show"
-                                                aria-labelledby="mainHeadingOne" data-bs-parent="#mainAccordion">
-                                                <div class="accordion-body">
-
-                                                    <!-- Nested Accordion inside Main 1 -->
-                                                    <div class="d-flex justify-content-between align-items-center gap-2">
-                                                        <label for="greenCheck" class="fw-normal mb-0">green</label>
-                                                        <input type="checkbox" id="greenCheck">
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Main Accordion 2 -->
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="mainHeadingTwo">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse" data-bs-target="#mainCollapseTwo"
-                                                    aria-expanded="false" aria-controls="mainCollapseTwo">
-                                                    size
-                                                </button>
-                                            </h2>
-                                            <div id="mainCollapseTwo" class="accordion-collapse collapse"
-                                                aria-labelledby="mainHeadingTwo" data-bs-parent="#mainAccordion">
-                                                <div class="accordion-body">
-
-                                                    <!-- Nested Accordion inside Main 2 -->
-                                                    <div class="d-flex justify-content-between align-items-center gap-2">
-                                                        <label for="greenCheck" class="fw-normal mb-0">23</label>
-                                                        <input type="checkbox" id="greenCheck">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Main Accordion 3 -->
+                                        @foreach ($attributes as $attribute)
                                             <div class="accordion-item">
-                                                <h2 class="accordion-header" id="mainHeadingThree">
+                                                <h2 class="accordion-header" id="Heading{{ $attribute->id }}">
                                                     <button class="accordion-button collapsed" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#mainCollapseThree"
-                                                        aria-expanded="false" aria-controls="mainCollapseThree">
-                                                        weight
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#Collapse{{ $attribute->id }}" aria-expanded="true"
+                                                        aria-controls="mainCollapseOne">
+                                                        {{ $attribute->name }}
                                                     </button>
                                                 </h2>
-                                                <div id="mainCollapseThree" class="accordion-collapse collapse"
-                                                    aria-labelledby="mainHeadingThree" data-bs-parent="#mainAccordion">
+                                                <div id="Collapse{{ $attribute->id }}" class="accordion-collapse collapse"
+                                                    aria-labelledby="Heading{{ $attribute->id }}"
+                                                    data-bs-parent="#mainAccordion">
                                                     <div class="accordion-body">
-
-                                                        <!-- Nested Accordion inside Main 3 -->
-                                                        <div
-                                                            class="d-flex justify-content-between align-items-center gap-2">
-                                                            <label for="greenCheck" class="fw-normal mb-0">32kg</label>
-                                                            <input type="checkbox" id="greenCheck">
-
-                                                        </div>
+                                                        <!-- Nested Accordion inside Main 1 -->
+                                                        @foreach ($attribute->variants as $variant)
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center gap-2">
+                                                                <label for="greenCheck"
+                                                                    class="fw-normal mb-0">{{ $variant->name }}</label>
+                                                                <input type="checkbox" value="{{ $variant->id }}"
+                                                                    id="greenCheck">
+                                                            </div>
+                                                        @endforeach
 
                                                     </div>
                                                 </div>
                                             </div>
+                                        @endforeach
 
-                                        </div>
+
                                         <div class="range-area">
                                             <div class="slider-container">
-                                                <input type="range" min="0" max="100" value="0"
+                                                <input type="range" min="0" max="10000" value="0"
                                                     id="minRange" class="slider min-slider"
                                                     style="background: linear-gradient(to right, rgb(193, 193, 193) 0%, rgb(79, 126, 255) 0%, rgb(79, 126, 255) 99%, rgb(221, 221, 221) 99%);">
-                                                <input type="range" min="0" max="100" value="100"
+                                                <input type="range" min="0" max="10000" value="100"
                                                     id="maxRange" class="slider max-slider"
                                                     style="background: linear-gradient(to right, rgb(193, 193, 193) 0%, rgb(79, 126, 255) 0%, rgb(79, 126, 255) 99%, rgb(221, 221, 221) 99%);">
                                             </div>
@@ -144,7 +106,7 @@
                                                     </div>
                                                     <p>-</p>
                                                     <div class="style-amount">
-                                                        $<span id="maxValue">99.00</span>
+                                                        $<span id="maxValue">9999.00</span>
                                                     </div>
                                                 </div>
 
@@ -153,23 +115,24 @@
                                         </div>
                                     </div>
                                 </div>
+                            </form>
 
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-9">
+                    <div class="row product-card">
+                        @foreach ($Products as $product)
+                            <x-product-card :id="$product->id" :name="$product->name" :price="$product->price"
+                                :image="$product->image"></x-product-card>
+                        @endforeach
+
+                        {{ $Products->links() }}
                     </div>
                 </div>
 
             </div>
-            <div class="col-lg-9">
-                <div class="row">
-                    @foreach ($Products as $product)
-                        <x-product-card :id="$product->id" :name="$product->name" :price="$product->price"
-                            :image="$product->image"></x-product-card>
-                    @endforeach
-
-                    {{ $Products->links() }}
-                </div>
-            </div>
-
-        </div>
 
         </div>
     </section>
@@ -243,48 +206,177 @@
     </section>
 @endsection
 @push('scripts')
-<script>
-     const minRange = document.getElementById("minRange");
-            const maxRange = document.getElementById("maxRange");
-            const minValueDisplay = document.getElementById("minValue");
-            const maxValueDisplay = document.getElementById("maxValue");
+    <script>
+        const minRange = document.getElementById("minRange");
+        const maxRange = document.getElementById("maxRange");
+        const minValueDisplay = document.getElementById("minValue");
+        const maxValueDisplay = document.getElementById("maxValue");
 
-            if (minRange) {
-                minRange.addEventListener("input", () => {
-                    console.log();
+        if (minRange) {
+            minRange.addEventListener("input", () => {
+                // console.log();
 
-                    if (parseInt(minRange.value) > parseInt(maxRange.value)) {
-                        minRange.value = parseInt(maxRange.value).toFixed(2);
-                    }
-                    minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
-                    updateSliderTrack();
-                });
-            }
-
-            if (maxRange) {
-                maxRange.addEventListener("input", () => {
-                    if (parseInt(maxRange.value) < parseInt(minRange.value)) {
-                        maxRange.value = parseInt(minRange.value).toFixed(2);
-                    }
-                    maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
-                    updateSliderTrack();
-                });
-            }
-
-            if (minRange && maxRange) {
-                function updateSliderTrack() {
-                    const percentMin = (minRange.value / maxRange.max) * 100;
-                    const percentMax = (maxRange.value / maxRange.max) * 100;
-
-                    minRange.style.background = `linear-gradient(to right, #c1c1c1
-     ${percentMin}%, #4F7EFF ${percentMin}%, #4F7EFF ${percentMax}%, #ddd ${percentMax}%)`;
-                    maxRange.style.background = minRange.style.background;
+                if (parseInt(minRange.value) > parseInt(maxRange.value)) {
+                    minRange.value = parseInt(maxRange.value).toFixed(2);
                 }
+                minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
                 updateSliderTrack();
+            });
+        }
+
+        if (maxRange) {
+            maxRange.addEventListener("input", () => {
+                if (parseInt(maxRange.value) < parseInt(minRange.value)) {
+                    maxRange.value = parseInt(minRange.value).toFixed(2);
+                }
+                maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
+                updateSliderTrack();
+            });
+        }
+
+        if (minRange && maxRange) {
+            function updateSliderTrack() {
+                const percentMin = (minRange.value / maxRange.max) * 100;
+                const percentMax = (maxRange.value / maxRange.max) * 100;
+
+                minRange.style.background = `linear-gradient(to right, #c1c1c1
+     ${percentMin}%, #4F7EFF ${percentMin}%, #4F7EFF ${percentMax}%, #ddd ${percentMax}%)`;
+                maxRange.style.background = minRange.style.background;
             }
+            updateSliderTrack();
+        }
 
 
+      $(document).ready(function() {
 
 
-</script>
+    function pagination(type, date, price) {
+
+        $(document).off("click", ".page-link");
+
+        $(document).on("click", ".page-link", function(e) {
+            e.preventDefault();
+
+            $(".page-item").removeClass("active");
+
+            var href = $(this).attr('href');
+            var pageNo = href.split("=")[1];
+
+            $.ajax({
+                type: type,
+                url: 'products?page=' + pageNo,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    date: date,
+                    price: price
+                },
+                success: function(response) {
+                    let html = '';
+                    response.products.data.forEach(element => {
+                        let imageurl = "{{ asset('images/products/featured') }}/" + element.image;
+                        let productId = element.id;
+                        let producturl = "{{ route('shop.details', ':productId') }}";
+                        producturl = producturl.replace(':productId', productId);
+
+                        html += `
+                            <div class="col-lg-3 col-md-6 col-12 ">
+                                <a href="${producturl}">
+                                    <div class="pro-area">
+                                        <div class="text-center mb-3">
+                                            <img class="img-fluid bit-img" src="${imageurl}" alt="">
+                                        </div>
+                                        <h4 class="inner-financial-hd">${element.name}</h4>
+                                        <div class="raiting-area">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </div>
+                                        <p class="shipping-para pr"><strong>$ ${element.price} </strong></p>
+                                        <div class="cart-btn-area">
+                                            <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i> Add To Cart</button>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        `;
+                    });
+                    $('.product-card').html(html);
+                    $('.product-card').append(`{{ $Products->links() }}`);
+
+                    $(".page-item").each(function(index, element) {
+
+                        if (index + 1 == pageNo) {
+                            element.classList.add("active");
+                        } else {
+                            element.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+
+    pagination('GET', null, null);
+
+    
+    $('select').on("change", function() {
+        var selectPrice = $('#sortByPrice').val();
+        var selectDate = $('#sortByDate').val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'products',
+            data: {
+                _token: "{{ csrf_token() }}",
+                date: selectDate,
+                price: selectPrice
+            },
+            success: function(response) {
+                let html = '';
+                response.products.data.forEach(element => {
+                    let imageurl = "{{ asset('images/products/featured') }}/" + element.image;
+                    let productId = element.id;
+                    let producturl = "{{ route('shop.details', ':productId') }}";
+                    producturl = producturl.replace(':productId', productId);
+
+                    html += `
+                        <div class="col-lg-3 col-md-6 col-12 ">
+                            <a href="${producturl}">
+                                <div class="pro-area">
+                                    <div class="text-center mb-3">
+                                        <img class="img-fluid bit-img" src="${imageurl}" alt="">
+                                    </div>
+                                    <h4 class="inner-financial-hd">${element.name}</h4>
+                                    <div class="raiting-area">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <p class="shipping-para pr"><strong>$ ${element.price} </strong></p>
+                                    <div class="cart-btn-area">
+                                        <button class="cart-btn"><i class="fa-solid fa-cart-shopping"></i> Add To Cart</button>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                });
+                $('.product-card').html(html);
+
+                $('.product-card').append(`{{ $Products->links() }}`);
+
+
+                pagination('POST', selectDate, selectPrice);
+            }
+        });
+    });
+});
+
+
+    </script>
 @endpush

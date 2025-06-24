@@ -7,16 +7,31 @@ use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variant;
-use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Pipeline\Pipeline;
+
 
 class ShopController extends Controller
 {
     public function index()
     {
-        $Products = Product::where('status', 'available')->paginate(16);
+        $Products = Product::where('status', 'available');
+
+        $Products = app(Pipeline::class)
+            ->send($Products)
+            ->through([
+                \App\Filters\ProductPriceFilter::class,
+                \App\Filters\ProductDateFilter::class,
+            ])
+            ->thenReturn()
+            ->paginate(10);
+
+        $attributes = Attribute::all();
+        if (request()->ajax()) {
+            return response()->json([
+                'products' => $Products,
+            ]);
+        }
 
         return view('screens.web.shop.index', get_defined_vars());
     }
@@ -48,14 +63,15 @@ class ShopController extends Controller
         return view('screens.web.shop.detail', get_defined_vars());
     }
 
-    public function calculatePrice(Request $request){
+    public function calculatePrice(Request $request)
+    {
 
 
         $product = Product::find($request->product_id);
 
 
         $sumPrice = 0;
-        foreach($request->dropdownValues as $dropdownvalue){
+        foreach ($request->dropdownValues as $dropdownvalue) {
             // dd($product->variants->find($dropdownvalue),$product->variants,$dropdownvalue);
             $price = $product->variants->find($dropdownvalue)->pivot->price;
             $sumPrice += $price;
@@ -68,10 +84,5 @@ class ShopController extends Controller
             'calculatedPrice' => $calculatedPrice,
             'price' => $price
         ]);
-
     }
-
-
-
-
 }
