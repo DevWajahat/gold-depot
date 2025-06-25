@@ -22,12 +22,17 @@ class ShopController extends Controller
             ->through([
                 \App\Filters\ProductPriceFilter::class,
                 \App\Filters\ProductDateFilter::class,
+                \App\Filters\ProductVariantFilter::class,
             ])
             ->thenReturn()
-            ->paginate(10);
+            ->paginate(20);
 
-        $attributes = Attribute::all();
-        if (request()->ajax()) {
+
+            $attributes = Attribute::all();
+            if (request()->ajax()) {
+
+                // dd($Products);
+
             return response()->json([
                 'products' => $Products,
             ]);
