@@ -23,6 +23,7 @@ class ShopController extends Controller
                 \App\Filters\ProductPriceFilter::class,
                 \App\Filters\ProductDateFilter::class,
                 \App\Filters\ProductVariantFilter::class,
+                \App\Filters\ProductRangeFilter::class,
             ])
             ->thenReturn()
             ->paginate(20);
@@ -35,6 +36,7 @@ class ShopController extends Controller
 
             return response()->json([
                 'products' => $Products,
+
             ]);
         }
 

@@ -208,56 +208,57 @@
 @endsection
 @push('scripts')
     <script>
-       document.addEventListener("DOMContentLoaded", () => {
-    const minRange = document.getElementById("minRange");
-    const maxRange = document.getElementById("maxRange");
-    const minValueDisplay = document.getElementById("minValue");
-    const maxValueDisplay = document.getElementById("maxValue");
+        document.addEventListener("DOMContentLoaded", () => {
+            const minRange = document.getElementById("minRange");
+            const maxRange = document.getElementById("maxRange");
+            const minValueDisplay = document.getElementById("minValue");
+            const maxValueDisplay = document.getElementById("maxValue");
 
-    if (minRange && maxRange && minValueDisplay && maxValueDisplay) {
-        // Set default values on load
-        minRange.value = 0;       // If you want min to start at 0
-        maxRange.value = 10000;   // Start max at 10000
+            if (minRange && maxRange && minValueDisplay && maxValueDisplay) {
 
-        // Update display text to match
-        minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
-        maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
+                minRange.value = 0;
+                maxRange.value = 10000;
 
-        // Update the slider track visuals
-        updateSliderTrack();
 
-        // Add your existing event listeners here...
-        minRange.addEventListener("input", () => {
-            if (parseInt(minRange.value) > parseInt(maxRange.value)) {
-                minRange.value = parseInt(maxRange.value).toFixed(2);
+                minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
+                maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
+
+
+                updateSliderTrack();
+
+
+                minRange.addEventListener("input", () => {
+                    if (parseInt(minRange.value) > parseInt(maxRange.value)) {
+                        minRange.value = parseInt(maxRange.value).toFixed(2);
+                    }
+                    minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
+                    updateSliderTrack();
+                });
+
+                maxRange.addEventListener("input", () => {
+                    if (parseInt(maxRange.value) < parseInt(minRange.value)) {
+                        maxRange.value = parseInt(minRange.value).toFixed(2);
+                    }
+                    maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
+                    updateSliderTrack();
+                });
+
+                function updateSliderTrack() {
+                    const percentMin = (minRange.value / maxRange.max) * 100;
+                    const percentMax = (maxRange.value / maxRange.max) * 100;
+
+                    const bg =
+                        `linear-gradient(to right, #c1c1c1 ${percentMin}%, #4F7EFF ${percentMin}%, #4F7EFF ${percentMax}%, #ddd ${percentMax}%)`;
+                    minRange.style.background = bg;
+                    maxRange.style.background = bg;
+                }
             }
-            minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
-            updateSliderTrack();
         });
-
-        maxRange.addEventListener("input", () => {
-            if (parseInt(maxRange.value) < parseInt(minRange.value)) {
-                maxRange.value = parseInt(minRange.value).toFixed(2);
-            }
-            maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
-            updateSliderTrack();
-        });
-
-        function updateSliderTrack() {
-            const percentMin = (minRange.value / maxRange.max) * 100;
-            const percentMax = (maxRange.value / maxRange.max) * 100;
-
-            const bg = `linear-gradient(to right, #c1c1c1 ${percentMin}%, #4F7EFF ${percentMin}%, #4F7EFF ${percentMax}%, #ddd ${percentMax}%)`;
-            minRange.style.background = bg;
-            maxRange.style.background = bg;
-        }
-    }
-});
 
 
 
         $(document).ready(function() {
-            function fetchProducts(type, pageNo, date, price, variants) {
+            function fetchProducts(type, pageNo, date, price, variants, range) {
                 $.ajax({
                     type: type,
                     url: 'products' + (pageNo ? '?page=' + pageNo : ''),
@@ -265,7 +266,8 @@
                         _token: "{{ csrf_token() }}",
                         date: date,
                         price: price,
-                        variants: variants
+                        variants: variants,
+                        range: range
                     },
                     success: function(response) {
                         let html = '';
@@ -350,6 +352,24 @@
                 var selectDate = $('#sortByDate').val();
                 fetchProducts('POST', null, selectDate, selectPrice, variants);
             });
+
+            $('.slider').on("change", function() {
+                var variants = [];
+                $('input[name^="variants"]:checked').each(function() {
+                    variants.push($(this).val());
+                });
+                var selectPrice = $('#sortByPrice').val();
+                var selectDate = $('#sortByDate').val();
+
+                var range = [];
+                var minPrice = $('.min-slider').val();
+                var maxPrice = $('.max-slider').val();
+                range.push(minPrice);
+                range.push(maxPrice);
+                fetchProducts('POST', null, selectDate, selectPrice, variants, range);
+
+
+            })
         });
     </script>
 @endpush
