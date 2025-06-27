@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\OrderProducts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCheckoutRequest;
+use App\Listeners\OrderPlacedProcessed;
 use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +28,7 @@ class CheckoutController extends Controller
         $couponCode = Coupon::where('coupon_code', $request->coupon_value)->first();
 
         $cart = session()->get('cart');
-        
+
         if ($couponCode) {
             $couponCode->update([
                 'remaining' => $couponCode->remaining - 1,
@@ -60,10 +62,12 @@ class CheckoutController extends Controller
             ]);
         }
 
+        // event(new OrderProducts($order));
+
         foreach (session()->get('cart')["items"] as $item) {
             $product = Product::find($item["id"]);
             if ($product->quantity < intval($item["quantity"])) {
-                return back()->with('error', 'We only have ' .$product->name . ' ' . $product->quantity . ' in stocks.');
+                return back()->with('error', 'We only have ' . $product->name . ' ' . $product->quantity . ' in stocks.');
             }
 
             $quantity = intval($product->quantity) - intval($item["quantity"]);
@@ -89,6 +93,9 @@ class CheckoutController extends Controller
             'phone' => $request->phone
         ]);
 
+        event(new OrderProducts($order));
+        // dd($order);
+
 
         foreach (session()->get('cart')["items"] as $cart) {
             $order->products()->attach(
@@ -104,17 +111,20 @@ class CheckoutController extends Controller
 
             // Phir pivot ka instance access karne ke liye:
             $attachedProduct = $order->products()->where('product_id', $cart['id'])->first();
+            if (isset($cart["variants"])) {
 
-            foreach ($cart["variants"] as $attr => $variant) {
-                DB::table('order_product_variant')->insert([
-                    'order_product_id' => $attachedProduct->pivot->id,
-                    'attribute' => $attr,
-                    'variant' => $variant[0],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                foreach ($cart["variants"] as $attr => $variant) {
+                    DB::table('order_product_variant')->insert([
+                        'order_product_id' => $attachedProduct->pivot->id,
+                        'attribute' => $attr,
+                        'variant' => $variant[0],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
+
 
         session()->forget('cart');
 
