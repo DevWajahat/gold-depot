@@ -201,8 +201,10 @@
                         <div id="longDescriptionDisplay"></div>
                     </div>
                 </div>
-
-                @forelse($product?->category?->products as $prod)
+                @php
+                $productCategory =    $product?->category?->products->take(4);
+                @endphp
+                @forelse($productCategory as $prod)
                     <x-product-card :id="$prod?->id" :name="$prod?->name" :price="$prod?->price"
                         :image="$prod?->image"></x-product-card>
                 @empty
@@ -245,7 +247,7 @@
         </div>
     </section>
 
-    @dump($product->id)
+
     @push('scripts')
         <script>
             $(document).ready(function() {
