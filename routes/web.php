@@ -47,7 +47,7 @@ Route::controller(ShopController::class)->name('shop.')->group(function () {
     Route::post('/calculate-price','calculatePrice')->name('.calculate.price');
     Route::post('sort','sort');
 });
-Route::post('search',[SearchController::class,'search']);
+Route::post('search',[SearchController::class,'search'])->name('search');
 
 // Web Cart Routes
 Route::prefix('cart')->controller(CartController::class)->group(function () {

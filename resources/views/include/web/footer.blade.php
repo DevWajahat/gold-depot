@@ -152,18 +152,17 @@
         $('#searchBar').on('input', function() {
             var searchQuery = $(this).val();
             searchQuery = "%" + searchQuery + "%"
-            console.log(searchQuery)
+
             $.ajax({
                 type: 'POST',
-                url: 'search',
+                url: "{{ route('search') }}",
                 data: {
                     _token: "{{ csrf_token() }}",
                     search: searchQuery
                 },
                 success: function(response) {
-                    // console.log(response)
-                    let html = '';
 
+                    let html = '';
                     response.searchProducts.forEach(function(item) {
 
                         let productId = item.id;
@@ -171,9 +170,10 @@
                             "{{ route('shop.details', ':productId') }}"
                             .replace(':productId', productId);
 
-                            let imageurl = "{{ asset('images/products/featured') }}/" + item.image;
+                        let imageurl = "{{ asset('images/products/featured') }}/" +
+                            item.image;
 
-                       html +=  (` <a href="${producturl}">
+                        html += (` <a href="${producturl}">
                             <div class="pr-search-area">
                                 <div class="d-flex align-items-center gap-2">
                                     <div>

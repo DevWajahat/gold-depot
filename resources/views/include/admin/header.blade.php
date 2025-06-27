@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE v4 | Dashboard</title>
+    <title>Dashboard</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE v4 | Dashboard" />
@@ -167,7 +167,7 @@
                     </li> --}}
                     <!--end::Messages Dropdown Menu-->
                     <!--begin::Notifications Dropdown Menu-->
-                    {{-- <li class="nav-item dropdown">
+                    <li class="nav-item dropdown">
                         <a class="nav-link" data-bs-toggle="dropdown" href="#">
                             <i class="bi bi-bell-fill"></i>
                             <span class="navbar-badge badge text-bg-warning">15</span>
@@ -192,7 +192,7 @@
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item dropdown-footer"> See All Notifications </a>
                         </div>
-                    </li> --}}
+                    </li>
                     <!--end::Notifications Dropdown Menu-->
                     <!--begin::Fullscreen Toggle-->
                     <li class="nav-item">
@@ -259,7 +259,7 @@
                         class="brand-image opacity-75 shadow" />
                     <!--end::Brand Image-->
                     <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">AdminLTE 4</span>
+                    <span class="brand-text fw-light">Admin</span>
                     <!--end::Brand Text-->
                 </a>
                 <!--end::Brand Link-->
@@ -439,7 +439,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item ">
+                        <li class="nav-item {{ Route::currentRouteName() == 'admin.product.attribute.index' || Route::currentRouteName() == 'admin.product.attribute.create'  ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link ">
                                 <i class="nav-icon bi bi-box-seam-fill"></i>
                                 <p>
@@ -449,13 +449,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.product.attribute.index') }}" class="nav-link ">
+                                    <a href="{{ route('admin.product.attribute.index') }}" class="nav-link {{ Route::CurrentRouteName() == 'admin.product.attribute.index' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>All Variants</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.product.attribute.create') }}" class="nav-link ">
+                                    <a href="{{ route('admin.product.attribute.create') }}" class="nav-link {{ Route::CurrentRouteName() == 'admin.product.attribute.create' ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-circle"></i>
                                         <p>Add Attributes</p>
                                     </a>
