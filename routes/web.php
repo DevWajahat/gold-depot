@@ -22,6 +22,7 @@ use App\Http\Controllers\Web\FilterController;
 use App\Http\Controllers\Web\IndexController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\ReviewController;
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,7 @@ Route::controller(ShopController::class)->name('shop.')->group(function () {
     Route::post('/calculate-price','calculatePrice')->name('.calculate.price');
     Route::post('sort','sort');
 });
+Route::post('search',[SearchController::class,'search']);
 
 // Web Cart Routes
 Route::prefix('cart')->controller(CartController::class)->group(function () {

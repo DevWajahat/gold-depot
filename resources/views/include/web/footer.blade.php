@@ -121,10 +121,14 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-12">
-                <form action="">
+                <form>
                     <div class="search-input-area">
-                        <input type="text" placeholder="Search" class="form-input">
-                        <button class="primary-btn mt-0">Search</button>
+                        <input type="text" id="searchBar" placeholder="Search" class="form-input">
+                        {{-- <button class="primary-btn mt-0">Search</button> --}}
+                    </div>
+
+                    <div class="search-product-list list-bysearch active">
+
                     </div>
                 </form>
             </div>
@@ -139,7 +143,59 @@
 <script src="{{ asset('assets/web/js/slick.min.js') }}"></script>
 <script src="{{ asset('assets/web/js/index.js') }}"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"
+    integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#searchBar').on('input', function() {
+            var searchQuery = $(this).val();
+            searchQuery = "%" + searchQuery + "%"
+            console.log(searchQuery)
+            $.ajax({
+                type: 'POST',
+                url: 'search',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    search: searchQuery
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let html = '';
+
+                    response.searchProducts.forEach(function(item) {
+
+                        let productId = item.id;
+                        let producturl =
+                            "{{ route('shop.details', ':productId') }}"
+                            .replace(':productId', productId);
+
+                            let imageurl = "{{ asset('images/products/featured') }}/" + item.image;
+
+                       html +=  (` <a href="${producturl}">
+                            <div class="pr-search-area">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div>
+                                        <img class="img-fluid" width="80" height="80"
+                                            src="${imageurl}"
+                                            alt="">
+                                    </div>
+                                    <div>
+                                        <h3 class="srch-pr-title">${item.name}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>`)
+
+
+                    })
+                    $('.search-product-list').html(html)
+                }
+            })
+        })
+    })
+</script>
 
 @stack('scripts')
 </body>

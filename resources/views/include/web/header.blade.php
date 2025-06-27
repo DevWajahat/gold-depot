@@ -178,9 +178,9 @@
                     </div>
                     <div class="col-lg-3 col-md-5 col-6">
                         <div class="header-cart-area">
-                            {{-- <div class="search-open">
+                            <div class="search-open">
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                            </div> --}}
+                            </div>
                             @php
                                 if (session()->has('cart')) {
                                     $cart = session()->get('cart');

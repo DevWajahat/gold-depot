@@ -122,16 +122,7 @@
                     </div>
 
                 </div>
-                {{-- <div class="col-lg-9">
-                    <div class="row product-card">
-                        @foreach ($Products as $product)
-                            <x-product-card :id="$product->id" :name="$product->name" :price="$product->price"
-                                :image="$product->image"></x-product-card>
-                        @endforeach
-
-                        {{ $Products->links() }}
-                    </div>
-                </div> --}}
+                
                 <div class="col-lg-9">
                     <div class="row product-card">
                         @foreach ($Products as $product)
