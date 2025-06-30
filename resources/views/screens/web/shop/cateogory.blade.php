@@ -70,11 +70,11 @@
                                                     @foreach ($attribute->variants as $variant)
                                                         <div
                                                             class="d-flex justify-content-between align-items-center gap-2">
-                                                            <label for="greenCheck"
+                                                            <label for="variantsCheck-{{ $variant->id }}"
                                                                 class="fw-normal mb-0">{{ $variant->name }}</label>
                                                             <input type="checkbox" class="variantsCheck"
                                                                 value="{{ $variant->name }}" name="variants[]"
-                                                                id="variantsCheck">
+                                                                id="variantsCheck-{{ $variant->id }}">
                                                         </div>
                                                     @endforeach
 
@@ -278,7 +278,8 @@
 
 
             function fetchProducts(type, pageNo, date, price, variants, minPrice, maxPrice) {
-                const url = pageNo ? `{{ route('shop.category',$id) }}?page=${pageNo}` : `{{ route('shop.category',$id) }}`;
+                const url = pageNo ? `{{ route('shop.category', $id) }}?page=${pageNo}` :
+                    `{{ route('shop.category', $id) }}`;
                 $.ajax({
                     type: type,
                     url: url,

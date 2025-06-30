@@ -149,50 +149,66 @@
 
 <script>
     $(document).ready(function() {
+
+        $('.search-close').on("click",function () {
+            $('#searchBar').val('');
+        })
+
         $('#searchBar').on('input', function() {
             var searchQuery = $(this).val();
+
+
+
             searchQuery = "%" + searchQuery + "%"
 
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('search') }}",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    search: searchQuery
-                },
-                success: function(response) {
+            if (searchQuery == "%%") {
+                $('.search-product-list').html('')
 
-                    let html = '';
-                    response.searchProducts.forEach(function(item) {
+            } else {
 
-                        let productId = item.id;
-                        let producturl =
-                            "{{ route('shop.details', ':productId') }}"
-                            .replace(':productId', productId);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('search') }}",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        search: searchQuery
+                    },
+                    success: function(response) {
+                        let html = '';
+                        console.log(response)
+                        response.searchProducts.data.forEach(function(item) {
 
-                        let imageurl = "{{ asset('images/products/featured') }}/" +
-                            item.image;
+                            let productId = item.id;
+                            let producturl =
+                                "{{ route('shop.details', ':productId') }}"
+                                .replace(':productId', productId);
 
-                        html += (` <a href="${producturl}">
-                            <div class="pr-search-area">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div>
-                                        <img class="img-fluid" width="80" height="80"
-                                            src="${imageurl}"
-                                            alt="">
-                                    </div>
-                                    <div>
-                                        <h3 class="srch-pr-title">${item.name}</h3>
+                            let imageurl =
+                                "{{ asset('images/products/featured') }}/" +
+                                item.image;
+
+                            html += (` <a href="${producturl}">
+                                <div class="pr-search-area">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div>
+                                            <img class="img-fluid" width="80" height="80"
+                                                src="${imageurl}"
+                                                alt="">
+                                        </div>
+                                        <div>
+                                            <h3 class="srch-pr-title">${item.name}</h3>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>`)
+                            </a>`)
+                        })
+                        $('.search-product-list').html(html)
+                       
 
+                    }
+                })
+            }
 
-                    })
-                    $('.search-product-list').html(html)
-                }
-            })
         })
     })
 </script>

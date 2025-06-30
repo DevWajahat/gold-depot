@@ -10,10 +10,11 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-       $searchProducts = Product::whereLike('name',$request->search)->get();
+        $searchProducts = Product::whereLike('name', $request->search)->paginate(6);
         // dd($searchProducts);
         return response()->json([
-            'searchProducts' => $searchProducts
+            'searchProducts' => $searchProducts,
+
         ]);
     }
 }
