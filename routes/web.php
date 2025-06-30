@@ -43,6 +43,7 @@ Route::controller(ShopController::class)->name('shop.')->group(function () {
     Route::get('/products', 'index')->name('index');
     Route::post('/products', 'index');
     Route::get('/{id}/products', 'category')->name('category');
+    Route::post('/{id}/products', 'category')   ;
     Route::get('/product/details/{id}', 'details')->name('details');
     Route::post('/calculate-price','calculatePrice')->name('.calculate.price');
     Route::post('sort','sort');

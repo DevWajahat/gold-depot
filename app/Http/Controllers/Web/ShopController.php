@@ -51,12 +51,47 @@ class ShopController extends Controller
         return view('screens.web.shop.index', get_defined_vars());
     }
 
-    public function category($id)
+    public function category($id, Request $request)
     {
         $category = Category::find($id);
         if (!$category) {
             return abort('404');
         }
+        $Products = $category->products();
+
+        $Products = app(Pipeline::class)
+            ->send($Products)
+            ->through([
+                
+                \App\Filters\ProductPriceFilter::class,
+                \App\Filters\ProductDateFilter::class,
+                \App\Filters\ProductVariantFilter::class,
+                \App\Filters\ProductRangeFilter::class,
+            ])
+            ->thenReturn()
+            ->paginate(20);
+
+        $minimumPrice = Product::min('price');
+        $maximumPrice = Product::max('price');
+
+        $Products->appends([
+            'price' => $request->price,
+            'date' => $request->date,
+            'variants' => $request->variants,
+            'min_price' => $request->min_price,
+            'max_price' => $request->max_price,
+        ]);
+
+        $attributes = Attribute::with('variants')->get();
+        $variants = Variant::all();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'products' => $Products,
+                'pagination' => $Products->links()->toHtml(),
+            ]);
+        }
+
 
         return view('screens.web.shop.cateogory', get_defined_vars());
     }
