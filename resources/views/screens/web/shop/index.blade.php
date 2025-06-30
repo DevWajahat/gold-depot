@@ -35,7 +35,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <form action="" id="filterProducts">
+
 
                                 <div class="container py-5" style="max-width: 700px;">
                                     <!-- Set fixed width like accordion -->
@@ -44,6 +44,7 @@
                                         <div class="mb-4">
                                             <label for="sortSelect" class="form-label fw-bold">Sort By Price:</label>
                                             <select id="sortByPrice" name="" class="form-select">
+                                                <option value="">None</option>
                                                 <option value="desc">High to Low</option>
                                                 <option value="asc">Low to High</option>
                                             </select>
@@ -51,6 +52,7 @@
                                         <div class="mb-4">
                                             <label for="sortSelect" class="form-label fw-bold">Sort By Date:</label>
                                             <select id="sortByDate" class="form-select">
+                                                <option value="">None</option>
                                                 <option value="asc">Old to New</option>
                                                 <option value="desc">New to Old</option>
                                             </select>
@@ -93,11 +95,11 @@
 
                                         <div class="range-area">
                                             <div class="slider-container">
-                                                <input type="range" min="{{ $minimumPrice }}" max="{{ $maximumPrice }}" value="0"
-                                                    id="minRange" class="slider min-slider"
+                                                <input type="range" min="{{ $minimumPrice }}" max="{{ $maximumPrice }}"
+                                                    value="0" id="minRange" class="slider min-slider"
                                                     style="background: linear-gradient(to right, rgb(193, 193, 193) 0%, rgb(79, 126, 255) 0%, rgb(79, 126, 255) 99%, rgb(221, 221, 221) 99%);">
-                                                <input type="range" min="" max="{{ $maximumPrice }}" value="{{ $maximumPrice }}"
-                                                    id="maxRange" class="slider max-slider"
+                                                <input type="range" min="" max="{{ $maximumPrice }}"
+                                                    value="{{ $maximumPrice }}" id="maxRange" class="slider max-slider"
                                                     style="background: linear-gradient(to right, rgb(193, 193, 193) 0%, rgb(79, 126, 255) 0%, rgb(79, 126, 255) 99%, rgb(221, 221, 221) 99%);">
                                             </div>
                                             <div class=" d-flex justify-content-between">
@@ -110,19 +112,16 @@
                                                         $<span id="maxValue">9999.00</span>
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-
+                         
                         </div>
                     </div>
 
                 </div>
-                
+
                 <div class="col-lg-9">
                     <div class="row product-card">
                         @foreach ($Products as $product)
@@ -134,9 +133,9 @@
                         {{ $Products->links() }}
                     </div>
 
-            </div>
+                </div>
 
-        </div>
+            </div>
     </section>
     <div class="shop-dollar-sec">
         <div class="container-fluid">
@@ -221,22 +220,28 @@
 
                 updateSliderTrack();
 
-                minRange.addEventListener("input", () => {
+                minRange.addEventListener("change", () => {
                     if (parseInt(minRange.value) > parseInt(maxRange.value)) {
                         minRange.value = parseInt(maxRange.value);
                     }
                     minValueDisplay.textContent = parseInt(minRange.value).toFixed(2);
                     updateSliderTrack();
-                    triggerFilterUpdate();
+                    setTimeout(function() {
+                        triggerFilterUpdate();
+
+                    }, 500);
                 });
 
-                maxRange.addEventListener("input", () => {
+                maxRange.addEventListener("change", () => {
+
                     if (parseInt(maxRange.value) < parseInt(minRange.value)) {
                         maxRange.value = parseInt(minRange.value);
                     }
                     maxValueDisplay.textContent = parseInt(maxRange.value).toFixed(2);
                     updateSliderTrack();
-                    triggerFilterUpdate();
+                    setTimeout(function() {
+                        triggerFilterUpdate();
+                    }, 500);
                 });
 
                 function updateSliderTrack() {
@@ -336,8 +341,7 @@
                         if (response.pagination) {
                             $('#pagination-container').html(response.pagination);
 
-                        }
-                        else{
+                        } else {
                             $('#pagination-container').html("");
                         }
 

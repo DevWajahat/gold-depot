@@ -267,7 +267,7 @@
         </div>
     </section>
 
-    @if(isset($reviews) && is_array($reviews))
+    @if(isset($reviews) && !empty($reviews))
 
     <section class="review-sec fix-pading">
         <div class="container">
@@ -323,7 +323,7 @@
                                     <x-blog-item :name="$blog->name" :image="$blog->image" :description="substr($blog->description, 0, 100)"></x-blog-item>
                                 @endforeach
 
-                            
+
                             </div>
                             <div class="banner-slider-btn-rev">
                                 <button class="prev-btn-stand"><i class="fa-solid fa-caret-left"></i></button>

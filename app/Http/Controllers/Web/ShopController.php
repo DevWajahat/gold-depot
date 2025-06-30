@@ -13,7 +13,7 @@ use Illuminate\Pipeline\Pipeline;
 
 class ShopController extends Controller
 {
-   public function index(Request $request)
+    public function index(Request $request)
     {
         $Products = Product::where('status', 'available');
 
@@ -28,8 +28,8 @@ class ShopController extends Controller
             ->thenReturn()
             ->paginate(20);
 
-            $minimumPrice = Product::min('price');
-            $maximumPrice = Product::max('price');
+        $minimumPrice = Product::min('price');
+        $maximumPrice = Product::max('price');
 
         $Products->appends([
             'price' => $request->price,
@@ -40,6 +40,7 @@ class ShopController extends Controller
         ]);
 
         $attributes = Attribute::with('variants')->get();
+        $variants = Variant::all();
         if ($request->ajax()) {
             return response()->json([
                 'products' => $Products,
