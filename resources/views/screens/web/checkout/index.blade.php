@@ -23,7 +23,8 @@
             @endif
 
 
-            <form action="{{ route('checkout.store') }}" method="post" class="mt-5" enctype="multipart/form-data">
+            <form id="checkoutForm" action="{{ route('checkout.store') }}" method="post" class="mt-5"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="row justify-content-between">
                     <div class="col-lg-3 col-md-6 col-12 m-0">
@@ -33,7 +34,7 @@
                             <div class="mb-2">
                                 <label for="">Full Name</label>
                                 <input type="text" value="{{ old('full_name') }}" name="full_name"
-                                    class="@error('full_name') is-invalid @enderror">
+                                    class="@error('full_name') is-invalid @enderror" id="fullName">
                                 @error('full_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -41,7 +42,7 @@
                             <div class="mb-2">
                                 <label for="">Country</label>
                                 <input type="text" name="country" value="{{ old('country') }}"
-                                    class="@error('country') is-invalid @enderror">
+                                    class="@error('country') is-invalid @enderror" id="country">
                                 @error('country')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -49,7 +50,7 @@
                             <div class="mb-2">
                                 <label for="">City</label>
                                 <input type="text" name="city" value="{{ old('city') }}"
-                                    class="@error('city') is-invalid @enderror">
+                                    class="@error('city') is-invalid @enderror" id="city">
                                 @error('city')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -57,7 +58,7 @@
                             <div class="mb-2">
                                 <label for="">State</label>
                                 <input type="text" name="state" value="{{ old('state') }}"
-                                    class="@error('state') is-invalid @enderror">
+                                    class="@error('state') is-invalid @enderror" id="state">
                                 @error('state')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -65,7 +66,7 @@
                             <div class="mb-2">
                                 <label for="">Street Address</label>
                                 <input type="text" value="{{ old('address') }}" name="address"
-                                    class="@error('address') is-invalid @enderror">
+                                    class="@error('address') is-invalid @enderror" id="streetAddress">
                                 @error('address')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -74,7 +75,7 @@
                                 <label for="">Postal Code/ ZIP</label>
                                 <div class="postal-area">
                                     <input type="number" value="{{ old('zip_code') }}" name="zip_code"
-                                        class="@error('zip_code') is-invalid @enderror">
+                                        class="@error('zip_code') is-invalid @enderror" id="zipCode">
                                     @error('zip_code')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -207,25 +208,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <label for="">Card Holder Name</label>
+                                <input id="card-holder-name" type="text">
 
-                                {{-- <div class="mt-5">
-                                    <h4>PAYMENT METHOD</h4>
-                                    <label class="form-check-label payment-radio" for="flexRadioDefault1">
-                                        <input class="form-check-input" type="checkbox" name="flexRadioDefault"
-                                            id="flexRadioDefault1" onclick="toggleCardInput()">
-                                        Cash on Delivery
-                                    </label>
-                                </div>
-                                <div class="card-main-area">
-                                    <div class="mb-2">
-                                        <input type="text" class="" placeholder="Card Number">
-                                    </div>
-                                    <div class="mb-2 card-input-area ">
-                                        <input type="text" class="" placeholder="M M">
-                                        <input type="text" class="" placeholder="YY">
-                                        <input type="text" class="" placeholder="CVC">
-                                    </div>
-                                </div> --}}
+                                <!-- Stripe Elements Placeholder -->
+                                <div id="card-element"></div>
+                                {{-- <button
+                                    class="mt-3 btn-success btn">
+                                    Verified Payment
+                                </button> --}}
+
                                 <label class="form-check-label payment-radio tearm-label" for="flexRadioDefault2">
                                     <input class="form-check-input" type="checkbox" name="radio"
                                         id="flexRadioDefault2">
@@ -234,7 +226,8 @@
                                 @error('radio')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
-                                <button class="primary-btn" type="submit">Place Order</button>
+                                <button id="card-button" class="primary-btn" data-secret="{{ $intent->client_secret }}"
+                                    type="submit">Place Order</button>
                             </div>
                         </div>
                     </div>
@@ -244,6 +237,99 @@
     </section>
 @endsection
 @push('scripts')
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        const cardHolderName = document.getElementById('card-holder-name');
+        const cardButton = document.getElementById('card-button');
+        const checkoutForm = document.getElementById('checkoutForm');
+
+        checkoutForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const {
+                paymentMethod,
+                error
+            } = await stripe.createPaymentMethod(
+                'card', cardElement, {
+                    billing_details: {
+                        name: cardHolderName.value
+                    }
+                }
+            );
+
+            if (error) {
+                console.log(error);
+                toastr.error(error.message ||
+                "An error occurred with your payment method.");
+            } else {
+                console.log(paymentMethod);
+                cardButton.classList.remove("btn-success");
+                cardButton.classList.add("disabled");
+
+                var fullName = $('#fullName').val();
+                var country = $('#country').val();
+                var city = $('#city').val();
+                var state = $('#state').val();
+                var streetAddress = $('#streetAddress').val();
+                var zipCode = $('#zipCode').val();
+                var phone = $('#phone').val();
+                var couponInput = $("#couponInput").val();
+
+                // Create a FormData object
+                var formData = new FormData();
+                formData.append('_token', "{{ csrf_token() }}");
+                formData.append('full_name', fullName);
+                formData.append('country', country);
+                formData.append('city', city);
+                formData.append('state', state);
+                formData.append('address', streetAddress);
+                formData.append('zip_code', zipCode);
+                formData.append('phone', phone);
+                formData.append('coupon_value', couponInput);
+                formData.append('radio', 1);
+                formData.append('paymentMethodId', paymentMethod.id);
+
+                console.log(fullName + " " + country + " " + city + " " + state + " " + streetAddress + " " +
+                    zipCode + " " + phone + " ");
+                console.log(fullName);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('checkout.store') }}",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(response) {
+                        window.location.href = "{{ route('checkout.confirm') }}";
+                    },
+                    error: function(xhr, status, error) {
+
+                        console.error("AJAX error:", status, error);
+                        try {
+                            console.log(xhr)
+                            const responseJson = JSON.parse(xhr.responseText);
+                            toastr.error(responseJson.message ||
+                                "An error occurred during checkout.");
+
+                        } catch (e) {
+                            toastr.error("An unknown error occurred.");
+                        }
+
+                        cardButton.classList.add("btn-success");
+                        cardButton.classList.remove("disabled");
+                    }
+                });
+
+                document.getElementById('card-element').style.display = "none";
+                cardHolderName.remove();
+            }
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $('#couponBtn').click(function(event) {

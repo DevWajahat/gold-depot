@@ -43,12 +43,12 @@ Route::controller(ShopController::class)->name('shop.')->group(function () {
     Route::get('/products', 'index')->name('index');
     Route::post('/products', 'index');
     Route::get('/{id}/products', 'category')->name('category');
-    Route::post('/{id}/products', 'category')   ;
+    Route::post('/{id}/products', 'category');
     Route::get('/product/details/{id}', 'details')->name('details');
-    Route::post('/calculate-price','calculatePrice')->name('.calculate.price');
-    Route::post('sort','sort');
+    Route::post('/calculate-price', 'calculatePrice')->name('.calculate.price');
+    Route::post('sort', 'sort');
 });
-Route::post('search',[SearchController::class,'search'])->name('search');
+Route::post('search', [SearchController::class, 'search'])->name('search');
 
 // Web Cart Routes
 Route::prefix('cart')->controller(CartController::class)->group(function () {
@@ -56,9 +56,8 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::post('store/{id}', 'store')->name('cart.store');
     Route::post('update/{id}', 'update')->name('cart.update');
     Route::get('destroy/{id}', 'destroy')->name('cart.destroy');
-    Route::post('update-variant/','updateVariant');
+    Route::post('update-variant/', 'updateVariant');
     Route::get('flush', 'flush')->name('cart.flush');
-
 });
 
 
@@ -73,6 +72,8 @@ Route::middleware('CheckCustomer')->controller(CheckoutController::class)->name(
     Route::get('checkout', 'index')->name('index');
     Route::post('checkout/store', 'store')->name('store');
     Route::get('confirmed-order', 'confirm')->name('confirm');
+    Route::view('/checkout/success', 'checkout.success')->name('checkout-success');
+    Route::view('/checkout/cancel', 'checkout.cancel')->name('checkout-cancel');
 });
 
 // Authorization and Authentication of Customers
@@ -117,7 +118,6 @@ Route::middleware('CheckAdmin')->prefix('/admin')->controller(AdminIndexControll
         Route::get('/edit-products/{id}', 'edit')->name('.edit');
         Route::post('/update/{id}', 'update')->name('.update');
         Route::post('/update-status', 'updateStatus')->name('.update.status');
-
     });
     // Product Images
     Route::post('/product-image/destroy', [ProductImagesController::class, 'destroy'])->name('productimage.destroy');
